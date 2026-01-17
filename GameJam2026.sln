@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameJam2026", "GameJam2026", "{F14AA387-FB52-A918-4966-502865956501}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "GameJam2026\Assembly-CSharp-Editor.csproj", "{11A039B5-7B5E-458B-8AA7-DE42E3225935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "GameJam2026\Assembly-CSharp.csproj", "{74983741-8D0F-C96B-3900-1C8A467D014D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11A039B5-7B5E-458B-8AA7-DE42E3225935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11A039B5-7B5E-458B-8AA7-DE42E3225935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11A039B5-7B5E-458B-8AA7-DE42E3225935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11A039B5-7B5E-458B-8AA7-DE42E3225935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74983741-8D0F-C96B-3900-1C8A467D014D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74983741-8D0F-C96B-3900-1C8A467D014D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74983741-8D0F-C96B-3900-1C8A467D014D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74983741-8D0F-C96B-3900-1C8A467D014D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11A039B5-7B5E-458B-8AA7-DE42E3225935} = {F14AA387-FB52-A918-4966-502865956501}
+		{74983741-8D0F-C96B-3900-1C8A467D014D} = {F14AA387-FB52-A918-4966-502865956501}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEEF3766-65D3-463B-A722-E47CB0D7A309}
+	EndGlobalSection
+EndGlobal
