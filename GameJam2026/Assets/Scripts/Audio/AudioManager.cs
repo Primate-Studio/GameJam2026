@@ -1,52 +1,87 @@
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.Audio;
 using System;
+using System.Collections.Generic;
 
+[ExecuteInEditMode]
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
+    public static AudioManager Instance;
 
-    [Header("Settings")]
-    [SerializeField] private SoundData[] sounds;
+    [Header("Micer & Routing")]
+    [SerializeField] private AudioMixer mainMixer;
 
-    private AudioSource musicSource;
-    private AudioSource sfxSource;
+    [Header("Categories")]
+    public SoundCategory[] musicList;
+    public SoundCategory[] sfxList;
+    public SoundCategory[] uiList;
+    public SoundCategory[] ambientList;
 
-    public void Awake()
+    private AudioSource musicSource, sfxSource, uiSource, ambientSource;
+
+    private void Awake()
     {
-        if (instance == null)
+        if(Application.isPlaying)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            if(Instance == null) {Instance = this; DontDestroyOnLoad(gameObject);}
+            else {Destroy(gameObject); return;}
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+    } 
 
-        musicSource = gameObject.AddComponent<AudioSource>();
-        sfxSource = gameObject.AddComponent<AudioSource>();
+    private void SetupSources()
+    {
+        musicSource = CreateSound("MusicSource","Music");
+        sfxSource = CreateSound("SFXSource","SFX");
+        uiSource = CreateSound("UISource","UI");
+        ambientSource = CreateSound("AmbientSource","Ambient");
+    }
+    private AudioSource CreateSound(string name, string group)
+    {
+        GameObject obj = new GameObject(name);
+        obj.transform.parent = transform;
+        AudioSource source = obj.AddComponent<AudioSource>();
+        source.outputAudioMixerGroup = mainMixer.FindMatchingGroups(group)[0];
+        return source;
     }
 
-    public void PlayMusic(string Name)
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Playback Logic
+    
+    public void PlaySFX(SFXType type) => PlayRandom(type, sfxList, sfxSource);
+    public void PlayUI(UIType type) => PlayRandom(type, uiList, uiSource);
+
+    public void PlayMusic(MusicType type)
     {
-        SoundData sound = Array.Find(sounds, s => s.soundName == Name);
-        if (sound == null) { Debug.LogWarning($"{Name}: sound not found!"); return; }
- 
-        musicSource.clip = sound.clip;
-        musicSource.volume = sound.volume;
-        musicSource.pitch = sound.pitch;
-        musicSource.loop = sound.loop;
+        var cat = musicList[(int) type];
+        musicSource.clip = cat.clips[0];
+        musicSource.loop = true;
         musicSource.Play();
-
     }
-    public void PlaySFX(string Name)
+    
+    private void PlayRandom(Enum type, SoundCategory[] list, AudioSource source)
     {
-        SoundData sound = Array.Find(sounds, s => s.soundName == Name);
-        if (sound == null) { Debug.LogWarning($"{Name}: sound not found!"); return; }
- 
-        sfxSource.PlayOneShot(sound.clip, sound.volume);
+        int index = Convert.ToInt32(type);
+        if(index >= list.Length || list[index].clips.Length == 0) return;
+
+        var category = list[index];
+        AudioClip clip = category.clips[UnityEngine.Random.Range(0, category.clips.Length)];
+        source.PlayOneShot(clip, category.volume);
     }
-    public void StopMusic() {musicSource.Stop(); }
+
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Editor Logic
+    private void OnEnable()
+    {
+        UpdateListNames<MusicType>(ref musicList);
+        UpdateListNames<SFXType>(ref sfxList);
+        UpdateListNames<UIType>(ref uiList);
+        UpdateListNames<AmbientType>(ref ambientList);
+    }
+    private void UpdateListNames<T>(ref SoundCategory[] list ) where T : Enum
+    {
+        string[] names = Enum.GetNames(typeof(T));
+        Array.Resize(ref list, names.Length);
+        for(int i = 0; i < names.Length; i++) list[i].name = names[i];
+    }
+
 }
