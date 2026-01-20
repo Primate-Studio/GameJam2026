@@ -4,31 +4,31 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
 
-    private float deltaTime;
-    private bool isPaused = false;
-
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
-    void Update()
+
+    private void OnEnable()
     {
-        if(InputManager.Instance.PausePressed)
-        {
-            TogglePause();
-        }
+        GameManager.OnGameStateChanged += OnGameStateChanged;
     }
-    void TogglePause()
+
+    private void OnDisable()
     {
-        isPaused = !isPaused;
-        Time.timeScale = isPaused ? 0f : 1f;
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState state)
+    {
+        Time.timeScale = (state == GameState.Paused) ? 0f : 1f;
     }
 }
+
