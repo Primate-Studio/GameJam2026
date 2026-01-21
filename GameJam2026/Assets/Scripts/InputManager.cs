@@ -18,6 +18,7 @@ public class InputManager : MonoBehaviour
     public bool JumpPressed => Input.GetKeyDown(jumpKey);
     public bool InteractPressed => Input.GetKeyDown(interactKey);
     public bool PausePressed => Input.GetKeyDown(pauseKey);
+    private bool isPaused = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,8 +31,18 @@ public class InputManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
     }
+    private void Update()
+    {
+        if(PausePressed)
+        {
+            SettingsButtons.Instance.OnPause(isPaused);
+            isPaused = !isPaused;
+            Time.timeScale = isPaused ? 0f : 1f;
+        }
+    }
     public bool HasMovementInput()
     {
         return !Mathf.Approximately(Horizontal, 0f) || !Mathf.Approximately(Vertical, 0f);
     }
+    
 }

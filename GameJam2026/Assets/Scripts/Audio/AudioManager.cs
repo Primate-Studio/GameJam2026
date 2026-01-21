@@ -26,6 +26,7 @@ public class AudioManager : MonoBehaviour
             if(Instance == null) {Instance = this; DontDestroyOnLoad(gameObject);}
             else {Destroy(gameObject); return;}
         }
+        SetupSources();
     } 
 
     private void SetupSources()
@@ -56,6 +57,13 @@ public class AudioManager : MonoBehaviour
         musicSource.clip = cat.clips[0];
         musicSource.loop = true;
         musicSource.Play();
+    }
+    public void PlayAmbient(AmbientType type)
+    {
+        var cat = ambientList[(int) type];
+        ambientSource.clip = cat.clips[0];
+        ambientSource.loop = true;
+        ambientSource.Play();
     }
     
     private void PlayRandom(Enum type, SoundCategory[] list, AudioSource source)
