@@ -48,14 +48,6 @@ public class ClientBodyCreator : MonoBehaviour
         t.localRotation = Quaternion.identity;
         t.localScale = Vector3.one;
 
-        // Si es UI (RectTransform)
-        var rt = go.gameObject.transform as RectTransform;
-        if (rt != null)
-        {
-            rt.anchoredPosition = Vector2.zero;
-            rt.localRotation = Quaternion.identity;
-            rt.localScale = Vector3.one;
-        }
         return go;
     }
 }
