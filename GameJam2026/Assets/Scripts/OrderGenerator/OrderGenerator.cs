@@ -19,13 +19,13 @@ public class OrderGenerator : MonoBehaviour
     }
     public void GenerateNewClientOrder()
     {
-        // Select a random pack
+        // Random Pack
         PackData selectedPack = availablePacks[Random.Range(0, availablePacks.Length)];
 
-        // Select a random activity from the selected pack
+        // Random Activity from Pack
         ActivityData selectedActivity = selectedPack.activities[Random.Range(0, selectedPack.activities.Length)];
 
-        // Get a random combination of monster, condition, and environment from the selected activity
+        // Random Combo from Activity
         selectedActivity.GetRandomCombo(out currentMonster, out currentCondition, out currentEnvironment);
 
         Debug.Log($"New Order Generated: Monster - {currentMonster.requirementName}, Condition - {currentCondition.requirementName}, Environment - {currentEnvironment.requirementName} ");
