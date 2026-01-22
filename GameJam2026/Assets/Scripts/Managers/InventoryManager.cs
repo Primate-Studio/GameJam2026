@@ -9,17 +9,17 @@ using System;
 public class InventorySlot
 {
     public ObjectType objectType = ObjectType.None;
-    public InteractableObject objectReference = null; // Referencia al objeto en el mundo
+    public GameObject handPrefab = null; // Prefab que se instancia en la mano (INDEPENDIENTE del mundo)
     
     public bool IsEmpty()
     {
-        return objectType == ObjectType.None || objectReference == null;
+        return objectType == ObjectType.None || handPrefab == null;
     }
     
     public void Clear()
     {
         objectType = ObjectType.None;
-        objectReference = null;
+        handPrefab = null;
     }
 }
 
@@ -80,13 +80,13 @@ public class InventoryManager : MonoBehaviour
         
         if (scroll > 0)
         {
-            // Scroll arriba - siguiente bolsillo
-            ChangeSlot(1);
+            // Scroll arriba - bolsillo anterior (índice baja)
+            ChangeSlot(-1);
         }
         else if (scroll < 0)
         {
-            // Scroll abajo - bolsillo anterior
-            ChangeSlot(-1);
+            // Scroll abajo - siguiente bolsillo (índice sube)
+            ChangeSlot(1);
         }
     }
     
@@ -128,20 +128,27 @@ public class InventoryManager : MonoBehaviour
         // Obtener el slot actual
         InventorySlot currentSlot = GetCurrentSlot();
         
-        // Si el slot no está vacío y tiene un objeto, instanciarlo
-        if (!currentSlot.IsEmpty() && currentSlot.objectReference != null)
+        // Si el slot no está vacío y tiene un prefab, instanciarlo
+        if (!currentSlot.IsEmpty() && currentSlot.handPrefab != null)
         {
             // Instanciar el prefab del objeto en la mano
-            if (currentSlot.objectReference.handPrefab != null && handTransform != null)
+            if (handTransform != null)
             {
                 currentHandObject = Instantiate(
-                    currentSlot.objectReference.handPrefab,
-                    handTransform.position,
-                    handTransform.rotation,
+                    currentSlot.handPrefab,
                     handTransform
                 );
                 
-                Debug.Log($"Objeto {currentSlot.objectType} instanciado en la mano");
+                // Asegurar posición local correcta
+                currentHandObject.transform.localPosition = Vector3.zero;
+                currentHandObject.transform.localRotation = Quaternion.identity;
+                currentHandObject.transform.localScale = Vector3.one;
+                
+                Debug.Log($"<color=green>Objeto {currentSlot.objectType} instanciado en la mano</color>");
+            }
+            else
+            {
+                Debug.LogError("<color=red>HandTransform no está asignado en InventoryManager!</color>");
             }
         }
     }
@@ -156,10 +163,15 @@ public class InventoryManager : MonoBehaviour
         
         if (slot.IsEmpty())
         {
+            // Guardar SOLO el tipo y el prefab, NO la referencia al objeto del mundo
             slot.objectType = obj.objectType;
-            slot.objectReference = obj;
-            obj.PickUp(); // Desactivar el objeto del mundo
-            UpdateHandObject(); // Mostrar en la mano
+            slot.handPrefab = obj.handPrefab;
+            
+            // PRIMERO: Mostrar en la mano (instanciar el prefab)
+            UpdateHandObject();
+            
+            // DESPUÉS: El objeto del mundo se oculta/respawnea independientemente
+            obj.PickUp();
             
             Debug.Log($"Objeto {obj.objectType} añadido al bolsillo {currentSlotIndex + 1}");
             return true;
@@ -170,32 +182,27 @@ public class InventoryManager : MonoBehaviour
     
     /// <summary>
     /// Reemplaza el objeto en el slot actual con otro objeto
-    /// El objeto anterior se devuelve para ser colocado en el mundo
     /// </summary>
-    public InteractableObject SwapCurrentSlot(InteractableObject newObj, Vector3 dropPosition)
+    public void SwapCurrentSlot(InteractableObject newObj)
     {
         InventorySlot slot = GetCurrentSlot();
         
         if (!slot.IsEmpty())
         {
-            // Guardar referencia al objeto anterior
-            InteractableObject oldObj = slot.objectReference;
+            ObjectType oldType = slot.objectType;
             
-            // Colocar el objeto anterior en el mundo
-            oldObj.Drop(dropPosition);
-            
-            // Reemplazar con el nuevo objeto
+            // Simplemente reemplazar el contenido del slot
             slot.objectType = newObj.objectType;
-            slot.objectReference = newObj;
-            newObj.PickUp();
+            slot.handPrefab = newObj.handPrefab;
+            
+            // PRIMERO: Actualizar visual en la mano
             UpdateHandObject();
             
-            Debug.Log($"Objeto {oldObj.objectType} cambiado por {newObj.objectType} en bolsillo {currentSlotIndex + 1}");
+            // DESPUÉS: El objeto del mundo se oculta/respawnea independientemente
+            newObj.PickUp();
             
-            return oldObj;
+            Debug.Log($"Objeto {oldType} cambiado por {newObj.objectType} en bolsillo {currentSlotIndex + 1}");
         }
-        
-        return null;
     }
     
     /// <summary>
@@ -209,13 +216,7 @@ public class InventoryManager : MonoBehaviour
         {
             ObjectType deliveredType = slot.objectType;
             
-            // Destruir el objeto (ya que se entrega)
-            if (slot.objectReference != null)
-            {
-                Destroy(slot.objectReference.gameObject);
-            }
-            
-            // Limpiar el slot
+            // Limpiar el slot (NO destruir nada del mundo, solo el inventario)
             slot.Clear();
             UpdateHandObject();
             

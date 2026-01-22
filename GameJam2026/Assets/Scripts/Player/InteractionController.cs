@@ -99,15 +99,10 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void SwapObject()
     {
-        Vector3 dropPosition = GetDropPosition();
-        InteractableObject oldObject = InventoryManager.Instance.SwapCurrentSlot(objectInRange, dropPosition);
+        ObjectType oldType = InventoryManager.Instance.GetCurrentObjectType();
+        InventoryManager.Instance.SwapCurrentSlot(objectInRange);
         
-        if (oldObject != null)
-        {
-            Debug.Log($"<color=cyan>↔ Objeto {oldObject.objectType} cambiado por {objectInRange.objectType}</color>");
-            // El nuevo objeto ya no está en rango, el viejo ahora está en su lugar
-            objectInRange = oldObject;
-        }
+        Debug.Log($"<color=cyan>↔ Objeto {oldType} cambiado por {objectInRange.objectType}</color>");
     }
     
     /// <summary>
