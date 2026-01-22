@@ -107,20 +107,32 @@ public class InteractionController : MonoBehaviour
     
     /// <summary>
     /// Entrega el objeto actual a la zona de entrega
+    /// Si es una DeliveryBox con pedido, lo entrega al pedido
+    /// Si no, es una entrega genérica
     /// </summary>
     private void DeliverObject()
     {
         ObjectType deliveredType = InventoryManager.Instance.GetCurrentObjectType();
         
-        if (InventoryManager.Instance.DeliverCurrentSlot())
+        // Verificar si es una DeliveryBox con pedido
+        DeliveryBox deliveryBox = objectInRange.GetComponent<DeliveryBox>();
+        
+        if (deliveryBox != null && deliveryBox.HasOrder())
         {
-            Debug.Log($"<color=yellow>✓ Objeto {deliveredType} entregado al cliente!</color>");
-            
-            // Aquí puedes añadir lógica adicional:
-            // - Dar puntos al jugador
-            // - Actualizar UI
-            // - Reproducir sonido
-            // - etc.
+            // Entregar al pedido específico
+            if (deliveryBox.TryDeliverItem(deliveredType))
+            {
+                // Si la entrega fue exitosa, vaciar el slot del inventario
+                InventoryManager.Instance.DeliverCurrentSlot();
+            }
+        }
+        else
+        {
+            // Entrega genérica (compatibilidad con sistema antiguo)
+            if (InventoryManager.Instance.DeliverCurrentSlot())
+            {
+                Debug.Log($"<color=yellow>✓ Objeto {deliveredType} entregado!</color>");
+            }
         }
     }
     
@@ -138,6 +150,7 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter(Collider other)
     {
+        // Detectar objetos interactuables
         InteractableObject obj = other.GetComponent<InteractableObject>();
         
         if (obj != null && other.gameObject.activeInHierarchy)
@@ -146,7 +159,15 @@ public class InteractionController : MonoBehaviour
             
             if (showDebugInfo)
             {
-                if (obj.isDeliveryZone)
+                // Verificar si es una DeliveryBox
+                DeliveryBox deliveryBox = obj.GetComponent<DeliveryBox>();
+                
+                if (deliveryBox != null && deliveryBox.HasOrder())
+                {
+                    Order order = deliveryBox.GetOrder();
+                    Debug.Log($"<color=magenta>[Trigger] Caja de Pedido #{order.orderID} detectada - Presiona E para entregar</color>");
+                }
+                else if (obj.isDeliveryZone)
                 {
                     Debug.Log($"<color=yellow>[Trigger] Zona de entrega detectada</color>");
                 }
@@ -163,13 +184,14 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void OnTriggerExit(Collider other)
     {
+        // Limpiar objeto interactuable
         InteractableObject obj = other.GetComponent<InteractableObject>();
         
         if (obj != null && obj == objectInRange)
         {
             if (showDebugInfo)
             {
-                Debug.Log($"<color=gray>[Trigger] Objeto {obj.objectType} fuera de rango</color>");
+                Debug.Log($"<color=gray>[Trigger] Objeto fuera de rango</color>");
             }
             
             objectInRange = null;
