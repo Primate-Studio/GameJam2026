@@ -7,9 +7,9 @@ using UnityEngine;
 public enum ObjectType
 {
     None,       // Para bolsillos vacíos
-    Espada,
-    Arco,
-    Lanza,
+    Sword,
+    Bow,
+    Spear,
     // Añade más tipos aquí según necesites
 }
 
