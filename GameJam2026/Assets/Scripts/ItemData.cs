@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Shop/Item")]
 public class ItemData : ScriptableObject
 {
-    public string itemName;
-
+    public ObjectType type;
+    
     [Header("Works With")]
     public RequirementData[] compatibleMonsters;
     public RequirementData[] compatibleConditions;

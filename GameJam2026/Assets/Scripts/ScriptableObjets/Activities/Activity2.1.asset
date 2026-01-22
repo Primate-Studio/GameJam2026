@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530bcd02b9a95db478a4f39eb3574069, type: 3}
-  m_Name: Sword
-  m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: 
-  compatibleMonsters: []
-  compatibleConditions: []
-  compatibleEnvironments: []
-  itemDescription: 
+  m_Script: {fileID: 11500000, guid: 2f2ba536e066680459531e59d26134d3, type: 3}
+  m_Name: Activity2.1
+  m_EditorClassIdentifier: Assembly-CSharp::ActivityData
+  activityName: 
+  monsters: []
+  conditions: []
+  environments: []
