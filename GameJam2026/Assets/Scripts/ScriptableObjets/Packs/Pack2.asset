@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PackData
   packName: 
   activities:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: da407628f2a3bab4aa55ff2618834cdd, type: 2}
+  - {fileID: 11400000, guid: bdb6dea366eba0d4e8ab8d8261370bae, type: 2}
+  - {fileID: 11400000, guid: ab1fb874e7275c34bb35038dfcacb306, type: 2}
+  - {fileID: 11400000, guid: c7282787135dd58438027f460a6487e6, type: 2}

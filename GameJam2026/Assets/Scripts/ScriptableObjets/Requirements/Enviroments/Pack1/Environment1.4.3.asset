@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Environment1.4.3
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   type: 2
-  requirementName: 
+  requirementName: Environment1.4.3

@@ -10,6 +10,8 @@ public class ItemData : ScriptableObject
     public RequirementData[] compatibleConditions;
     public RequirementData[] compatibleEnvironments;
 
+    public GameObject itemPrefab;
+
     [TextArea]
     public string itemDescription;
 }

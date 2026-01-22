@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Enemy1.4.2
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   type: 0
-  requirementName: 
+  requirementName: Enemy1.4.2

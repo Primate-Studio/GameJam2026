@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2ba536e066680459531e59d26134d3, type: 3}
   m_Name: Activity1.3
   m_EditorClassIdentifier: Assembly-CSharp::ActivityData
-  activityName: 
-  monsters: []
-  conditions: []
-  environments: []
+  activityName: Activity1.3
+  monsters:
+  - {fileID: 11400000, guid: 331a834a54d542649a965929321f7548, type: 2}
+  - {fileID: 11400000, guid: 8813172edc1eee34e923b83dc622891d, type: 2}
+  - {fileID: 11400000, guid: d43e0657b9af71945ac0704a84fb4717, type: 2}
+  conditions:
+  - {fileID: 11400000, guid: 46a91dacb98a69f4f97772d1d892e05f, type: 2}
+  - {fileID: 11400000, guid: 9be449cc982e64842b091c7a32569bd4, type: 2}
+  - {fileID: 11400000, guid: dfcd265bc2b18b64b9b7388ae0f81dcf, type: 2}
+  environments:
+  - {fileID: 11400000, guid: 59f880cdf5754004498faea32df3d233, type: 2}
+  - {fileID: 11400000, guid: 02f041eb8af88e746a0c3f821570210b, type: 2}
+  - {fileID: 11400000, guid: 39a305938e51f424f922bda4ac27255f, type: 2}

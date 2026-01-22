@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Condition1.1.3
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   type: 1
-  requirementName: 
+  requirementName: Condition1.1.3
