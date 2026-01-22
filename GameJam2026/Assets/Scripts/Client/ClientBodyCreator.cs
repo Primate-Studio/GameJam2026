@@ -10,7 +10,7 @@ public class ClientBodyCreator : MonoBehaviour
     private GameObject bodyAccessory;
     void Start()
     {
-        ApplyRandomLook(visualPool);
+
     }
 
     void Update()
@@ -40,9 +40,10 @@ public class ClientBodyCreator : MonoBehaviour
 
     private GameObject SpawnAndReset(GameObject[] pool, Transform parent)
     {
+        //reset pool
         if (pool == null || pool.Length == 0) return null;
         var prefab = pool[Random.Range(0, pool.Length)];
-        var go = Instantiate(prefab, parent, false); // en espacio local del padre
+        var go = Instantiate(prefab, parent, false);
         var t = go.transform;
         t.localPosition = Vector3.zero;
         t.localRotation = Quaternion.identity;

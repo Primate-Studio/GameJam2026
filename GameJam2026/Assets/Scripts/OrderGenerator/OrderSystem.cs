@@ -327,6 +327,7 @@ public class OrderSystem : MonoBehaviour
             {
                 Destroy(activeBoxes[index]);
                 activeBoxes.RemoveAt(index);
+                ClientManager.Instance.DismissClientInSlot(index);
             }
         }
     }
