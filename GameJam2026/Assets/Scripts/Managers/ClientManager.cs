@@ -66,6 +66,16 @@ public class ClientManager : MonoBehaviour
 
         // Moviment al slot corresponent
         ClientMovement mover = client.GetComponent<ClientMovement>();
+        
+        // Cuando el cliente llegue a su posición, generar el pedido
+        mover.OnArrival = () =>
+        {
+            if (OrderSystem.Instance != null)
+            {
+                OrderSystem.Instance.GenerateOrderForClient(client, slotIndex);
+            }
+        };
+        
         mover.MoveTo(targetPoints[slotIndex].position);
     }
 

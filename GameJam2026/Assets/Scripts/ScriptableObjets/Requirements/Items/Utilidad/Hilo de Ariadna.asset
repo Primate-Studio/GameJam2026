@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530bcd02b9a95db478a4f39eb3574069, type: 3}
+  m_Name: Hilo de Ariadna
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  type: 1
+  compatibleMonsters:
+  - {fileID: 11400000, guid: d3033394608c4aa4d801b6b722ab66e6, type: 2}
+  - {fileID: 11400000, guid: 2dfa5fc124b5804419b4e94a42f506e6, type: 2}
+  - {fileID: 11400000, guid: 288e3d237f7d3f1428b7a1b3e6da21e2, type: 2}
+  - {fileID: 11400000, guid: 42427e6de6b562b42842dfc459bf54ec, type: 2}
+  - {fileID: 11400000, guid: 6fd63478546b32449aba9f5b9f886b9e, type: 2}
+  - {fileID: 11400000, guid: 8fca3fb0ef8c41e4b8b6dbd4d0e2bac4, type: 2}
+  - {fileID: 11400000, guid: 331a834a54d542649a965929321f7548, type: 2}
+  - {fileID: 11400000, guid: 8813172edc1eee34e923b83dc622891d, type: 2}
+  - {fileID: 11400000, guid: d43e0657b9af71945ac0704a84fb4717, type: 2}
+  - {fileID: 11400000, guid: 82a6db5ff234e36458719d4492a7e437, type: 2}
+  - {fileID: 11400000, guid: 4d57817c1ccf36a4db64ccd73190ab55, type: 2}
+  - {fileID: 11400000, guid: 3053ad5975a47cb4cbb58eb11af1c234, type: 2}
+  compatibleConditions:
+  - {fileID: 11400000, guid: 06ee4a860c84f194e8a6c5dab816298a, type: 2}
+  - {fileID: 11400000, guid: 6511cea1c4229824b8e2baf45f6ad596, type: 2}
+  - {fileID: 11400000, guid: 7f56a9285e2a8a940aff379588e414df, type: 2}
+  - {fileID: 11400000, guid: 24831695e4082e14aacf75aa4e9a990a, type: 2}
+  - {fileID: 11400000, guid: 9f6a3ddaa5f1f574ea4dd36268b4e5db, type: 2}
+  - {fileID: 11400000, guid: 2363e58976b07ac428e33db5bb6dc7c9, type: 2}
+  - {fileID: 11400000, guid: 46a91dacb98a69f4f97772d1d892e05f, type: 2}
+  - {fileID: 11400000, guid: 9be449cc982e64842b091c7a32569bd4, type: 2}
+  - {fileID: 11400000, guid: dfcd265bc2b18b64b9b7388ae0f81dcf, type: 2}
+  - {fileID: 11400000, guid: eebe56ffddba5ec4d9709c876bd0a68b, type: 2}
+  - {fileID: 11400000, guid: e747ce8097b6d2748853c894852fa49c, type: 2}
+  - {fileID: 11400000, guid: ec2f433a878704a45b3ebd9d7b205fc4, type: 2}
+  compatibleEnvironments:
+  - {fileID: 11400000, guid: df3f3294170d19b4c87c5d3cfbb73dd6, type: 2}
+  - {fileID: 11400000, guid: 27850d5a8d9241d4297cb750e04e1f52, type: 2}
+  - {fileID: 11400000, guid: 9ba29aa1333d73e4486637ae6ccfeff6, type: 2}
+  - {fileID: 11400000, guid: 5244c4c881b6a304f85c29537ca4724c, type: 2}
+  - {fileID: 11400000, guid: 28cfd0bd5c12f874ab1a82c6ceb4bd11, type: 2}
+  - {fileID: 11400000, guid: 6f131545c9b9f3a41b42d1ca739280f6, type: 2}
+  - {fileID: 11400000, guid: 59f880cdf5754004498faea32df3d233, type: 2}
+  - {fileID: 11400000, guid: 02f041eb8af88e746a0c3f821570210b, type: 2}
+  - {fileID: 11400000, guid: 39a305938e51f424f922bda4ac27255f, type: 2}
+  - {fileID: 11400000, guid: 07fb1cd3c04d2ac4ab12ef5b28c09652, type: 2}
+  - {fileID: 11400000, guid: b52ded36f51bb4d498c78b9612882539, type: 2}
+  - {fileID: 11400000, guid: 0ec44345088d3504fa2c1e8e4a689a70, type: 2}
+  itemPrefab: {fileID: 847986499320479389, guid: 9d7ab027ee3334a43852c3dbc0165d07, type: 3}
+  itemDescription: 

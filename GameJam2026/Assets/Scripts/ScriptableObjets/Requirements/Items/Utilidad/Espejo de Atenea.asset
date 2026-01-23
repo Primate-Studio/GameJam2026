@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530bcd02b9a95db478a4f39eb3574069, type: 3}
+  m_Name: Espejo de Atenea
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  type: 3
+  compatibleMonsters:
+  - {fileID: 11400000, guid: f01184e4a0f0c8e498d6468d1fa7e3d3, type: 2}
+  - {fileID: 11400000, guid: a9d3535944407a94d89a22258f31b3c3, type: 2}
+  - {fileID: 11400000, guid: 03dbcfb177ce5624c8c312666d90dbbb, type: 2}
+  - {fileID: 11400000, guid: 0554f8688c699434e9f94f7dee747112, type: 2}
+  - {fileID: 11400000, guid: f229dd30a42335445b5330768440df28, type: 2}
+  - {fileID: 11400000, guid: 7861d0c11e97c5d4ca08cce2840caa75, type: 2}
+  - {fileID: 11400000, guid: 7451ee7e5eb87d648a6b7e39e55612ac, type: 2}
+  - {fileID: 11400000, guid: 8699d0e3c22d49c4faaa41a2d3f3c628, type: 2}
+  - {fileID: 11400000, guid: d04607903e82ad04a914c8b04986af6c, type: 2}
+  - {fileID: 11400000, guid: 82b3bbacfe967624d9ee251ac85fb352, type: 2}
+  - {fileID: 11400000, guid: e0d30f69867d1e84584813f3ebfe19e8, type: 2}
+  - {fileID: 11400000, guid: ea6f92cfda29b1d4aacc8609f3f47126, type: 2}
+  compatibleConditions:
+  - {fileID: 11400000, guid: 7d64584f5eadbc34bb7b9cecde8c3d92, type: 2}
+  - {fileID: 11400000, guid: f26b2bbb11ad5b8459b9f7a2cf9d061c, type: 2}
+  - {fileID: 11400000, guid: a91ace8537e34d5448c1d4363f9e8dee, type: 2}
+  - {fileID: 11400000, guid: 7832e78298266da4081f1152aab688cc, type: 2}
+  - {fileID: 11400000, guid: 5fbe83fe32873fe499bf7a5dd57a54e6, type: 2}
+  - {fileID: 11400000, guid: 05cc613fcd9a5594bbe88a2294a435e3, type: 2}
+  - {fileID: 11400000, guid: ac1f249deb74ea042b0339bb91fa3e99, type: 2}
+  - {fileID: 11400000, guid: b5e19c40a16693d4fb06aed0b9c797bd, type: 2}
+  - {fileID: 11400000, guid: d34a3098958e4d74f857bd74331a076e, type: 2}
+  - {fileID: 11400000, guid: b140c99b7664cd64194fbce90b364f44, type: 2}
+  - {fileID: 11400000, guid: cb5cbb4bdd3988540b6669fa47832596, type: 2}
+  - {fileID: 11400000, guid: 0f7c3b3650a9df34b8037d08abb2ab9f, type: 2}
+  compatibleEnvironments:
+  - {fileID: 11400000, guid: 86ccfc2576113b34cb64b1d8520b95b4, type: 2}
+  - {fileID: 11400000, guid: 4fff730b0a7b4ec4b9b8d56a6888a2d0, type: 2}
+  - {fileID: 11400000, guid: 0eebe80c51d2f154bb860c330e7469d0, type: 2}
+  - {fileID: 11400000, guid: 44678f008043b9c41915d59064722395, type: 2}
+  - {fileID: 11400000, guid: 71d0d7be7d7585240ba7c39655f300fb, type: 2}
+  - {fileID: 11400000, guid: 017f92037e0901d4e9e90ae8a95f74ce, type: 2}
+  - {fileID: 11400000, guid: bd529d1e3a51e52439d1319f45ed4f28, type: 2}
+  - {fileID: 11400000, guid: 7e4a0eda8470dfd4cb853e4d339c627d, type: 2}
+  - {fileID: 11400000, guid: 65ade01fc4f83ed4dbbd58145b312ab8, type: 2}
+  - {fileID: 11400000, guid: 05036b33d4b04c44ca9a03bd8a2af20c, type: 2}
+  - {fileID: 11400000, guid: cdb00b20d007e85429d4075a1cdb21c1, type: 2}
+  - {fileID: 11400000, guid: 0f859a652b887e54ab5d9ead659b4fb3, type: 2}
+  itemPrefab: {fileID: 7069461465253622002, guid: 679983fe22679c34596aa2bbd0ca8a36, type: 3}
+  itemDescription: 

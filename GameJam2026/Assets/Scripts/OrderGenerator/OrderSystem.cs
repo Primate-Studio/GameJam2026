@@ -10,6 +10,17 @@ public class OrderSystem : MonoBehaviour
 {
     public static OrderSystem Instance { get; private set; }
     
+    // Clase para vincular cliente, order y box
+    [System.Serializable]
+    private class ClientOrderData
+    {
+        public GameObject client;
+        public Order order;
+        public GameObject box;
+        public ClientTimer clientTimer;
+        public int slotIndex;
+    }
+    
     [Header("Spawn Positions")]
     [Tooltip("Posiciones donde se instanciarán las cajas de pedido (máximo 3)")]
     public Transform spawnBox1;
@@ -57,8 +68,7 @@ public class OrderSystem : MonoBehaviour
     [Range(0, 100)] public float penalty_Abandonado = 95f;
     
     [Header("Active Orders")]
-    [SerializeField] private List<Order> activeOrders = new List<Order>();
-    private List<GameObject> activeBoxes = new List<GameObject>();
+    [SerializeField] private List<ClientOrderData> activeClientOrders = new List<ClientOrderData>();
     
     private int nextOrderID = 1;
     
@@ -72,26 +82,30 @@ public class OrderSystem : MonoBehaviour
         Instance = this;
     }
     
+    void Start()
+    {
+        // Suscribirse a la llegada de clientes desde ClientManager
+        if (ClientManager.Instance != null)
+        {
+            // El ClientManager debe llamar a GenerateOrderForClient cuando un cliente llega
+            Debug.Log("<color=cyan>OrderSystem listo para recibir clientes</color>");
+        }
+    }
+    
     void Update()
     {
-        // Generar pedido al presionar ESPACIO
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TryGenerateOrder();
-        }
-        
-        // TODO: Actualizar timers de pedidos activos
-        // Tu compañero se encargará de esto
-        // UpdateOrderTimers();
+        // Actualizar timers de pedidos activos y verificar si expiran
+        UpdateOrderTimers();
     }
     
     /// <summary>
-    /// Intenta generar un nuevo pedido si hay espacio disponible
+    /// Genera un pedido cuando un cliente llega a su posición
+    /// Llamado por ClientManager cuando el cliente llega
     /// </summary>
-    public void TryGenerateOrder()
+    public void GenerateOrderForClient(GameObject client, int slotIndex)
     {
         // Verificar si hay espacio (máximo 3 pedidos)
-        if (activeOrders.Count >= 3)
+        if (activeClientOrders.Count >= 3)
         {
             Debug.LogWarning("<color=orange>⚠️ No hay espacio para más pedidos! (Máximo 3)</color>");
             return;
@@ -118,9 +132,24 @@ public class OrderSystem : MonoBehaviour
             deliveryBox.AssignOrder(newOrder);
         }
         
-        // Añadir a las listas
-        activeOrders.Add(newOrder);
-        activeBoxes.Add(box);
+        // Obtener o crear el ClientTimer
+        ClientTimer clientTimer = client.GetComponent<ClientTimer>();
+        if (clientTimer == null)
+        {
+            clientTimer = client.AddComponent<ClientTimer>();
+        }
+        clientTimer.StartNewOrderTimer();
+        
+        // Crear el ClientOrderData y añadirlo
+        ClientOrderData clientOrderData = new ClientOrderData
+        {
+            client = client,
+            order = newOrder,
+            box = box,
+            clientTimer = clientTimer,
+            slotIndex = slotIndex
+        };
+        activeClientOrders.Add(clientOrderData);
         
         Debug.Log($"<color=green>✓ Pedido #{newOrder.orderID} generado!</color>");
         
@@ -180,9 +209,9 @@ public class OrderSystem : MonoBehaviour
     /// </summary>
     private Transform GetAvailableSpawnPosition()
     {
-        if (activeOrders.Count == 0) return spawnBox1;
-        if (activeOrders.Count == 1) return spawnBox2;
-        if (activeOrders.Count == 2) return spawnBox3;
+        if (activeClientOrders.Count == 0) return spawnBox1;
+        if (activeClientOrders.Count == 1) return spawnBox2;
+        if (activeClientOrders.Count == 2) return spawnBox3;
         return null;
     }
     
@@ -205,7 +234,9 @@ public class OrderSystem : MonoBehaviour
         // Si el pedido está completo, procesarlo
         if (order.IsComplete())
         {
-            ProcessCompletedOrder(order);
+            // Encontrar el ClientOrderData correspondiente
+            ClientOrderData clientOrderData = activeClientOrders.Find(cod => cod.order == order);
+            ProcessCompletedOrder(clientOrderData);
         }
         
         return true;
@@ -214,8 +245,11 @@ public class OrderSystem : MonoBehaviour
     /// <summary>
     /// Procesa un pedido completado y determina si el NPC sobrevive
     /// </summary>
-    private void ProcessCompletedOrder(Order order)
+    private void ProcessCompletedOrder(ClientOrderData clientOrderData)
     {
+        if (clientOrderData == null) return;
+        
+        Order order = clientOrderData.order;
         Debug.Log($"<color=yellow>📦 Pedido #{order.orderID} completado! Procesando...</color>");
         
         // Calcular objetos correctos
@@ -224,9 +258,8 @@ public class OrderSystem : MonoBehaviour
         // Calcular % de fallo base según objetos correctos
         float baseFailRate = CalculateBaseFailRate(correctItems, order.itemsNeeded);
         
-        // TODO: Calcular penalización por tiempo (tu compañero lo hará)
-        // float timePenalty = CalculateTimePenalty(order);
-        float timePenalty = 0f; // Por ahora sin penalización de tiempo
+        // Calcular penalización por tiempo usando el ClientTimer
+        float timePenalty = CalculateTimePenalty(clientOrderData.clientTimer);
         
         // % de fallo total
         float totalFailRate = baseFailRate + timePenalty;
@@ -239,8 +272,8 @@ public class OrderSystem : MonoBehaviour
         Debug.Log($"<color=cyan>📊 Penalización tiempo: {timePenalty}%</color>");
         Debug.Log($"<color=cyan>📊 % Supervivencia: {survivalRate}%</color>");
         
-        // Esperar 20 segundos y determinar resultado
-        StartCoroutine(DetermineOrderOutcome(order, survivalRate));
+        // Determinar resultado inmediatamente (ya no esperamos 20 segundos)
+        DetermineOrderOutcomeImmediate(clientOrderData, survivalRate);
     }
     
     /// <summary>
@@ -266,34 +299,46 @@ public class OrderSystem : MonoBehaviour
     }
     
     /// <summary>
-    /// TODO: Calcula la penalización por tiempo según el estado del pedido
-    /// Tu compañero implementará esto cuando añada el sistema de timers
+    /// Calcula la penalización por tiempo según el ClientTimer
     /// </summary>
-    private float CalculateTimePenalty(Order order)
+    private float CalculateTimePenalty(ClientTimer clientTimer)
     {
-        switch (order.state)
+        if (clientTimer == null) return 0f;
+        
+        // Obtener el nivel de desesperación del ClientTimer a través de reflexión
+        // (porque desperationLevel es privado)
+        float timePercentage = clientTimer.GetComponent<ClientTimer>() != null ? 
+            (clientTimer.timeRemaining / clientTimer.orderDuration) : 1f;
+        
+        // Calcular penalización basada en el porcentaje de tiempo restante
+        if (timePercentage >= 0.60f)
         {
-            case OrderState.Tranquilo:
-                return 0f;
-            case OrderState.Nervioso:
-                return penalty_Nervioso;
-            case OrderState.Impaciente:
-                return penalty_Impaciente;
-            case OrderState.Desesperado:
-                return penalty_Desesperado;
-            case OrderState.Abandonado:
-                return penalty_Abandonado;
-            default:
-                return 0f;
+            return 0f; // None
+        }
+        else if (timePercentage >= 0.30f && timePercentage < 0.60f)
+        {
+            return penalty_Nervioso; // Low
+        }
+        else if (timePercentage >= 0.10f && timePercentage < 0.30f)
+        {
+            return penalty_Impaciente; // Medium
+        }
+        else if (timePercentage > 0f && timePercentage < 0.10f)
+        {
+            return penalty_Desesperado; // High
+        }
+        else
+        {
+            return penalty_Abandonado; // Abandon
         }
     }
     
     /// <summary>
-    /// Espera 20 segundos y determina si el NPC sobrevive o muere
+    /// Determina inmediatamente si el NPC sobrevive o muere
     /// </summary>
-    private IEnumerator DetermineOrderOutcome(Order order, float survivalRate)
+    private void DetermineOrderOutcomeImmediate(ClientOrderData clientOrderData, float survivalRate)
     {
-        yield return new WaitForSeconds(20f);
+        Order order = clientOrderData.order;
         
         // Tirar dado
         float randomValue = Random.Range(0f, 100f);
@@ -309,52 +354,62 @@ public class OrderSystem : MonoBehaviour
         }
         
         // Remover el pedido del sistema
-        RemoveOrder(order);
+        RemoveOrder(clientOrderData);
     }
     
     /// <summary>
-    /// Remueve un pedido del sistema y destruye su caja
+    /// Remueve un pedido del sistema, destruye su caja y despide al cliente
     /// </summary>
-    private void RemoveOrder(Order order)
+    private void RemoveOrder(ClientOrderData clientOrderData)
     {
-        int index = activeOrders.IndexOf(order);
+        if (clientOrderData == null) return;
         
-        if (index >= 0)
+        // Destruir la caja
+        if (clientOrderData.box != null)
         {
-            activeOrders.RemoveAt(index);
-            
-            if (index < activeBoxes.Count)
-            {
-                Destroy(activeBoxes[index]);
-                activeBoxes.RemoveAt(index);
-                ClientManager.Instance.DismissClientInSlot(index);
-            }
+            Destroy(clientOrderData.box);
         }
+        
+        // Despedir al cliente
+        if (ClientManager.Instance != null)
+        {
+            ClientManager.Instance.DismissClientInSlot(clientOrderData.slotIndex);
+        }
+        
+        // Remover de la lista activa
+        activeClientOrders.Remove(clientOrderData);
     }
     
     /// <summary>
-    /// TODO: Actualiza los timers de todos los pedidos activos
-    /// Tu compañero implementará esto
+    /// Actualiza los timers de todos los pedidos activos y verifica si expiran
     /// </summary>
     private void UpdateOrderTimers()
     {
-        // foreach (Order order in activeOrders)
-        // {
-        //     order.timeElapsed += Time.deltaTime;
-        //     
-        //     // Actualizar estado según tiempo
-        //     float timeRemaining = order.maxTime - order.timeElapsed;
-        //     
-        //     if (timeRemaining <= 0)
-        //         order.state = OrderState.Abandonado;
-        //     else if (timeRemaining <= 6)
-        //         order.state = OrderState.Desesperado;
-        //     else if (timeRemaining <= 18)
-        //         order.state = OrderState.Impaciente;
-        //     else if (timeRemaining <= 36)
-        //         order.state = OrderState.Nervioso;
-        //     else
-        //         order.state = OrderState.Tranquilo;
-        // }
+        // Verificar si algún timer ha expirado
+        for (int i = activeClientOrders.Count - 1; i >= 0; i--)
+        {
+            ClientOrderData clientOrderData = activeClientOrders[i];
+            
+            if (clientOrderData.clientTimer != null)
+            {
+                // Verificar si el tiempo se acabó
+                if (clientOrderData.clientTimer.timeRemaining <= 0f)
+                {
+                    Debug.Log($"<color=red>⏱️ Tiempo agotado para pedido #{clientOrderData.order.orderID}!</color>");
+                    
+                    // Si hay objetos entregados, calcular resultado parcial
+                    if (clientOrderData.order.deliveredItems.Count > 0)
+                    {
+                        ProcessCompletedOrder(clientOrderData);
+                    }
+                    else
+                    {
+                        // Sin objetos = abandono total
+                        Debug.Log($"<color=red>✗ NPC del pedido #{clientOrderData.order.orderID} ha ABANDONADO (0 objetos entregados)</color>");
+                        RemoveOrder(clientOrderData);
+                    }
+                }
+            }
+        }
     }
 }

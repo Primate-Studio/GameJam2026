@@ -6,11 +6,7 @@ using UnityEngine;
 /// </summary>
 public enum ObjectType
 {
-    None,       // Para bolsillos vacíos
-    Sword,
-    Bow,
-    Spear,
-    // Añade más tipos aquí según necesites
+    None, Hilo, Red, Espejo, Sandalia, Alas, Brújula, Tridente, CascoA, Rayo, Arco ,Mandoble, CascoH, Chanclas, Mascaras, Odre, CoronaL, Cinturon       // Para bolsillos vacíos
 }
 
 /// <summary>
