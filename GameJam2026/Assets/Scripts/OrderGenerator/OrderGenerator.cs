@@ -19,6 +19,7 @@ public class OrderGenerator : MonoBehaviour
     }
     public void GenerateNewClientOrder()
     {
+        int requiredCount = Random.Range(2, 4); // 2 o 3 objetos
         // Random Pack
         PackData selectedPack = availablePacks[Random.Range(0, availablePacks.Length)];
 
