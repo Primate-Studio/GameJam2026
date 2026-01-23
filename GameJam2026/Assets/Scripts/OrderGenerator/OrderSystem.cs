@@ -232,10 +232,13 @@ public class OrderSystem : MonoBehaviour
         
         if (survived)
         {
+            MoneyManager.Instance.successMoney();
             Debug.Log($"<color=green>✓ NPC del pedido #{order.orderID} ha SOBREVIVIDO! (Winrate: {survivalPercentage:F1}%)</color>");
         }
         else
         {
+
+            MoneyManager.Instance.deadthPenaltyMoney();
             Debug.Log($"<color=red>✗ NPC del pedido #{order.orderID} ha MUERTO... (Winrate: {survivalPercentage:F1}%)</color>");
         }
         

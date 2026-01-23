@@ -23,6 +23,7 @@ public class Order
     
     [Header("Status")]
     public DesperationLevel state = DesperationLevel.None;
+
     
     // ID único del pedido
     public int orderID;
@@ -59,28 +60,36 @@ public class Order
             if (System.Array.Exists(requirement.Good, obj => obj == deliveredType))
             {
                 quality = "Ideal";
-                scoreChange = 65f;
+                scoreChange = 100f;
+                MoneyManager.Instance.AddMoney(6);
+                MoneyManager.Instance.SubtractMoney(2);
                 totalScore += scoreChange;
             }
             // Verificar si el objeto es Decente (Mid)
             else if (System.Array.Exists(requirement.Mid, obj => obj == deliveredType))
             {
                 quality = "Decente";
-                scoreChange = 35f;
+                scoreChange = 65f;
+                MoneyManager.Instance.AddMoney(4);
+                MoneyManager.Instance.SubtractMoney(2);                
                 totalScore += scoreChange;
             }
             // Verificar si el objeto es Pésimo (Bad)
             else if (System.Array.Exists(requirement.Bad, obj => obj == deliveredType))
             {
                 quality = "Pésimo";
-                scoreChange = -40f;
+                scoreChange = 0f;
+                MoneyManager.Instance.AddMoney(1);
+                MoneyManager.Instance.SubtractMoney(2);                
                 totalScore += scoreChange;
             }
             else
             {
                 // Si no está en ninguna lista = Neutro (0%)
                 quality = "Neutro";
-                scoreChange = 0f;
+                scoreChange = 10f;
+                MoneyManager.Instance.AddMoney(2);
+                MoneyManager.Instance.SubtractMoney(2);
             }
             
             //if (showLogs)

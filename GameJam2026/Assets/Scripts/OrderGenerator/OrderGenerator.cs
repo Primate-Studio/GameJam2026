@@ -69,7 +69,7 @@ public class OrderGenerator : MonoBehaviour
         }
         
         // Los objetos necesarios = número de requisitos
-        order.itemsNeeded = requiredCount*2;
+        order.itemsNeeded = requiredCount;
         
         // Actualizar variables para debug visual
         currentMonster = order.monster;
