@@ -19,6 +19,7 @@ public class OrderSystem : MonoBehaviour
         public GameObject box;
         public ClientTimer clientTimer;
         public int slotIndex;
+        public GameObject uiElement;
     }
     
     [Header("Spawn Positions")]
@@ -32,6 +33,9 @@ public class OrderSystem : MonoBehaviour
     
     [Header("Active Orders")]
     [SerializeField] private List<ClientOrderData> activeClientOrders = new List<ClientOrderData>();
+
+    public Transform uiContainer;
+    public GameObject orderUIPrefab;
     
     void Awake()
     {
@@ -117,13 +121,23 @@ public class OrderSystem : MonoBehaviour
         clientTimer.StartNewOrderTimer();
         
         // Crear el ClientOrderData y añadirlo
+        // 1. Fem la "foto" cridant al Photo Booth
+        Sprite clientPhoto = PortraitCamera.Instance.TakePortrait(client);
+
+        // 2. Instanciem l'element de la UI al teu contenidor del Canvas
+        // Necessites tenir 'public GameObject orderUIPrefab' i 'public Transform uiContainer' a l'OrderSystem
+        GameObject uiObj = Instantiate(orderUIPrefab, uiContainer);
+        uiObj.GetComponent<OrderUIItem>().Setup(newOrder, clientPhoto);
+
+        // 3. Creem el ClientOrderData incloent la UI
         ClientOrderData clientOrderData = new ClientOrderData
         {
             client = client,
             order = newOrder,
             box = box,
             clientTimer = clientTimer,
-            slotIndex = slotIndex
+            slotIndex = slotIndex,
+            uiElement = uiObj // <--- GUARDEM LA REFERÈNCIA
         };
         activeClientOrders.Add(clientOrderData);
         
@@ -137,6 +151,7 @@ public class OrderSystem : MonoBehaviour
         }
         Debug.Log($"<color=cyan>Requisitos ({newOrder.itemsNeeded}): {requirements}</color>");
         Debug.Log($"<color=yellow>Objetos necesarios: {newOrder.itemsNeeded}</color>");
+
     }
     
     /// <summary>
@@ -225,6 +240,11 @@ public class OrderSystem : MonoBehaviour
     private void RemoveOrder(ClientOrderData clientOrderData)
     {
         if (clientOrderData == null) return;
+        
+        if (clientOrderData.uiElement != null)
+        {
+            Destroy(clientOrderData.uiElement);
+        }
         
         //Debug.Log($"<color=yellow>🗑️ RemoveOrder: Eliminando pedido #{clientOrderData.order.orderID} del slot {clientOrderData.slotIndex}</color>");
         
