@@ -217,17 +217,26 @@ public class OrderSystem : MonoBehaviour
     {
         Order order = clientOrderData.order;
         
-        // Tirar dado
+        // Normalizar survivalRate: si está en formato decimal (0-1), convertir a porcentaje (0-100)
+        float survivalPercentage = survivalRate;
+        if (survivalRate <= 1f)
+        {
+            survivalPercentage = survivalRate * 100f;
+        }
+        
+        // Tirar dado entre 0 y 100
         float randomValue = Random.Range(0f, 100f);
-        bool survived = randomValue < survivalRate;
+        bool survived = randomValue < survivalPercentage;
+        
+        Debug.Log($"<color=yellow>🎲 Tirando dado: {randomValue:F2} vs {survivalPercentage:F1}% winrate</color>");
         
         if (survived)
         {
-            Debug.Log($"<color=green>✓ NPC del pedido #{order.orderID} ha SOBREVIVIDO! (Winrate: {survivalRate:F1}%)</color>");
+            Debug.Log($"<color=green>✓ NPC del pedido #{order.orderID} ha SOBREVIVIDO! (Winrate: {survivalPercentage:F1}%)</color>");
         }
         else
         {
-            Debug.Log($"<color=red>✗ NPC del pedido #{order.orderID} ha MUERTO... (Winrate: {survivalRate:F1}%)</color>");
+            Debug.Log($"<color=red>✗ NPC del pedido #{order.orderID} ha MUERTO... (Winrate: {survivalPercentage:F1}%)</color>");
         }
         
         // Remover el pedido del sistema
