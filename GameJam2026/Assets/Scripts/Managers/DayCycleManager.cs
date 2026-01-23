@@ -49,6 +49,8 @@ public class DayCycleManager : MonoBehaviour
         isDayActive = true;
         OnDayStart?.Invoke();
         Debug.Log("<color=yellow>☀ La botiga ha obert!</color>");
+        
+        GameManager.Instance.ChangeState(GameState.Playing);
     }
 
     private void EndDay()
@@ -57,8 +59,7 @@ public class DayCycleManager : MonoBehaviour
         OnDayEnd?.Invoke();
         Debug.Log("<color=red>🌙 La botiga ha tancat!</color>");
         
-        // Aquí podríem canviar l'estat del GameManager
-        //GameManager.Instance.ChangeState(GameState.GameOver); 
+        GameManager.Instance.ChangeState(GameState.Result);
     }
 
     private void UpdateLighting(float progress)

@@ -3,6 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
+    public static GameSceneManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OnGameStateChanged;
@@ -31,6 +37,9 @@ public class GameSceneManager : MonoBehaviour
 
             case GameState.GameWin:
                 LoadScene("GameWinScene");
+                break;
+            case GameState.Result:
+                LoadScene("ResultScene");
                 break;
         }
     }

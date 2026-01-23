@@ -9,7 +9,8 @@ public enum GameState
     Playing,
     Paused,
     GameOver,
-    GameWin
+    GameWin,
+    Result
 }
 
 public class GameManager : MonoBehaviour
@@ -20,8 +21,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameState currentState;
     public GameState CurrentState => currentState;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
@@ -49,14 +48,7 @@ public class GameManager : MonoBehaviour
         currentState = newState;
         OnGameStateChanged?.Invoke(currentState);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-      public void StartNewGame()
+    public void StartNewGame()
     {
         ChangeState(GameState.Playing);
     }
@@ -78,6 +70,4 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(currentState);
 
     }
-
-
 }

@@ -43,7 +43,7 @@ public class InputManager : MonoBehaviour
         {
             SettingsButtons.Instance.OnPause(isPaused);
             isPaused = !isPaused;
-            Time.timeScale = isPaused ? 0f : 1f;
+            GameManager.Instance.ChangeState(isPaused ? GameState.Paused : GameState.Playing);
         }
     }
     public bool HasMovementInput()
