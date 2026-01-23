@@ -7,19 +7,22 @@ public class MoneyManager : MonoBehaviour
 
     [Header("Configuration")]
     public float Debt = 250;
-    public int currentMoney = 0;
-    public int totalMoney = 0;
-    public int InventoryCost = 0;
+    [HideInInspector]public int currentMoney = 0;
+    [HideInInspector] public int totalMoney = 0;
+    public int InventoryCost = 2;
 
-    private int deathPenalty = 10;
-    public int deathCount = 0;
-    public int successCount = 0;
-    public int totalItemsSold = 0;
+    public int deathPenalty = 10;
+    [HideInInspector] public int deathCount = 0;
+    [HideInInspector] public int successCount = 0;
+    [HideInInspector] public int totalItemsSold = 0;
 
     public int weaponPenalty = 5;
-    public int weaponPaycheck = 0;
+    [HideInInspector]public int weaponPaycheck = 0;
 
-    float debtPaymentAmount = 0;
+    [HideInInspector]float debtPaymentAmount = 0;
+
+    public int successReward = 8;
+    public float debtPaymentRate = 0.25f; 
     
 
     void Awake()
@@ -30,17 +33,6 @@ public class MoneyManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void AddMoney(int amount)
@@ -56,7 +48,7 @@ public class MoneyManager : MonoBehaviour
 
     public void successMoney()
     {
-        currentMoney += 8;
+        currentMoney += successReward;
         successCount++;
     }
 
@@ -68,21 +60,21 @@ public class MoneyManager : MonoBehaviour
 
     public int debtPayment()
     {
-        debtPaymentAmount = currentMoney * 0.25f;
+        debtPaymentAmount = currentMoney * debtPaymentRate;
         Debt -= debtPaymentAmount;
         return (int)debtPaymentAmount;
     }
     
     public void CalculateTotalMoney()
     {
-        totalMoney += currentMoney - InventoryCost + weaponPaycheck;
+        totalMoney += currentMoney - InventoryCost*totalItemsSold + weaponPaycheck;
         totalMoney -= debtPayment();
     }
 
     public void ResetDayPaycheck()
     {
         weaponPaycheck = 0;
-        InventoryCost = 0;
+        InventoryCost = 2;
         currentMoney = 0;
         deathCount = 0;
         successCount = 0;
@@ -93,7 +85,7 @@ public class MoneyManager : MonoBehaviour
     {
         currentMoney = 0;
         totalMoney = 0;
-        InventoryCost = 0;
+        InventoryCost = 2;
         weaponPaycheck = 0;
         deathCount = 0;
         successCount = 0;

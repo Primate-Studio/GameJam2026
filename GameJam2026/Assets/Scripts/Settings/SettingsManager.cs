@@ -10,9 +10,6 @@ public class SettingsManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private AudioMixer mainMixer;
 
-    [Header("Video Settings")]
-    [SerializeField] private Image brightnessOverlay;
-
     private void Awake()
     {
         if(Instance == null) {Instance = this; DontDestroyOnLoad(gameObject);}
@@ -36,18 +33,6 @@ public class SettingsManager : MonoBehaviour
     }
 
     //--------VIDEO & ACCESSIBILITY SETTINGS-----------
-
-    public void SetBrightness(float value)
-    {
-        if (brightnessOverlay != null)
-        {
-            // Ajustem l'alfa d'una imatge negra per simular brillantor
-            Color c = brightnessOverlay.color;
-            c.a = 1f - value; // Si value és 1 (màxim), l'alfa és 0 (transparent)
-            brightnessOverlay.color = c;
-        }
-        PlayerPrefs.SetFloat("Brightness", value);
-    }
     public void SetResolution(int index)
     {
         Resolution res = Screen.resolutions[index];
@@ -72,9 +57,6 @@ public class SettingsManager : MonoBehaviour
         SetMute("MasterVolume", PlayerPrefs.GetInt("MasterVolume_muted", 0) == 1);
         SetMute("MusicVolume", PlayerPrefs.GetInt("MusicVolume_muted", 0) == 1);
         SetMute("SFXVolume", PlayerPrefs.GetInt("SFXVolume_muted", 0) == 1);
-
-        // Video
-        SetBrightness(PlayerPrefs.GetFloat("Brightness", 1f));
        
     }
 }

@@ -41,8 +41,10 @@ public class InputManager : MonoBehaviour
     {
         if(PausePressed)
         {
-            SettingsButtons.Instance.OnPause(isPaused);
             isPaused = !isPaused;
+            SettingsButtons.Instance.OnPause(isPaused);
+            Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = isPaused;
             GameManager.Instance.ChangeState(isPaused ? GameState.Paused : GameState.Playing);
         }
     }

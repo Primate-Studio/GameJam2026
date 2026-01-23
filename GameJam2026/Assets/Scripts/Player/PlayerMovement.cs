@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void HandleMouseLook()
     {
-        if (InputManager.Instance == null) return;
+        if (InputManager.Instance == null || GameManager.Instance.CurrentState == GameState.Paused) return;
         
         // Rotación horizontal del jugador
         float mouseX = InputManager.Instance.MouseX * mouseSensitivity;

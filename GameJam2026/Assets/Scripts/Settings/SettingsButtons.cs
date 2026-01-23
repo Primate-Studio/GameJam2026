@@ -39,12 +39,10 @@ public class SettingsButtons : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        settingsmanager = SettingsManager.Instance;
     }
-    
-
     void Start()
     {
+        settingsmanager = SettingsManager.Instance;
         settingsmanager.LoadSettings();
         SetSettingsUI();
     }
@@ -109,10 +107,6 @@ public class SettingsButtons : MonoBehaviour
     public void OnMusicMuteToggled(bool isMuted)
     {
         settingsmanager.SetMute("MusicVolume", isMuted);
-    }
-    public void OnBrightnessChanged(float value)
-    {
-        settingsmanager.SetBrightness(value);
     }
     
     public void SetSettingsUI()
