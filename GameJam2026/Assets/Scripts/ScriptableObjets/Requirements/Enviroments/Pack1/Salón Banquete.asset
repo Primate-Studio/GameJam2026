@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4598632e93cd4b4fb359e98871d4955, type: 3}
   m_Name: "Sal\xF3n Banquete"
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
+  Good: 06000000
+  Mid: 03000000
+  Bad: 02000000
   type: 2
-  requirementName: Environment1.2.1
+  requirementName: "Sal\xF3n Banquete"

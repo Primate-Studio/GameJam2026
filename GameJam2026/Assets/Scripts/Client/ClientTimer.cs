@@ -10,11 +10,7 @@ public class ClientTimer : MonoBehaviour
 
     public float timeRemaining;  // Público para que OrderSystem pueda acceder
     private bool isOrderActive = false;
-
-    void Start()
-    {
-        StartNewOrderTimer();
-    }
+    private bool timerUICreated = false;
 
     void Update()
     {
@@ -22,17 +18,26 @@ public class ClientTimer : MonoBehaviour
         {
             //Color change based on time remaining
             timeRemaining -= Time.deltaTime;
-            TimerFillImage.fillAmount = timeRemaining / orderDuration;
-            TimerFillImage.color = Color.Lerp(Color.red, Color.green, timeRemaining / orderDuration);
+            
+            if (TimerFillImage != null)
+            {
+                TimerFillImage.fillAmount = timeRemaining / orderDuration;
+                TimerFillImage.color = Color.Lerp(Color.red, Color.green, timeRemaining / orderDuration);
+            }
+            
             CalculateDesperationLevel();
 
             if (timeRemaining <= 0f)
             {
                 isOrderActive = false;
-                TimerFillImage.fillAmount = 0f;
+                if (TimerFillImage != null)
+                {
+                    TimerFillImage.fillAmount = 0f;
+                }
             }
         }
     }
+    
     private void CalculateDesperationLevel()
     {
         float percentage = timeRemaining / orderDuration;
@@ -57,14 +62,41 @@ public class ClientTimer : MonoBehaviour
             desperationLevel = DesperationLevel.Abandon;
         }
     }
+    
+    /// <summary>
+    /// Obtiene el nivel de desesperación actual
+    /// </summary>
+    public DesperationLevel GetDesperationLevel()
+    {
+        return desperationLevel;
+    }
+    
+    /// <summary>
+    /// Obtiene el porcentaje de tiempo restante (0-1)
+    /// </summary>
+    public float GetTimePercentage()
+    {
+        return timeRemaining / orderDuration;
+    }
 
     public void StartNewOrderTimer()
     {
-        CreateTimer();
+        // Solo crear la UI la primera vez que se inicia un pedido
+        if (!timerUICreated)
+        {
+            CreateTimer();
+            timerUICreated = true;
+        }
+        
         timeRemaining = orderDuration;
         isOrderActive = true;
-        TimerFillImage.fillAmount = 1f;
+        
+        if (TimerFillImage != null)
+        {
+            TimerFillImage.fillAmount = 1f;
+        }
     }
+    
     private void CreateTimer()
     {
         // Crear un canvas con una Imagen con un Sprite en concreto

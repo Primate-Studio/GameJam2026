@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4598632e93cd4b4fb359e98871d4955, type: 3}
   m_Name: "Peaje mar\xEDtimo"
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
+  Good: 03000000
+  Mid: 02000000
+  Bad: 01000000
   type: 2
-  requirementName: Environment1.4.1
+  requirementName: "Peaje mar\xEDtimo"

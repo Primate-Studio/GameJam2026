@@ -153,7 +153,7 @@ public class InteractionController : MonoBehaviour
         // Detectar objetos interactuables
         InteractableObject obj = other.GetComponent<InteractableObject>();
         
-        if (obj != null && other.gameObject.activeInHierarchy)
+        if (obj != null && other.gameObject.activeInHierarchy && objectInRange != obj)
         {
             objectInRange = obj;
             

@@ -26,19 +26,12 @@ public class OrderSystem : MonoBehaviour
     public Transform spawnBox1;
     public Transform spawnBox2;
     public Transform spawnBox3;
-    [Header("Order Configuration")]
-    [Tooltip("Packs disponibles para generar pedidos")]
-    [SerializeField] private PackData[] availablePacks;
     [Header("Prefabs")]
     [Tooltip("Prefab de la caja donde se entregan los objetos")]
     public GameObject deliveryBoxPrefab;
     
-    
-    
     [Header("Active Orders")]
     [SerializeField] private List<ClientOrderData> activeClientOrders = new List<ClientOrderData>();
-    
-    private int nextOrderID = 1;
     
     void Awake()
     {
@@ -72,6 +65,8 @@ public class OrderSystem : MonoBehaviour
     /// </summary>
     public void GenerateOrderForClient(GameObject client, int slotIndex)
     {
+        //Debug.Log($"<color=cyan>🔹 GenerateOrderForClient llamado para slot {slotIndex}. Pedidos activos: {activeClientOrders.Count}/3</color>");
+        
         // Verificar si hay espacio (máximo 3 pedidos)
         if (activeClientOrders.Count >= 3)
         {
@@ -79,15 +74,28 @@ public class OrderSystem : MonoBehaviour
             return;
         }
         
-        // Generar el pedido
-        Order newOrder = GenerateRandomOrder();
+        // Verificar si ya hay un pedido para este slot
+        if (activeClientOrders.Exists(cod => cod.slotIndex == slotIndex))
+        {
+            Debug.LogWarning($"<color=orange>⚠️ Ya existe un pedido activo para el slot {slotIndex}!</color>");
+            return;
+        }
         
-        // Obtener posición de spawn disponible
-        Transform spawnPos = GetAvailableSpawnPosition();
+        // Generar el pedido usando el OrderGenerator
+        if (OrderGenerator.Instance == null)
+        {
+            Debug.LogError("<color=red>OrderGenerator.Instance es null! Asegúrate de que hay un OrderGenerator en la escena.</color>");
+            return;
+        }
+        
+        Order newOrder = OrderGenerator.Instance.GenerateNewClientOrder();
+        
+        // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
+        Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
         
         if (spawnPos == null)
         {
-            Debug.LogError("No hay posición de spawn disponible!");
+            Debug.LogError($"No hay posición de spawn para el slot {slotIndex}!");
             return;
         }
         
@@ -132,55 +140,17 @@ public class OrderSystem : MonoBehaviour
     }
     
     /// <summary>
-    /// Genera un pedido aleatorio con requisitos y objetos necesarios
-    /// El número de requisitos (2 o 3) determina cuántos objetos se necesitan
+    /// Obtiene la posición de spawn correspondiente a un slot específico
     /// </summary>
-    private Order GenerateRandomOrder()
+    private Transform GetSpawnPositionForSlot(int slotIndex)
     {
-        Order order = new Order();
-        order.orderID = nextOrderID++;
-        
-        // Generar requisitos aleatorios
-        PackData selectedPack = availablePacks[Random.Range(0, availablePacks.Length)];
-        ActivityData selectedActivity = selectedPack.activities[Random.Range(0, selectedPack.activities.Length)];
-        
-        // Decidir aleatoriamente cuántos requisitos (2 o 3)
-        int requiredCount = Random.Range(2, 4); // 2 o 3
-        
-        // Generar todos los requisitos primero
-        RequirementData tempMonster, tempCondition, tempEnvironment;
-        selectedActivity.GetRandomCombo(out tempMonster, out tempCondition, out tempEnvironment);
-        
-        if (requiredCount == 2)
+        switch (slotIndex)
         {
-            // Solo 2 requisitos: Monster y Condition
-            order.monster = tempMonster;
-            order.condition = tempCondition;
-            order.environment = null; // Sin requisito de Environment
+            case 0: return spawnBox1;
+            case 1: return spawnBox2;
+            case 2: return spawnBox3;
+            default: return null;
         }
-        else // requiredCount == 3
-        {
-            // 3 requisitos: Monster, Condition y Environment
-            order.monster = tempMonster;
-            order.condition = tempCondition;
-            order.environment = tempEnvironment;
-        }
-        
-        // Los objetos necesarios = número de requisitos
-        order.itemsNeeded = requiredCount;
-        
-        return order;
-    }
-    
-    /// <summary>
-    /// Obtiene la primera posición de spawn disponible
-    /// </summary>
-    private Transform GetAvailableSpawnPosition()
-    {
-        if (activeClientOrders.Count == 0) return spawnBox1;
-        if (activeClientOrders.Count == 1) return spawnBox2;
-        if (activeClientOrders.Count == 2) return spawnBox3;
-        return null;
     }
     
     /// <summary>
@@ -204,14 +174,27 @@ public class OrderSystem : MonoBehaviour
         {
             // Encontrar el ClientOrderData correspondiente
             ClientOrderData clientOrderData = activeClientOrders.Find(cod => cod.order == order);
-            OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
+            
+            if (clientOrderData != null)
+            {
+                if (OrderEvaluator.Instance != null)
+                {
+                    OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
+                }
+                else
+                {
+                    Debug.LogError("<color=red>OrderEvaluator.Instance es null! Asegúrate de que hay un OrderEvaluator en la escena.</color>");
+                }
+            }
+            else
+            {
+                Debug.LogError($"<color=red>No se encontró ClientOrderData para el pedido #{order.orderID}</color>");
+            }
         }
         
         return true;
     }
-    
-   
-    
+        
     /// <summary>
     /// Determina inmediatamente si el NPC sobrevive o muere
     /// </summary>
@@ -243,6 +226,8 @@ public class OrderSystem : MonoBehaviour
     {
         if (clientOrderData == null) return;
         
+        //Debug.Log($"<color=yellow>🗑️ RemoveOrder: Eliminando pedido #{clientOrderData.order.orderID} del slot {clientOrderData.slotIndex}</color>");
+        
         // Destruir la caja
         if (clientOrderData.box != null)
         {
@@ -257,6 +242,8 @@ public class OrderSystem : MonoBehaviour
         
         // Remover de la lista activa
         activeClientOrders.Remove(clientOrderData);
+        
+        //Debug.Log($"<color=yellow>🗑️ Pedido eliminado. Pedidos activos restantes: {activeClientOrders.Count}/3</color>");
     }
     
     /// <summary>
@@ -279,7 +266,15 @@ public class OrderSystem : MonoBehaviour
                     // Si hay objetos entregados, calcular resultado parcial
                     if (clientOrderData.order.deliveredItems.Count > 0)
                     {
-                        OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
+                        if (OrderEvaluator.Instance != null)
+                        {
+                            OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
+                        }
+                        else
+                        {
+                            Debug.LogError("<color=red>OrderEvaluator.Instance es null!</color>");
+                            RemoveOrder(clientOrderData);
+                        }
                     }
                     else
                     {

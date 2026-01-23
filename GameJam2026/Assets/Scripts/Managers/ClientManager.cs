@@ -57,6 +57,8 @@ public class ClientManager : MonoBehaviour
 
     private void SpawnClientInSlot(int slotIndex)
     {
+        //Debug.Log($"<color=lime>👤 ClientManager: Spawneando cliente en slot {slotIndex}</color>");
+        
         GameObject client = Instantiate(clientPrefab, spawnPoint.position, spawnPoint.rotation);
         activeClients[slotIndex] = client;
 
@@ -70,9 +72,15 @@ public class ClientManager : MonoBehaviour
         // Cuando el cliente llegue a su posición, generar el pedido
         mover.OnArrival = () =>
         {
+            //Debug.Log($"<color=lime>👤 Cliente llegó al slot {slotIndex}, generando pedido...</color>");
+            
             if (OrderSystem.Instance != null)
             {
                 OrderSystem.Instance.GenerateOrderForClient(client, slotIndex);
+            }
+            else
+            {
+                Debug.LogError("<color=red>OrderSystem.Instance es null!</color>");
             }
         };
         
@@ -106,9 +114,8 @@ public class ClientManager : MonoBehaviour
         return;
     }
 
-    // 2. Agafem la referència i alliberem el slot immediatament
+    // 2. Agafem la referència (NO alliberem el slot encara)
     GameObject client = activeClients[slotIndex];
-    activeClients[slotIndex] = null; 
 
     // 3. Ordenem al client que marxi
     ClientMovement mover = client.GetComponent<ClientMovement>();
@@ -117,7 +124,19 @@ public class ClientManager : MonoBehaviour
         mover.MoveTo(spawnPoint.position);
         
         // Li assignem la destrucció quan arribi al final
-        mover.OnArrival = () => mover.Despawn();
+        // IMPORTANT: Alliberem el slot DESPRÉS que el client s'hagi destruït
+        mover.OnArrival = () => 
+        {
+            //Debug.Log($"<color=orange>👋 Cliente del slot {slotIndex} llegó al spawn, liberando slot...</color>");
+            activeClients[slotIndex] = null; // Ara sí alliberem el slot
+            mover.Despawn();
+        };
+    }
+    else
+    {
+        // Si no té ClientMovement, alliberem immediatament
+        activeClients[slotIndex] = null;
+        Destroy(client);
     }
 }
 }

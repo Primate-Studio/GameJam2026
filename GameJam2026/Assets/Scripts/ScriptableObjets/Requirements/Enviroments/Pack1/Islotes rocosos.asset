@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4598632e93cd4b4fb359e98871d4955, type: 3}
   m_Name: Islotes rocosos
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
+  Good: 02000000
+  Mid: 10000000
+  Bad: 04000000
   type: 2
-  requirementName: Environment1.3.3
+  requirementName: Islotes rocosos
