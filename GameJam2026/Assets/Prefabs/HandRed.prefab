@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7182410193141881321}
   - component: {fileID: 879833805435153703}
   m_Layer: 0
-  m_Name: HandBow
+  m_Name: HandRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
