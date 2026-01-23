@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 0a000000
   Mid: 07000000
-  Bad: 00000000
+  Bad: 08000000
   type: 0
   requirementName: "Circe Son\xE1mbula"

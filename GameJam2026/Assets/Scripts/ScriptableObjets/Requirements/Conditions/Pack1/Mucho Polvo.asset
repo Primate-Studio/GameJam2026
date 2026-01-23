@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mucho Polvo
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 0e000000
-  Mid: 0f000000
+  Mid: 0d000000
   Bad: 10000000
   type: 1
   requirementName: Mucho Polvo

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ciclope Borracho
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 07000000
-  Mid: 0a000000
-  Bad: 09000000
+  Mid: 08000000
+  Bad: 0a000000
   type: 0
   requirementName: Ciclope Borracho

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Estampida de Ovejas
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 0f000000
-  Mid: 0c000000
+  Mid: 0d000000
   Bad: 10000000
   type: 1
   requirementName: Estampida de Ovejas

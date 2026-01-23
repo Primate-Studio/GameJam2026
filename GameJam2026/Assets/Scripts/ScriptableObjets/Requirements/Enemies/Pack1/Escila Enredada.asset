@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 07000000
   Mid: 09000000
-  Bad: 08000000
+  Bad: 0a000000
   type: 0
   requirementName: Escila Enredada

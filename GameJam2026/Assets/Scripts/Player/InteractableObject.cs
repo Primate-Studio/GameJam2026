@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public enum ObjectType
 {
-    None, Hilo, Red, Espejo, Sandalia, Alas, Brújula, Tridente, CascoA, Rayo, Arco ,Mandoble, CascoH, Chanclas, Mascaras, Odre, CoronaL, Cinturon       // Para bolsillos vacíos
+    None, Hilo, Red, Espejo, Sandalia, Alas, Brújula, Tridente, CascoA, Rayo, Arco ,Mandoble, CascoH, Escudo, Mascaras, Odre, CoronaL, Cinturon       // Para bolsillos vacíos
 }
 
 /// <summary>

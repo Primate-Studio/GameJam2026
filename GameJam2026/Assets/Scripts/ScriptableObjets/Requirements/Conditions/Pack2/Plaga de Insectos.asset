@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4598632e93cd4b4fb359e98871d4955, type: 3}
   m_Name: Plaga de Insectos
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
-  Good: 0c000000
-  Mid: 0e000000
-  Bad: 0d000000
+  Good: 11000000
+  Mid: 0d000000
+  Bad: 0e000000
   type: 1
   requirementName: Plaga de Insectos

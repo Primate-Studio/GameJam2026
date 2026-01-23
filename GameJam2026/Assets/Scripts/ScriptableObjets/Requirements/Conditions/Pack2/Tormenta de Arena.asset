@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 0e000000
   Mid: 11000000
-  Bad: 0d000000
+  Bad: 0c000000
   type: 1
   requirementName: Tormenta de Arena

@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 487064880}
   - component: {fileID: 487064879}
   m_Layer: 0
-  m_Name: Chancla
+  m_Name: Escudo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

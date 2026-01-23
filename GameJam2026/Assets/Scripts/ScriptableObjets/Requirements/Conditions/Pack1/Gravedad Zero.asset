@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Gravedad Zero
   m_EditorClassIdentifier: Assembly-CSharp::RequirementData
   Good: 0f000000
-  Mid: 02000000
-  Bad: 0d000000
+  Mid: 0d000000
+  Bad: 0e000000
   type: 1
   requirementName: Gravedad Zero
