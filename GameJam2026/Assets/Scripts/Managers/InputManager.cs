@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
+    [SerializeField] private KeyCode manualKey = KeyCode.Tab;
 
     // Movement
     public float Horizontal => Input.GetAxis("Horizontal");
@@ -24,6 +25,7 @@ public class InputManager : MonoBehaviour
     public bool JumpPressed => Input.GetKeyDown(jumpKey);
     public bool InteractPressed => Input.GetKeyDown(interactKey);
     public bool PausePressed => Input.GetKeyDown(pauseKey);
+    public bool ManualPressed => Input.GetKeyDown(manualKey);
     private bool isPaused = false;
     private void Awake()
     {
@@ -46,6 +48,19 @@ public class InputManager : MonoBehaviour
             Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = isPaused;
             GameManager.Instance.ChangeState(isPaused ? GameState.Paused : GameState.Playing);
+        }
+        if(ManualPressed && !isPaused)
+        {
+            ManualUI manualUI = FindFirstObjectByType<ManualUI>();
+            if(manualUI.manualPanel != null && !manualUI.manualPanel.activeSelf)
+            {
+                manualUI.OpenManual();
+            }
+            else if(manualUI != null && manualUI.manualPanel.activeSelf)
+            {
+                manualUI.CloseManual();
+            }
+            
         }
     }
     public bool HasMovementInput()

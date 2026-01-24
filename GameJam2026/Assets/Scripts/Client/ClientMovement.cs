@@ -20,6 +20,14 @@ public class ClientMovement : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(CheckArrivalRoutine());
     }
+    private void Update()
+    {
+        //Always Look at the camera
+        Vector3 lookPos = Camera.main.transform.position - transform.position;
+        lookPos.y = 0;  
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+    }
 
     private System.Collections.IEnumerator CheckArrivalRoutine()
     {
