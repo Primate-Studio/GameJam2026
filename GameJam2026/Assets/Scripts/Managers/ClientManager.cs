@@ -14,8 +14,17 @@ public class ClientManager : MonoBehaviour
     private GameObject[] activeClients; // Guardem el client de cada slot (null si buit)
     private float spawnTimer = 0f;
 
+    [Header("Configuració dels Clients")]
+    public int maxClientsPerDay = 5;
+    public int clientsCount = 0;
+
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
         activeClients = new GameObject[targetPoints.Length];
     }
@@ -61,6 +70,7 @@ public class ClientManager : MonoBehaviour
         
         GameObject client = Instantiate(clientPrefab, spawnPoint.position, spawnPoint.rotation);
         activeClients[slotIndex] = client;
+        clientsCount++;
 
         // Visuals (El que ja tenies)
         ClientBodyCreator bodyCreator = client.GetComponent<ClientBodyCreator>();

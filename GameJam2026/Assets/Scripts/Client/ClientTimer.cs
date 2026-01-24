@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class ClientTimer : MonoBehaviour
 {
+    public static ClientTimer Instance { get; private set; }
     public float orderDuration = 60f;
     private Image TimerFillImage;
     public Sprite spriteTimerFill;
@@ -12,6 +13,16 @@ public class ClientTimer : MonoBehaviour
     private bool isOrderActive = false;
     private bool timerUICreated = false;
 
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+    
     void Update()
     {
         if (isOrderActive)
@@ -124,5 +135,26 @@ public class ClientTimer : MonoBehaviour
         RectTransform imageRect = TimerFillImage.GetComponent<RectTransform>();
         imageRect.sizeDelta = new Vector2(1, 1);
         imageRect.localPosition = Vector3.zero;
+    }
+
+    public void CalculateTimer()
+    {
+        if (MoneyManager.Instance.Debt >= 250)
+        {
+            orderDuration = 50f;
+        }
+        else if (MoneyManager.Instance.Debt >= 150)
+        {
+            orderDuration = 40f;
+        }
+        else if (MoneyManager.Instance.Debt >= 50)
+        {
+            orderDuration = 30f;
+        }
+        else if (MoneyManager.Instance.Debt > 0)
+        {
+            orderDuration = 20f;
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEditor.PackageManager;
 
 public class DayCycleManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class DayCycleManager : MonoBehaviour
     public float dayDurationInSeconds = 300f; // 5 minuts
     private float currentTime = 0f;
     private bool isDayActive = false;
+
+
 
     [Header("Referències de Llum")]
     [SerializeField] private Light sunLight;
@@ -37,7 +40,7 @@ public class DayCycleManager : MonoBehaviour
 
         UpdateLighting(progress);
 
-        if (currentTime >= dayDurationInSeconds)
+        if (currentTime >= dayDurationInSeconds || ClientManager.Instance.clientsCount >= ClientManager.Instance.maxClientsPerDay)
         {
             EndDay();
         }
@@ -48,9 +51,20 @@ public class DayCycleManager : MonoBehaviour
         currentTime = 0f;
         isDayActive = true;
         OnDayStart?.Invoke();
+        ClientManager.Instance.clientsCount = 0;
         Debug.Log("<color=yellow>☀ La botiga ha obert!</color>");
         
         GameManager.Instance.ChangeState(GameState.Playing);
+    }
+
+    public void NextDay()
+    {
+        currentTime = 0f;
+        isDayActive = true;
+        OnDayStart?.Invoke();
+        ClientTimer.Instance.CalculateTimer();
+        ClientManager.Instance.clientsCount = 0;
+        ClientManager.Instance.maxClientsPerDay += 3;
     }
 
     private void EndDay()
