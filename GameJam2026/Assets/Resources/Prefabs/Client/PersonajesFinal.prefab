@@ -74,6 +74,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -1435864882576515394, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
   m_PrefabInstance: {fileID: 9155522514989016029}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &3173592124979691690 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5981956786891432823, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
+  m_PrefabInstance: {fileID: 9155522514989016029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4244072649588753641 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4185239683842529484, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
@@ -110,6 +115,19 @@ MonoBehaviour:
   facesParent: {fileID: 7554033996123836949}
   clothesParent: {fileID: 1377040762592787811}
   accessoriesParent: {fileID: 4244072649588753641}
+  bodyParent: {fileID: 3173592124979691690}
+  skinMat: {fileID: 2100000, guid: be0c7c4ce4b58d645a248a4a5ff64193, type: 2}
+  hairMat: {fileID: 2100000, guid: c8476c9e279cbfb49af0d03e2b5cc9b9, type: 2}
+  RandomSkinColors:
+  - {r: 0.9528302, g: 0.67192507, b: 0.3460751, a: 0}
+  - {r: 0.4245283, g: 0.28959018, b: 0.21026166, a: 0}
+  - {r: 0.9150943, g: 0.68951815, b: 0.55682623, a: 0}
+  - {r: 1, g: 0.90788573, b: 0.7688679, a: 0}
+  RandomHairColors:
+  - {r: 0.11320752, g: 0.050335538, b: 0, a: 0}
+  - {r: 0.4245283, g: 0.19030578, b: 0, a: 0}
+  - {r: 0.8679245, g: 0.73300254, b: 0.10234957, a: 0}
+  - {r: 0.8018868, g: 0.35056207, b: 0.16264686, a: 0}
 --- !u!195 &3802253455889969223
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -7,10 +7,16 @@ public class ClientBodyCreator : MonoBehaviour
     public Transform facesParent;
     public Transform clothesParent;
     public Transform accessoriesParent;
+    public Transform bodyParent;
+    public Material skinMat;
+    public Material hairMat;
+    public Color[] RandomSkinColors;
+    public Color[] RandomHairColors;
 
     public void ApplyRandomLook()
     {
         // Randomitzem cada categoria
+        ApplyRandomColor();
         RandomizeChild(headsParent);
         RandomizeChild(facesParent);
         RandomizeChild(clothesParent);
@@ -31,9 +37,40 @@ public class ClientBodyCreator : MonoBehaviour
         }
     }
     
-    // Per testetjar (opcional)
-    void Update()
+    private void ApplyRandomColor()
     {
-        if (Input.GetKeyDown(KeyCode.R)) ApplyRandomLook();
+        if (RandomSkinColors != null && RandomSkinColors.Length > 0)
+        {
+            var skinColor = RandomSkinColors[Random.Range(0, RandomSkinColors.Length)];
+            ApplyColorToRenderers(bodyParent, skinColor, skinMat);
+            ApplyColorToRenderers(facesParent, skinColor, skinMat);
+
+        }
+
+        if (RandomHairColors != null && RandomHairColors.Length > 0)
+        {
+            var hairColor = RandomHairColors[Random.Range(0, RandomHairColors.Length)];
+            ApplyColorToRenderers(headsParent, hairColor, hairMat);
+        }
+    }
+
+    // Instancia material solo si el renderer tiene el material template asignado
+    private void ApplyColorToRenderers(Transform parent, Color color, Material template)
+    {
+        if (parent == null || template == null) return;
+
+        var renderers = parent.GetComponentsInChildren<Renderer>(false); // solo activos
+        foreach (var r in renderers)
+        {
+            if (r == null) continue;
+
+            // Solo aplicar si el renderer tiene el material plantilla asignado
+            if (r.sharedMaterial == template)
+            {
+                var instancedMat = new Material(template);
+                instancedMat.color = color;
+                r.material = instancedMat; // instancia única para este renderer
+            }
+        }
     }
 }
