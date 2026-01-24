@@ -73,23 +73,23 @@ public class MoneyManager : MonoBehaviour
     }
     public void CalculateDebtLevel()
     {
-        if (Debt > 50 && Debt <= 100)
+        if (Debt > 70 && Debt <= 130)
         {
             debtLevel = DebtLevel.LowLow;
         }
-        else if (Debt > 100 && Debt <= 150)
+        else if (Debt > 130 && Debt <= 180)
         {
             debtLevel = DebtLevel.Low;
         }
-        else if (Debt > 150 && Debt <= 200)
+        else if (Debt > 180 && Debt <= 220)
         {
             debtLevel = DebtLevel.Medium;
         }
-        else if( Debt > 200 )
+        else if( Debt > 220 )
         {
             debtLevel = DebtLevel.High;
         }
-        else
+        else if( Debt <= 70)
         {
             debtLevel = DebtLevel.None;
         }

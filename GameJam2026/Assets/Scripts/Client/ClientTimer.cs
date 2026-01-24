@@ -143,19 +143,19 @@ public class ClientTimer : MonoBehaviour
         switch (MoneyManager.Instance.DebtLevel)
         {
             case DebtLevel.High:
-                orderDuration = 50f;
+                orderDuration = 70f;
                 break;
             case DebtLevel.Medium:
-                orderDuration = 40f;
+                orderDuration = 62f;
                 break;
             case DebtLevel.Low:
-                orderDuration = 30f;
+                orderDuration = 51f;
                 break;
             case DebtLevel.LowLow:
-                orderDuration = 20f;
+                orderDuration = 37f;
                 break;
             case DebtLevel.None:
-                orderDuration = 15f;
+                orderDuration = 25f;
                 break;
         }
     }

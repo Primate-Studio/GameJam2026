@@ -48,8 +48,18 @@ public class OrderGenerator : MonoBehaviour
         // Random Pack
         PackData selectedPack = availablePacks[activePacks > 1 ? Random.Range(0, activePacks-1) : 0];
 
+        ActivityData selectedActivity;
         // Random Activity from Pack
-        ActivityData selectedActivity = selectedPack.activities[Random.Range(0, activeActivities-1)];
+        if(activeActivities == 0 && selectedPack.name == "Pack1")
+        {
+            selectedActivity = selectedPack.activities[Random.Range(0, 1)];
+        }
+        else if(activeActivities == 0 && selectedPack.name == "Pack2")
+        {
+            selectedActivity = selectedPack.activities[0];
+        }
+        else {selectedActivity = selectedPack.activities[Random.Range(0, activeActivities-1)];}
+        
 
         // Random Combo from Activity
         RequirementData tempMonster, tempCondition, tempEnvironment;
@@ -94,23 +104,23 @@ public class OrderGenerator : MonoBehaviour
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Medium)
         {
-            activePacks = 1;
-            activeActivities = 4;
+            activePacks = 2;
+            activeActivities = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Low)
         {
             activePacks = 2;
-            activeActivities = 6;
+            activeActivities = 2;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.LowLow)
         {
             activePacks = 2;
-            activeActivities = 8;
+            activeActivities = 3;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.None)
         {
             activePacks = 2;
-            activeActivities = 8;
+            activeActivities = 4;
         }
         else
         {
