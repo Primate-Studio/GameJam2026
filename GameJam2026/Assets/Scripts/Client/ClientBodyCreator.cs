@@ -2,54 +2,38 @@ using UnityEngine;
 
 public class ClientBodyCreator : MonoBehaviour
 {
-   // [Header("")]
-    public ClientVisualPool visualPool;
-    private GameObject face;
-    private GameObject head;
-    private GameObject clothes;
-    private GameObject bodyAccessory;
-    void Start()
-    {
+    [Header("Contenidors de la jerarquia FBX")]
+    public Transform headsParent;
+    public Transform facesParent;
+    public Transform clothesParent;
+    public Transform accessoriesParent;
 
+    public void ApplyRandomLook()
+    {
+        // Randomitzem cada categoria
+        RandomizeChild(headsParent);
+        RandomizeChild(facesParent);
+        RandomizeChild(clothesParent);
+        RandomizeChild(accessoriesParent);
     }
 
+    private void RandomizeChild(Transform parent)
+    {
+        if (parent == null || parent.childCount == 0) return;
+
+        // 1. Triem un índex a l'atzar
+        int randomIndex = Random.Range(0, parent.childCount);
+
+        // 2. Recorrem tots els fills (objectes del fbx) i només activem el triat
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            parent.GetChild(i).gameObject.SetActive(i == randomIndex);
+        }
+    }
+    
+    // Per testetjar (opcional)
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //for testing purposes
-            Destroy(head.gameObject);
-            Destroy(face.gameObject);
-            Destroy(clothes.gameObject);
-            Destroy(bodyAccessory.gameObject);
-            
-            //reapply random look
-            ApplyRandomLook(visualPool);
-        }   
-    }
-
-    public void ApplyRandomLook(ClientVisualPool visualPool)
-    {
-        if (visualPool == null) { Debug.LogWarning("VisualPool es null"); return; }
-
-        head = SpawnAndReset(visualPool.headAccessories, transform);
-        face = SpawnAndReset(visualPool.faces, transform);
-        clothes = SpawnAndReset(visualPool.clothes, transform);
-        bodyAccessory = SpawnAndReset(visualPool.bodyAccessories, transform);
-    }
-
-    private GameObject SpawnAndReset(GameObject[] pool, Transform parent)
-    {
-        //reset pool
-        if (pool == null || pool.Length == 0) return null;
-        var prefab = pool[Random.Range(0, pool.Length)];
-        var go = Instantiate(prefab, parent, false);
-        var t = go.transform;
-        t.localPosition = Vector3.zero;
-        t.localRotation = Quaternion.identity;
-        t.localScale = Vector3.one;
-
-        return go;
+        if (Input.GetKeyDown(KeyCode.R)) ApplyRandomLook();
     }
 }
-

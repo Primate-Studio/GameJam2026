@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb06cb05f436d704eb0a93021f3ebc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClientManager
-  clientPrefab: {fileID: 1929826140850931138, guid: b925e80b3b2079f428a8ff55b7a657c2, type: 3}
+  clientPrefab: {fileID: 8345058963331473036, guid: 79edabea90d12414c80165c5e36b769f, type: 3}
   spawnPoint: {fileID: 2077776840}
   targetPoints:
   - {fileID: 1119923742}
@@ -1038,6 +1038,46 @@ PrefabInstance:
     - target: {fileID: 1862274229585890166, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.031593695
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.011306668
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.99690676
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.071070276
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -8.105
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 176.259
+      objectReference: {fileID: 0}
+    - target: {fileID: 7251027020304277126, guid: 5d8d019b44c2fff48ae91bd4e4ebbe93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 1.565
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3612,7 +3652,6 @@ MonoBehaviour:
     slotNumberText: {fileID: 0}
   selectedColor: {r: 1, g: 0.8355927, b: 0.015686274, a: 0.41960785}
   normalColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  selectedScale: 7
 --- !u!1 &1418700201
 GameObject:
   m_ObjectHideFlags: 0

@@ -75,7 +75,7 @@ public class ClientManager : MonoBehaviour
 
         // Visuals (El que ja tenies)
         ClientBodyCreator bodyCreator = client.GetComponent<ClientBodyCreator>();
-        if (bodyCreator != null) bodyCreator.ApplyRandomLook(bodyCreator.visualPool);
+        if (bodyCreator != null) bodyCreator.ApplyRandomLook();
 
         // Moviment al slot corresponent
         ClientMovement mover = client.GetComponent<ClientMovement>();
