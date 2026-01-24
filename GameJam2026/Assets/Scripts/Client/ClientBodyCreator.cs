@@ -51,6 +51,7 @@ public class ClientBodyCreator : MonoBehaviour
         {
             var hairColor = RandomHairColors[Random.Range(0, RandomHairColors.Length)];
             ApplyColorToRenderers(headsParent, hairColor, hairMat);
+            ApplyColorToRenderers(facesParent, hairColor, hairMat);
         }
     }
 
