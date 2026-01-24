@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 59552211}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Attack Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,6 +223,7 @@ MonoBehaviour:
   - {fileID: 731648475}
   maxClientsPerDay: 5
   clientsCount: 0
+  orderDuration: 60
 --- !u!4 &71597886
 Transform:
   m_ObjectHideFlags: 0
@@ -543,7 +544,8 @@ GameObject:
   - component: {fileID: 313522489}
   - component: {fileID: 313522488}
   - component: {fileID: 313522487}
-  m_Layer: 0
+  - component: {fileID: 313522491}
+  m_Layer: 3
   m_Name: Casco H
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -659,6 +661,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313522485}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &313522491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313522485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!4 &349883736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2210408775519173591, guid: dcee82e57ca23234fb0e7a6e9cb1b3a9, type: 3}
@@ -673,7 +688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 424663941}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Condition Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -917,6 +932,7 @@ GameObject:
   - component: {fileID: 453222040}
   - component: {fileID: 453222044}
   - component: {fileID: 453222045}
+  - component: {fileID: 453222046}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1063,6 +1079,23 @@ MonoBehaviour:
   acceleration: 5
   mouseSensitivity: 2
   verticalLookLimit: 90
+--- !u!114 &453222046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453222039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d2e1d99aab8e264b8c9c68e49d059aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRaycast
+  rayDistance: 5
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerCamera: {fileID: 1420762839}
 --- !u!1 &454461605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1109,8 @@ GameObject:
   - component: {fileID: 454461609}
   - component: {fileID: 454461608}
   - component: {fileID: 454461607}
-  m_Layer: 0
+  - component: {fileID: 454461611}
+  m_Layer: 3
   m_Name: Cinturon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1192,6 +1226,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454461605}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &454461611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 454461605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &479242360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,7 +1363,8 @@ GameObject:
   - component: {fileID: 487064881}
   - component: {fileID: 487064880}
   - component: {fileID: 487064879}
-  m_Layer: 0
+  - component: {fileID: 487064883}
+  m_Layer: 3
   m_Name: Escudo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1432,6 +1480,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 487064877}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &487064883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487064877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &506464672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,7 +1506,8 @@ GameObject:
   - component: {fileID: 506464676}
   - component: {fileID: 506464675}
   - component: {fileID: 506464674}
-  m_Layer: 0
+  - component: {fileID: 506464678}
+  m_Layer: 3
   m_Name: Mandoble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1561,6 +1623,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506464672}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &506464678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506464672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &616101035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1627,7 +1702,8 @@ GameObject:
   - component: {fileID: 713555691}
   - component: {fileID: 713555690}
   - component: {fileID: 713555689}
-  m_Layer: 0
+  - component: {fileID: 713555693}
+  m_Layer: 3
   m_Name: Rayo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1743,6 +1819,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713555687}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &713555693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713555687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &720484200
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,7 +2149,8 @@ GameObject:
   - component: {fileID: 872142667}
   - component: {fileID: 872142666}
   - component: {fileID: 872142665}
-  m_Layer: 0
+  - component: {fileID: 872142669}
+  m_Layer: 3
   m_Name: Odre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2176,6 +2266,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 872142663}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &872142669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872142663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &895663782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,7 +2323,8 @@ GameObject:
   - component: {fileID: 932040143}
   - component: {fileID: 932040142}
   - component: {fileID: 932040141}
-  m_Layer: 0
+  - component: {fileID: 932040145}
+  m_Layer: 3
   m_Name: Sandalia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2336,6 +2440,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932040139}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &932040145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932040139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &980064614
 GameObject:
   m_ObjectHideFlags: 0
@@ -2550,11 +2667,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hilo
       objectReference: {fileID: 0}
+    - target: {fileID: 6906573513629153558, guid: dcee82e57ca23234fb0e7a6e9cb1b3a9, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6906573513629153558, guid: dcee82e57ca23234fb0e7a6e9cb1b3a9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 996440629}
   m_SourcePrefab: {fileID: 100100000, guid: dcee82e57ca23234fb0e7a6e9cb1b3a9, type: 3}
+--- !u!1 &996440628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6906573513629153558, guid: dcee82e57ca23234fb0e7a6e9cb1b3a9, type: 3}
+  m_PrefabInstance: {fileID: 996440627}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &996440629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996440628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1087689865
 GameObject:
   m_ObjectHideFlags: 0
@@ -2998,7 +3140,8 @@ GameObject:
   - component: {fileID: 1194018083}
   - component: {fileID: 1194018082}
   - component: {fileID: 1194018081}
-  m_Layer: 0
+  - component: {fileID: 1194018085}
+  m_Layer: 3
   m_Name: Casco A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3114,6 +3257,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194018079}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1194018085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194018079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1001 &1249009123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3125,6 +3281,10 @@ PrefabInstance:
     - target: {fileID: 2029960078743236619, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
       propertyPath: m_Name
       value: Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 2029960078743236619, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6698263290736792030, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
       propertyPath: m_LocalScale.x
@@ -3185,8 +3345,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2029960078743236619, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1723706897}
   m_SourcePrefab: {fileID: 100100000, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
+--- !u!1 &1249009124 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2029960078743236619, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
+  m_PrefabInstance: {fileID: 1249009123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1268986431
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,7 +3470,8 @@ GameObject:
   - component: {fileID: 1418700205}
   - component: {fileID: 1418700204}
   - component: {fileID: 1418700203}
-  m_Layer: 0
+  - component: {fileID: 1418700207}
+  m_Layer: 3
   m_Name: Mascara
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3418,6 +3587,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418700201}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1418700207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418700201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1420762837
 GameObject:
   m_ObjectHideFlags: 0
@@ -3604,7 +3786,8 @@ GameObject:
   - component: {fileID: 1584457312}
   - component: {fileID: 1584457311}
   - component: {fileID: 1584457310}
-  m_Layer: 0
+  - component: {fileID: 1584457314}
+  m_Layer: 3
   m_Name: Corona
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3720,6 +3903,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584457308}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1584457314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584457308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1623289135
 GameObject:
   m_ObjectHideFlags: 0
@@ -3872,6 +4068,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6698263290736792030, guid: d34ce6ac251078a4dac25ff1a1fae2e9, type: 3}
   m_PrefabInstance: {fileID: 1249009123}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1723706897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249009124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1741161877
 GameObject:
   m_ObjectHideFlags: 0
@@ -3938,7 +4147,8 @@ GameObject:
   - component: {fileID: 1840353474}
   - component: {fileID: 1840353473}
   - component: {fileID: 1840353472}
-  m_Layer: 0
+  - component: {fileID: 1840353476}
+  m_Layer: 3
   m_Name: Tridente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4054,6 +4264,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1840353470}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1840353476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840353470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1850497302
 GameObject:
   m_ObjectHideFlags: 0
@@ -4067,7 +4290,8 @@ GameObject:
   - component: {fileID: 1850497306}
   - component: {fileID: 1850497305}
   - component: {fileID: 1850497304}
-  m_Layer: 0
+  - component: {fileID: 1850497308}
+  m_Layer: 3
   m_Name: Alas de picaro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4183,6 +4407,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850497302}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1850497308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850497302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1852430194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4420,7 +4657,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1866339759}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Enviroment Condition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4516,11 +4753,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Espejo
       objectReference: {fileID: 0}
+    - target: {fileID: 1564641689686702315, guid: c68d39ac9b628df49a65519275f03b2b, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1564641689686702315, guid: c68d39ac9b628df49a65519275f03b2b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1869789220}
   m_SourcePrefab: {fileID: 100100000, guid: c68d39ac9b628df49a65519275f03b2b, type: 3}
+--- !u!1 &1869789219 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1564641689686702315, guid: c68d39ac9b628df49a65519275f03b2b, type: 3}
+  m_PrefabInstance: {fileID: 1869789218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1869789220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869789219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1890530218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4534,7 +4796,8 @@ GameObject:
   - component: {fileID: 1890530222}
   - component: {fileID: 1890530221}
   - component: {fileID: 1890530220}
-  m_Layer: 0
+  - component: {fileID: 1890530224}
+  m_Layer: 3
   m_Name: "Br\xFAjula de Hermes"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4650,6 +4913,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890530218}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1890530224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890530218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &1950883186
 GameObject:
   m_ObjectHideFlags: 0
@@ -4674,8 +4950,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950883186}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 912.0216, y: 564.9917, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4686,7 +4962,7 @@ Transform:
   - {fileID: 751969155}
   - {fileID: 616101037}
   - {fileID: 1117500413}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2118895703}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1971323186
 GameObject:
@@ -4907,7 +5183,8 @@ GameObject:
   - component: {fileID: 2018781593}
   - component: {fileID: 2018781592}
   - component: {fileID: 2018781591}
-  m_Layer: 0
+  - component: {fileID: 2018781595}
+  m_Layer: 3
   m_Name: Arco
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5023,6 +5300,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2018781589}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2018781595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018781589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c59a16c0bbdbc145b3e98dba926a45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMaterial: {fileID: 2100000, guid: c669ff920b118b04f869222aa9cd3a75, type: 2}
 --- !u!1 &2026211059
 GameObject:
   m_ObjectHideFlags: 0
@@ -5140,6 +5430,7 @@ Transform:
   - {fileID: 756867482}
   - {fileID: 1710579449}
   - {fileID: 2077776840}
+  - {fileID: 1950883187}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2128283326
@@ -5203,5 +5494,4 @@ SceneRoots:
   - {fileID: 2007771524}
   - {fileID: 446706145}
   - {fileID: 1268986435}
-  - {fileID: 1950883187}
   - {fileID: 2118895703}
