@@ -33,7 +33,7 @@ public class InventoryManager : MonoBehaviour
     
     [Header("Inventory Configuration")]
     [Tooltip("Los 3 bolsillos del inventario")]
-    [SerializeField] private InventorySlot[] slots = new InventorySlot[3];
+    public InventorySlot[] slots = new InventorySlot[3];
     
     [Tooltip("Índice del bolsillo actualmente seleccionado (0, 1 o 2)")]
     [SerializeField] private int currentSlotIndex = 0;
@@ -47,6 +47,9 @@ public class InventoryManager : MonoBehaviour
     
     // Evento que se dispara cuando cambia el objeto en la mano
     public event Action<ObjectType> OnSlotChanged;
+    
+    // Evento que se dispara cuando el inventario se actualiza (añadir, cambiar o entregar objeto)
+    public event Action OnInventoryUpdated;
     
     void Awake()
     {
@@ -173,6 +176,9 @@ public class InventoryManager : MonoBehaviour
             // DESPUÉS: El objeto del mundo se oculta/respawnea independientemente
             obj.PickUp();
             
+            // Disparar evento de actualización
+            OnInventoryUpdated?.Invoke();
+            
             Debug.Log($"Objeto {obj.objectType} añadido al bolsillo {currentSlotIndex + 1}");
             return true;
         }
@@ -201,6 +207,9 @@ public class InventoryManager : MonoBehaviour
             // DESPUÉS: El objeto del mundo se oculta/respawnea independientemente
             newObj.PickUp();
             
+            // Disparar evento de actualización
+            OnInventoryUpdated?.Invoke();
+            
             Debug.Log($"Objeto {oldType} cambiado por {newObj.objectType} en bolsillo {currentSlotIndex + 1}");
         }
     }
@@ -219,6 +228,9 @@ public class InventoryManager : MonoBehaviour
             // Limpiar el slot (NO destruir nada del mundo, solo el inventario)
             slot.Clear();
             UpdateHandObject();
+            
+            // Disparar evento de actualización
+            OnInventoryUpdated?.Invoke();
             
             Debug.Log($"Objeto {deliveredType} entregado desde bolsillo {currentSlotIndex + 1}");
             return true;
@@ -249,5 +261,13 @@ public class InventoryManager : MonoBehaviour
     public ObjectType GetCurrentObjectType()
     {
         return GetCurrentSlot().objectType;
+    }
+    
+    /// <summary>
+    /// Obtiene el índice del slot actualmente seleccionado
+    /// </summary>
+    public int GetCurrentSlotIndex()
+    {
+        return currentSlotIndex;
     }
 }
