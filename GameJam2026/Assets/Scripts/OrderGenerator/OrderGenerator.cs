@@ -46,7 +46,7 @@ public class OrderGenerator : MonoBehaviour
         int activePacks, activeActivities;
         CalculateActivities(out activePacks, out activeActivities);
         // Random Pack
-        PackData selectedPack = availablePacks[activePacks > 1 ? Random.Range(0, activePacks-1) : 0];
+        PackData selectedPack = availablePacks[activePacks > 1 ? Random.Range(0, activePacks) : 0];
 
         ActivityData selectedActivity;
         // Random Activity from Pack
@@ -58,7 +58,7 @@ public class OrderGenerator : MonoBehaviour
         {
             selectedActivity = selectedPack.activities[0];
         }
-        else {selectedActivity = selectedPack.activities[Random.Range(0, activeActivities-1)];}
+        else {selectedActivity = selectedPack.activities[Random.Range(0, activeActivities)];}
         
 
         // Random Combo from Activity

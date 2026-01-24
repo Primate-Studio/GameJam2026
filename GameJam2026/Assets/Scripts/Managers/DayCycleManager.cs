@@ -62,9 +62,11 @@ public class DayCycleManager : MonoBehaviour
         currentTime = 0f;
         isDayActive = true;
         OnDayStart?.Invoke();
-        ClientTimer.Instance.CalculateTimer();
+        ClientManager.Instance.CalculateTimer();
         ClientManager.Instance.clientsCount = 0;
         ClientManager.Instance.maxClientsPerDay += 3;
+
+        GameManager.Instance.ChangeState(GameState.Playing);
     }
 
     private void EndDay()

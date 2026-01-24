@@ -221,6 +221,8 @@ MonoBehaviour:
   - {fileID: 1119923742}
   - {fileID: 1741161879}
   - {fileID: 731648475}
+  maxClientsPerDay: 5
+  clientsCount: 0
 --- !u!4 &71597886
 Transform:
   m_ObjectHideFlags: 0

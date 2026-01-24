@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class ClientTimer : MonoBehaviour
 {
-    public static ClientTimer Instance { get; private set; }
-    public float orderDuration = 60f;
     private Image TimerFillImage;
     public Sprite spriteTimerFill;
     private DesperationLevel desperationLevel;
@@ -16,12 +14,7 @@ public class ClientTimer : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+
     }
     
     void Update()
@@ -33,8 +26,8 @@ public class ClientTimer : MonoBehaviour
             
             if (TimerFillImage != null)
             {
-                TimerFillImage.fillAmount = timeRemaining / orderDuration;
-                TimerFillImage.color = Color.Lerp(Color.red, Color.green, timeRemaining / orderDuration);
+                TimerFillImage.fillAmount = timeRemaining / ClientManager.Instance.orderDuration;
+                TimerFillImage.color = Color.Lerp(Color.red, Color.green, timeRemaining / ClientManager.Instance.orderDuration);
             }
             
             CalculateDesperationLevel();
@@ -52,7 +45,7 @@ public class ClientTimer : MonoBehaviour
     
     private void CalculateDesperationLevel()
     {
-        float percentage = timeRemaining / orderDuration;
+        float percentage = timeRemaining / ClientManager.Instance.orderDuration;
         if (percentage >= 0.60f)
         {
             desperationLevel = DesperationLevel.None;
@@ -88,7 +81,7 @@ public class ClientTimer : MonoBehaviour
     /// </summary>
     public float GetTimePercentage()
     {
-        return timeRemaining / orderDuration;
+        return timeRemaining / ClientManager.Instance.orderDuration;
     }
 
     public void StartNewOrderTimer()
@@ -100,7 +93,7 @@ public class ClientTimer : MonoBehaviour
             timerUICreated = true;
         }
         
-        timeRemaining = orderDuration;
+        timeRemaining = ClientManager.Instance.orderDuration;
         isOrderActive = true;
         
         if (TimerFillImage != null)
@@ -136,27 +129,5 @@ public class ClientTimer : MonoBehaviour
         RectTransform imageRect = TimerFillImage.GetComponent<RectTransform>();
         imageRect.sizeDelta = new Vector2(1, 1);
         imageRect.localPosition = Vector3.zero;
-    }
-
-    public void CalculateTimer()
-    {
-        switch (MoneyManager.Instance.DebtLevel)
-        {
-            case DebtLevel.High:
-                orderDuration = 70f;
-                break;
-            case DebtLevel.Medium:
-                orderDuration = 62f;
-                break;
-            case DebtLevel.Low:
-                orderDuration = 51f;
-                break;
-            case DebtLevel.LowLow:
-                orderDuration = 37f;
-                break;
-            case DebtLevel.None:
-                orderDuration = 25f;
-                break;
-        }
     }
 }

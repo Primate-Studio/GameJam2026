@@ -17,6 +17,7 @@ public class ClientManager : MonoBehaviour
     [Header("Configuració dels Clients")]
     public int maxClientsPerDay = 5;
     public int clientsCount = 0;
+    public float orderDuration = 60f;
 
     void Awake()
     {
@@ -116,37 +117,58 @@ public class ClientManager : MonoBehaviour
         }
     }
     public void DismissClientInSlot(int slotIndex)
-{
-    // 1. Seguretat: mirem si realment hi ha algú en aquell slot
-    if (slotIndex < 0 || slotIndex >= activeClients.Length || activeClients[slotIndex] == null)
     {
-        Debug.LogWarning($"Intentant fer fora un client del slot {slotIndex} però està buit!");
-        return;
-    }
-
-    // 2. Agafem la referència (NO alliberem el slot encara)
-    GameObject client = activeClients[slotIndex];
-
-    // 3. Ordenem al client que marxi
-    ClientMovement mover = client.GetComponent<ClientMovement>();
-    if (mover != null)
-    {
-        mover.MoveTo(spawnPoint.position);
-        
-        // Li assignem la destrucció quan arribi al final
-        // IMPORTANT: Alliberem el slot DESPRÉS que el client s'hagi destruït
-        mover.OnArrival = () => 
+        // 1. Seguretat: mirem si realment hi ha algú en aquell slot
+        if (slotIndex < 0 || slotIndex >= activeClients.Length || activeClients[slotIndex] == null)
         {
-            //Debug.Log($"<color=orange>👋 Cliente del slot {slotIndex} llegó al spawn, liberando slot...</color>");
-            activeClients[slotIndex] = null; // Ara sí alliberem el slot
-            mover.Despawn();
-        };
+            Debug.LogWarning($"Intentant fer fora un client del slot {slotIndex} però està buit!");
+            return;
+        }
+
+        // 2. Agafem la referència (NO alliberem el slot encara)
+        GameObject client = activeClients[slotIndex];
+
+        // 3. Ordenem al client que marxi
+        ClientMovement mover = client.GetComponent<ClientMovement>();
+        if (mover != null)
+        {
+            mover.MoveTo(spawnPoint.position);
+            
+            // Li assignem la destrucció quan arribi al final
+            // IMPORTANT: Alliberem el slot DESPRÉS que el client s'hagi destruït
+            mover.OnArrival = () => 
+            {
+                //Debug.Log($"<color=orange>👋 Cliente del slot {slotIndex} llegó al spawn, liberando slot...</color>");
+                activeClients[slotIndex] = null; // Ara sí alliberem el slot
+                mover.Despawn();
+            };
+        }
+        else
+        {
+            // Si no té ClientMovement, alliberem immediatament
+            activeClients[slotIndex] = null;
+            Destroy(client);
+        }
     }
-    else
+    public void CalculateTimer()
     {
-        // Si no té ClientMovement, alliberem immediatament
-        activeClients[slotIndex] = null;
-        Destroy(client);
+        switch (MoneyManager.Instance.DebtLevel)
+        {
+            case DebtLevel.High:
+                orderDuration = 70f;
+                break;
+            case DebtLevel.Medium:
+                orderDuration = 62f;
+                break;
+            case DebtLevel.Low:
+                orderDuration = 51f;
+                break;
+            case DebtLevel.LowLow:
+                orderDuration = 37f;
+                break;
+            case DebtLevel.None:
+                orderDuration = 25f;
+                break;
+        }
     }
-}
 }
