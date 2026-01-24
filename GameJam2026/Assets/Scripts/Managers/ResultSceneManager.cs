@@ -54,6 +54,7 @@ private void Awake()
     private void HandleNextDay()
     {
         DayCycleManager.Instance.NextDay();
+        SaveDataManager.Instance.SaveGame(); 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         MoneyManager.Instance.ResetDayPaycheck();

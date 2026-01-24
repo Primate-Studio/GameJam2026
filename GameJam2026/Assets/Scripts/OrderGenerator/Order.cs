@@ -53,13 +53,11 @@ public class Order
         
         foreach (ObjectType deliveredType in deliveredItems)
         {
-            string quality = "";
             float scoreChange = 0f;
             
             // Verificar si el objeto es Ideal (Good)
             if (System.Array.Exists(requirement.Good, obj => obj == deliveredType))
             {
-                quality = "Ideal";
                 scoreChange = 100f;
                 MoneyManager.Instance.AddMoney(6);
                 MoneyManager.Instance.SubtractMoney(2);
@@ -68,7 +66,6 @@ public class Order
             // Verificar si el objeto es Decente (Mid)
             else if (System.Array.Exists(requirement.Mid, obj => obj == deliveredType))
             {
-                quality = "Decente";
                 scoreChange = 65f;
                 MoneyManager.Instance.AddMoney(4);
                 MoneyManager.Instance.SubtractMoney(2);                
@@ -77,7 +74,6 @@ public class Order
             // Verificar si el objeto es Pésimo (Bad)
             else if (System.Array.Exists(requirement.Bad, obj => obj == deliveredType))
             {
-                quality = "Pésimo";
                 scoreChange = 0f;
                 MoneyManager.Instance.AddMoney(1);
                 MoneyManager.Instance.SubtractMoney(2);                
@@ -85,8 +81,6 @@ public class Order
             }
             else
             {
-                // Si no está en ninguna lista = Neutro (0%)
-                quality = "Neutro";
                 scoreChange = 10f;
                 MoneyManager.Instance.AddMoney(2);
                 MoneyManager.Instance.SubtractMoney(2);

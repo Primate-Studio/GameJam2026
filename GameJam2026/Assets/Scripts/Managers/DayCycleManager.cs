@@ -10,7 +10,7 @@ public class DayCycleManager : MonoBehaviour
     public float dayDurationInSeconds = 300f; // 5 minuts
     private float currentTime = 0f;
     private bool isDayActive = false;
-
+    public int currentDay = 1;
 
 
     [Header("Referències de Llum")]
@@ -59,6 +59,7 @@ public class DayCycleManager : MonoBehaviour
 
     public void NextDay()
     {
+        currentDay++;
         currentTime = 0f;
         isDayActive = true;
         OnDayStart?.Invoke();
