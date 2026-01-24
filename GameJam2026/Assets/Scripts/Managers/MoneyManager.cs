@@ -1,10 +1,11 @@
 using UnityEngine;
 
+public enum DebtLevel { None, LowLow, Low, Medium, High }
 public class MoneyManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static MoneyManager Instance { get; private set; }
 
+    private DebtLevel debtLevel = DebtLevel.High;
     [Header("Configuration")]
     public float Debt = 250;
     [HideInInspector]public int currentMoney = 0;
@@ -69,6 +70,33 @@ public class MoneyManager : MonoBehaviour
     {
         totalMoney += currentMoney - InventoryCost*totalItemsSold + weaponPaycheck;
         totalMoney -= debtPayment();
+    }
+    public void CalculateDebtLevel()
+    {
+        if (Debt > 50 && Debt <= 100)
+        {
+            debtLevel = DebtLevel.LowLow;
+        }
+        else if (Debt > 100 && Debt <= 150)
+        {
+            debtLevel = DebtLevel.Low;
+        }
+        else if (Debt > 150 && Debt <= 200)
+        {
+            debtLevel = DebtLevel.Medium;
+        }
+        else if( Debt > 200 )
+        {
+            debtLevel = DebtLevel.High;
+        }
+        else
+        {
+            debtLevel = DebtLevel.None;
+        }
+    }
+    public DebtLevel DebtLevel
+    {
+        get { return debtLevel; }
     }
 
     public void ResetDayPaycheck()

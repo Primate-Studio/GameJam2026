@@ -42,12 +42,14 @@ public class OrderGenerator : MonoBehaviour
         order.orderID = nextOrderID++;
         
         int requiredCount = Random.Range(2, 4); // 2 o 3 objetos
-        
+
+        int activePacks, activeActivities;
+        CalculateActivities(out activePacks, out activeActivities);
         // Random Pack
-        PackData selectedPack = availablePacks[Random.Range(0, availablePacks.Length)];
+        PackData selectedPack = availablePacks[activePacks > 1 ? Random.Range(0, activePacks-1) : 0];
 
         // Random Activity from Pack
-        ActivityData selectedActivity = selectedPack.activities[Random.Range(0, selectedPack.activities.Length)];
+        ActivityData selectedActivity = selectedPack.activities[Random.Range(0, activeActivities-1)];
 
         // Random Combo from Activity
         RequirementData tempMonster, tempCondition, tempEnvironment;
@@ -80,5 +82,40 @@ public class OrderGenerator : MonoBehaviour
         Debug.Log($"(From Pack: {selectedPack.packName}, Activity: {selectedActivity.activityName})");
         
         return order;
+    }
+
+    private void CalculateActivities(out int activePacks, out int activeActivities)
+    {
+
+        if (MoneyManager.Instance.DebtLevel == DebtLevel.High)
+        {
+            activePacks = 1;
+            activeActivities = 2;
+        }
+        else if (MoneyManager.Instance.DebtLevel == DebtLevel.Medium)
+        {
+            activePacks = 1;
+            activeActivities = 4;
+        }
+        else if (MoneyManager.Instance.DebtLevel == DebtLevel.Low)
+        {
+            activePacks = 2;
+            activeActivities = 6;
+        }
+        else if (MoneyManager.Instance.DebtLevel == DebtLevel.LowLow)
+        {
+            activePacks = 2;
+            activeActivities = 8;
+        }
+        else if (MoneyManager.Instance.DebtLevel == DebtLevel.None)
+        {
+            activePacks = 2;
+            activeActivities = 8;
+        }
+        else
+        {
+            activePacks = 1;
+            activeActivities = 2;
+        }
     }
 }

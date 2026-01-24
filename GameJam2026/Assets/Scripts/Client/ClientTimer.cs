@@ -12,6 +12,7 @@ public class ClientTimer : MonoBehaviour
     public float timeRemaining;  // Público para que OrderSystem pueda acceder
     private bool isOrderActive = false;
     private bool timerUICreated = false;
+    public DebtLevel DebtLevel;
 
     void Awake()
     {
@@ -139,22 +140,23 @@ public class ClientTimer : MonoBehaviour
 
     public void CalculateTimer()
     {
-        if (MoneyManager.Instance.Debt >= 250)
+        switch (MoneyManager.Instance.DebtLevel)
         {
-            orderDuration = 50f;
+            case DebtLevel.High:
+                orderDuration = 50f;
+                break;
+            case DebtLevel.Medium:
+                orderDuration = 40f;
+                break;
+            case DebtLevel.Low:
+                orderDuration = 30f;
+                break;
+            case DebtLevel.LowLow:
+                orderDuration = 20f;
+                break;
+            case DebtLevel.None:
+                orderDuration = 15f;
+                break;
         }
-        else if (MoneyManager.Instance.Debt >= 150)
-        {
-            orderDuration = 40f;
-        }
-        else if (MoneyManager.Instance.Debt >= 50)
-        {
-            orderDuration = 30f;
-        }
-        else if (MoneyManager.Instance.Debt > 0)
-        {
-            orderDuration = 20f;
-        }
-
     }
 }
