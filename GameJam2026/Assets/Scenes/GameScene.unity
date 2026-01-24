@@ -3638,17 +3638,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
   slotUIs:
-  - transform: {fileID: 1714060777}
-    iconImage: {fileID: 53974752}
-    borderImage: {fileID: 1714060778}
+  - transform: {fileID: 1898093396}
+    iconImage: {fileID: 1591030185}
+    borderImage: {fileID: 1898093397}
     slotNumberText: {fileID: 0}
   - transform: {fileID: 1956170212}
     iconImage: {fileID: 1683246605}
     borderImage: {fileID: 1956170213}
     slotNumberText: {fileID: 0}
-  - transform: {fileID: 1898093396}
-    iconImage: {fileID: 1591030185}
-    borderImage: {fileID: 1898093397}
+  - transform: {fileID: 1714060777}
+    iconImage: {fileID: 53974752}
+    borderImage: {fileID: 1714060778}
     slotNumberText: {fileID: 0}
   selectedColor: {r: 1, g: 0.8355927, b: 0.015686274, a: 0.41960785}
   normalColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

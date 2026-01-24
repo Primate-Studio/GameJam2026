@@ -99,6 +99,8 @@ public class InventoryManager : MonoBehaviour
     /// <param name="direction">1 para siguiente, -1 para anterior</param>
     private void ChangeSlot(int direction)
     {
+        if (GameManager.Instance.CurrentState == GameState.Paused)
+            return;
         currentSlotIndex += direction;
         
         // Wrap around (si llegas al final, vuelves al principio)
@@ -106,9 +108,7 @@ public class InventoryManager : MonoBehaviour
             currentSlotIndex = 0;
         else if (currentSlotIndex < 0)
             currentSlotIndex = 2;
-        
-        Debug.Log($"Bolsillo cambiado a: {currentSlotIndex + 1}");
-        
+                
         // Actualizar el objeto en la mano
         UpdateHandObject();
         
