@@ -27,6 +27,7 @@ public class InputManager : MonoBehaviour
     public bool PausePressed => Input.GetKeyDown(pauseKey);
     public bool ManualPressed => Input.GetKeyDown(manualKey);
     private bool isPaused = false;
+    private GameState lastStateBeforePause = GameState.MainMenu;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,11 +44,7 @@ public class InputManager : MonoBehaviour
     {
         if(PausePressed)
         {
-            isPaused = !isPaused;
-            SettingsButtons.Instance.OnPause(isPaused);
-            Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = isPaused;
-            GameManager.Instance.ChangeState(isPaused ? GameState.Paused : GameState.Playing);
+            SetPauseState(!isPaused);
         }
         if(ManualPressed && !isPaused)
         {
@@ -62,6 +59,27 @@ public class InputManager : MonoBehaviour
             }
             
         }
+    }
+    public void SetPauseState(bool pause)
+    {
+        if (pause)
+        {
+            lastStateBeforePause = GameManager.Instance.CurrentState;
+            GameManager.Instance.ChangeState(GameState.Paused);
+        }
+        else
+        {
+            GameManager.Instance.ChangeState(lastStateBeforePause);
+        }
+
+        isPaused = pause;
+
+        if (SettingsButtons.Instance != null)
+            SettingsButtons.Instance.OnPause(isPaused);
+
+        bool unlockCursor = isPaused || GameManager.Instance.CurrentState == GameState.MainMenu || GameManager.Instance.CurrentState == GameState.Result;
+        Cursor.lockState = unlockCursor ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = unlockCursor;
     }
     public bool HasMovementInput()
     {

@@ -638,22 +638,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32fbc93aa0d4e2842bc03d5438708f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsButtons
-  BackButton: {fileID: 1573198484}
-  GeneralSettingsPanel: {fileID: 1573198483}
+  BackButton: {fileID: 2089984274}
+  SettingsPanel: {fileID: 1573198482}
   GeneralSettingsCanvas: {fileID: 1573198485}
-  AudioSettingsPanel: {fileID: 1573198482}
-  VideoSettingsPanel: {fileID: 1573198481}
-  AudioSettingsButton: {fileID: 1573198480}
-  VideoSettingsButton: {fileID: 1573198479}
   GeneralVolumeSlider: {fileID: 1573198478}
   SFXVolumeSlider: {fileID: 1573198477}
   AmbientVolumeSlider: {fileID: 1573198476}
   MusicVolumeSlider: {fileID: 1573198475}
-  GeneralMuteToggle: {fileID: 1573198474}
-  SFXMuteToggle: {fileID: 1573198473}
-  AmbientMuteToggle: {fileID: 1573198472}
-  MusicMuteToggle: {fileID: 1573198471}
-  BrightnessSlider: {fileID: 1573198470}
+  FullscreenToggle: {fileID: 1660971298}
+  VSyncToggle: {fileID: 1652766290}
 --- !u!4 &823194529
 Transform:
   m_ObjectHideFlags: 0
@@ -885,17 +878,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoneyManager
   Debt: 250
-  currentMoney: 0
-  totalMoney: 0
   InventoryCost: 2
   deathPenalty: 10
+  debtPaymentRate: 0.25
+  successReward: 8
+  currentMoney: 0
+  totalMoney: 0
+  weaponPaycheck: 0
+  debtPaymentAmount: 0
+  itemsBenefits: 0
   deathCount: 0
   successCount: 0
   totalItemsSold: 0
-  weaponPenalty: 5
-  weaponPaycheck: 0
-  successReward: 8
-  debtPaymentRate: 0.25
 --- !u!114 &976066003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1741,13 +1735,141 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 823194529}
     m_Modifications:
+    - target: {fileID: 197366143913857234, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197366143913857234, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197366143913857234, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 822708151005103753, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 822708151005103753, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 822708151005103753, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 955899362485861756, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 955899362485861756, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944952047384200251, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944952047384200251, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1944952047384200251, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2083753155242456088, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 823194528}
+    - target: {fileID: 2240329373689693507, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2240329373689693507, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785445497527222411, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785445497527222411, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785445497527222411, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534541417579715692, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534541417579715692, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534541417579715692, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794736309839563181, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794736309839563181, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794736309839563181, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363690923361356525, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363690923361356525, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241927672023583339, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241927672023583339, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241927672023583339, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549087741751381788, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549087741751381788, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635639665558579576, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635639665558579576, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6635639665558579576, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7259871823515441785, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
       propertyPath: m_Name
       value: SettingsCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 7259871823515441785, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7976198976443637841, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
       propertyPath: m_Pivot.x
@@ -1834,61 +1956,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
---- !u!114 &1573198470 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8874959712950259520, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
---- !u!114 &1573198471 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1332508712705803270, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
---- !u!114 &1573198472 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8470130468597501806, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
---- !u!114 &1573198473 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6393719940546877368, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
---- !u!114 &1573198474 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1967323408761945943, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!114 &1573198475 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4791282429637092469, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
@@ -1933,59 +2000,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
---- !u!114 &1573198479 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4277954229392945884, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!114 &1573198480 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7576814261442201040, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!1 &1573198481 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2899852116050339688, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1573198482 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5586176912376955154, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
   m_PrefabInstance: {fileID: 1573198469}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1573198483 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2063743873404228815, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1573198484 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1828728537942920319, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
-  m_PrefabInstance: {fileID: 1573198469}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1573198485 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7259871823515441785, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
   m_PrefabInstance: {fileID: 1573198469}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1652766290 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6582193995752458363, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+  m_PrefabInstance: {fileID: 1573198469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+--- !u!114 &1660971298 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7604669214010532642, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+  m_PrefabInstance: {fileID: 1573198469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!1 &1688146083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,6 +2352,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074869218}
   m_CullTransparentMesh: 1
+--- !u!114 &2089984274 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2083753155242456088, guid: 8fbf143c2498e534e841d3cda53a9679, type: 3}
+  m_PrefabInstance: {fileID: 1573198469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

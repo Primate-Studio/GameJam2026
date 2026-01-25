@@ -6,13 +6,8 @@ public class SettingsButtons : MonoBehaviour
     public static SettingsButtons Instance { get; private set; }
     [Header("GeneralSettings References")]
     [SerializeField] private Button BackButton;
-    [SerializeField] private GameObject GeneralSettingsPanel;
+    [SerializeField] private GameObject SettingsPanel;
     [SerializeField] private GameObject GeneralSettingsCanvas;
-
-    [SerializeField] private GameObject AudioSettingsPanel;
-    [SerializeField] private GameObject VideoSettingsPanel;
-    [SerializeField] private Button AudioSettingsButton;
-    [SerializeField] private Button VideoSettingsButton;
 
     [Header("Audio Settings References")]      
     [SerializeField] private Slider GeneralVolumeSlider;
@@ -20,13 +15,9 @@ public class SettingsButtons : MonoBehaviour
     [SerializeField] private Slider AmbientVolumeSlider;
     [SerializeField] private Slider MusicVolumeSlider;
 
-    [SerializeField] private Toggle GeneralMuteToggle;
-    [SerializeField] private Toggle SFXMuteToggle; 
-    [SerializeField] private Toggle AmbientMuteToggle;
-    [SerializeField] private Toggle MusicMuteToggle;
-
     [Header("Video Settings References")]
-    [SerializeField] private Slider BrightnessSlider;
+    [SerializeField] private Toggle FullscreenToggle;
+    [SerializeField] private Toggle VSyncToggle;
     SettingsManager settingsmanager;
     private void Awake()
     {
@@ -47,31 +38,28 @@ public class SettingsButtons : MonoBehaviour
         SetSettingsUI();
     }
 
+    private void OnEnable()
+    {
+        if (BackButton != null)
+            BackButton.onClick.AddListener(OnBackButton);
+    }
+
+    private void OnDisable()
+    {
+        if (BackButton != null)
+            BackButton.onClick.RemoveListener(OnBackButton);
+    }
+
     //--------BUTTON METHODS-----------
     public void OnPause(bool isPaused)
     {
         GeneralSettingsCanvas.SetActive(isPaused);
-        GeneralSettingsPanel.SetActive(isPaused); 
-    }
-    public void OnAudioSettingsButton()
-    {
-        AudioSettingsPanel.SetActive(true);
-        GeneralSettingsPanel.SetActive(false);
-        VideoSettingsPanel.SetActive(false);
-    }
-    public void OnVideoSettingsButton()
-    {
-        VideoSettingsPanel.SetActive(true);
-        GeneralSettingsPanel.SetActive(false);
-        AudioSettingsPanel.SetActive(false);
     }
     public void OnBackButton()
-    {
-        GeneralSettingsPanel.SetActive(true);
-        AudioSettingsPanel.SetActive(false);
-        VideoSettingsPanel.SetActive(false);
+    {  
+        InputManager.Instance.SetPauseState(false);
+        GeneralSettingsCanvas.SetActive(false);
     }
-
 
     public void OnGeneralVolumeChanged(float value)
     {
@@ -90,23 +78,13 @@ public class SettingsButtons : MonoBehaviour
         settingsmanager.SetVolume("MusicVolume", value);
     }
 
-    public void OnGeneralMuteToggled(bool isMuted)
+    public void onFullscreenToggleChanged(bool isFullscreen)
     {
-        settingsmanager.SetMute("MasterVolume", isMuted);
+        Screen.fullScreen = isFullscreen;
     }
-    public void OnSFXMuteToggled(bool isMuted)
+    public void SetVSync(bool isTarget)
     {
-        settingsmanager.SetMute("SFXVolume", isMuted);
-        AudioManager.Instance.PlayMusic(MusicType.MainMenu);
-        AudioManager.Instance.PlayAmbient(AmbientType.Birds);
-    }
-    public void OnAmbientMuteToggled(bool isMuted)
-    {
-        settingsmanager.SetMute("AmbientVolume", isMuted);
-    }
-    public void OnMusicMuteToggled(bool isMuted)
-    {
-        settingsmanager.SetMute("MusicVolume", isMuted);
+        QualitySettings.vSyncCount = isTarget ? 1 : 0;
     }
     
     public void SetSettingsUI()
@@ -114,10 +92,9 @@ public class SettingsButtons : MonoBehaviour
         GeneralVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
         MusicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
         SFXVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
-        GeneralMuteToggle.isOn = PlayerPrefs.GetInt("MasterVolume_muted", 0) == 1;
-        MusicMuteToggle.isOn = PlayerPrefs.GetInt("MusicVolume_muted", 0) == 1;
-        SFXMuteToggle.isOn = PlayerPrefs.GetInt("SFXVolume_muted", 0) == 1;
-        BrightnessSlider.value = PlayerPrefs.GetFloat("Brightness", 1f);
+        AmbientVolumeSlider.value = PlayerPrefs.GetFloat("AmbientVolume", 0.75f);
+        FullscreenToggle.isOn = Screen.fullScreen;
+        VSyncToggle.isOn = QualitySettings.vSyncCount == 1 ? true : false;
     }
 }
 
