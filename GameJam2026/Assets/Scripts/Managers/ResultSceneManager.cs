@@ -37,6 +37,7 @@ private void Awake()
 
     public void SetResults()
     {
+        MoneyManager.Instance.CalculateTotalMoney();
         benefitsText.text = "Missions exitoses: \n" + MoneyManager.Instance.successCount.ToString() + "*" + 
             MoneyManager.Instance.successReward.ToString() + " = " + 
             (MoneyManager.Instance.successCount * MoneyManager.Instance.successReward).ToString() + " € \n"
@@ -54,7 +55,7 @@ private void Awake()
     private void HandleNextDay()
     {
         DayCycleManager.Instance.NextDay();
-        SaveDataManager.Instance.SaveGame(); 
+        //SaveDataManager.Instance.SaveGame();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         MoneyManager.Instance.ResetDayPaycheck();

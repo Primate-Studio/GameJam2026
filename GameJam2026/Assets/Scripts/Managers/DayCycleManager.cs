@@ -29,6 +29,7 @@ public class DayCycleManager : MonoBehaviour
     private void Start()
     {
         StartDay(); // En una versió final, això es cridaria des d'un botó "Obrir Botiga"
+        currentDay = PlayerPrefs.GetInt("CurrentDay", 1);
     }
 
     private void Update()
@@ -60,6 +61,7 @@ public class DayCycleManager : MonoBehaviour
     public void NextDay()
     {
         currentDay++;
+        SaveDataManager.Instance.SaveGame();
         currentTime = 0f;
         isDayActive = true;
         OnDayStart?.Invoke();

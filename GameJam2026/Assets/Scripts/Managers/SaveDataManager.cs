@@ -19,8 +19,13 @@ public class SaveDataManager : MonoBehaviour
 
     public void SaveGame()
     {
-        // Implement your save game logic here
         //currentDay, totalMoney, debt 
-        Debug.Log("Game Saved!");
+        PlayerPrefs.SetInt("CurrentDay", DayCycleManager.Instance.currentDay);
+        PlayerPrefs.SetFloat("TotalMoney", MoneyManager.Instance.totalMoney);
+        PlayerPrefs.SetFloat("Debt", MoneyManager.Instance.Debt); 
+        PlayerPrefs.Save();
+        Debug.Log("Game Saved! \nDay: " + DayCycleManager.Instance.currentDay + 
+                  "\nTotal Money: " + MoneyManager.Instance.totalMoney + 
+                  "\nDebt: " + MoneyManager.Instance.Debt);
     }
 }

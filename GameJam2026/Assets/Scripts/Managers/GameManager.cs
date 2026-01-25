@@ -50,6 +50,12 @@ public class GameManager : MonoBehaviour
     }
     public void StartNewGame()
     {
+        PlayerPrefs.DeleteAll();
+        MoneyManager.Instance.ResetMoney();
+        ChangeState(GameState.Playing);
+    }
+    public void ContinueGame()
+    {
         ChangeState(GameState.Playing);
     }
 

@@ -35,6 +35,11 @@ public class MoneyManager : MonoBehaviour
         }
         Instance = this;
     }
+    void Start()
+    {
+        Debt = PlayerPrefs.GetFloat("Debt", 250);
+        totalMoney = (int)PlayerPrefs.GetFloat("TotalMoney", 0);
+    }
 
     public void AddMoney(int amount)
     {
