@@ -7,23 +7,22 @@ public class MoneyManager : MonoBehaviour
 
     private DebtLevel debtLevel = DebtLevel.High;
     [Header("Configuration")]
-    public float Debt = 250;
-    [HideInInspector]public int currentMoney = 0;
-    [HideInInspector] public int totalMoney = 0;
-    public int InventoryCost = 2;
+    public float Debt = 250f;
+    public float InventoryCost = 2f;
+    public float deathPenalty = 10f;
+    public float debtPaymentRate = 0.25f; 
+    public float successReward = 8f;
 
-    public int deathPenalty = 10;
+    [HideInInspector] public float currentMoney = 0;
+    [HideInInspector] public float totalMoney = 0;
+    [HideInInspector] public float weaponPaycheck = 0;
+    [HideInInspector] public float debtPaymentAmount = 0;
+    [HideInInspector] public float itemsBenefits = 0;
+
     [HideInInspector] public int deathCount = 0;
     [HideInInspector] public int successCount = 0;
     [HideInInspector] public int totalItemsSold = 0;
 
-    public int weaponPenalty = 5;
-    [HideInInspector]public int weaponPaycheck = 0;
-
-    [HideInInspector]float debtPaymentAmount = 0;
-
-    public int successReward = 8;
-    public float debtPaymentRate = 0.25f; 
     
 
     void Awake()
@@ -38,15 +37,16 @@ public class MoneyManager : MonoBehaviour
     void Start()
     {
         Debt = PlayerPrefs.GetFloat("Debt", 250);
-        totalMoney = (int)PlayerPrefs.GetFloat("TotalMoney", 0);
+        totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
     }
 
-    public void AddMoney(int amount)
+    public void AddMoney(float amount)
     {
         currentMoney += amount;
+        itemsBenefits += amount;
     }
 
-    public void SubtractMoney(int amount)
+    public void SubtractMoney(float amount)
     {
         currentMoney -= amount;
         totalItemsSold ++;
@@ -64,16 +64,17 @@ public class MoneyManager : MonoBehaviour
         deathCount++;
     }
 
-    public int debtPayment()
+    public float debtPayment()
     {
+        if(currentMoney <= 0) return 0f;
         debtPaymentAmount = currentMoney * debtPaymentRate;
         Debt -= debtPaymentAmount;
-        return (int)debtPaymentAmount;
+        return debtPaymentAmount;
     }
     
     public void CalculateTotalMoney()
     {
-        totalMoney += currentMoney - InventoryCost*totalItemsSold + weaponPaycheck;
+        totalMoney += currentMoney - InventoryCost*totalItemsSold;
         totalMoney -= debtPayment();
     }
     public void CalculateDebtLevel()
@@ -106,19 +107,23 @@ public class MoneyManager : MonoBehaviour
 
     public void ResetDayPaycheck()
     {
+        itemsBenefits = 0;
         weaponPaycheck = 0;
         InventoryCost = 2;
         currentMoney = 0;
         deathCount = 0;
         successCount = 0;
         totalItemsSold = 0;
+        debtPaymentAmount = 0;
     }
 
     public void ResetMoney()
     {
+        itemsBenefits = 0;
+        debtPaymentAmount = 0;
         currentMoney = 0;
         totalMoney = 0;
-        InventoryCost = 2;
+        InventoryCost = 2f;
         weaponPaycheck = 0;
         deathCount = 0;
         successCount = 0;

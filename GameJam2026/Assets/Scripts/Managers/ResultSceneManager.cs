@@ -5,8 +5,10 @@ using TMPro;
 public class ResultSceneManager : MonoBehaviour
 {    
     [Header("UI")]
-    [SerializeField] private TMP_Text benefitsText;
-    [SerializeField] private TMP_Text lossesText;
+    [SerializeField] private TMP_Text exitMissionText;
+    [SerializeField] private TMP_Text soldItemsText;
+    [SerializeField] private TMP_Text failedMissionsText;
+    [SerializeField] private TMP_Text restockInventoryText;
     [SerializeField] private TMP_Text totalText;
     [SerializeField] private TMP_Text debtText;
 
@@ -37,19 +39,16 @@ private void Awake()
 
     public void SetResults()
     {
+        debtText.text = MoneyManager.Instance.Debt.ToString() + "€";
         MoneyManager.Instance.CalculateTotalMoney();
-        benefitsText.text = "Missions exitoses: \n" + MoneyManager.Instance.successCount.ToString() + "*" + 
-            MoneyManager.Instance.successReward.ToString() + " = " + 
-            (MoneyManager.Instance.successCount * MoneyManager.Instance.successReward).ToString() + " € \n"
-            + "Items venuts: \n" + MoneyManager.Instance.totalItemsSold.ToString() + " = " + 
-            MoneyManager.Instance.currentMoney.ToString() + " € \n";
-        lossesText.text = "Penalitzacions per morts: \n" + MoneyManager.Instance.deathCount.ToString() + "*" + 
-            MoneyManager.Instance.deathPenalty.ToString() + " = -" + (MoneyManager.Instance.deathCount * MoneyManager.Instance.deathPenalty).ToString() + " € \n"
-            + "Reposar inventari: \n" + MoneyManager.Instance.InventoryCost.ToString() + " € \n";
-        
-        totalText.text = "Total guanyat: " + MoneyManager.Instance.currentMoney.ToString() + " € \n";
-        
-        debtText.text = "Deute restant: " + MoneyManager.Instance.Debt.ToString() + " €" + "-" + MoneyManager.Instance.debtPayment().ToString() + " € = " + MoneyManager.Instance.Debt.ToString() + " €";
+        exitMissionText.text = MoneyManager.Instance.successCount.ToString() + " x " + MoneyManager.Instance.successReward.ToString() + "€" + " = " + (MoneyManager.Instance.successCount * MoneyManager.Instance.successReward).ToString() + "€";
+        soldItemsText.text = MoneyManager.Instance.totalItemsSold.ToString() + " = " + MoneyManager.Instance.itemsBenefits.ToString() + "€";
+        failedMissionsText.text = MoneyManager.Instance.deathCount.ToString() + " x " + MoneyManager.Instance.deathPenalty.ToString() + "€" + " = " + (MoneyManager.Instance.deathCount * MoneyManager.Instance.deathPenalty).ToString() + "€";
+        restockInventoryText.text = (MoneyManager.Instance.InventoryCost * MoneyManager.Instance.totalItemsSold).ToString() + "€";
+
+        totalText.text = MoneyManager.Instance.currentMoney + "€";
+        if(MoneyManager.Instance.debtPaymentAmount > 0)
+        debtText.text += " - " + MoneyManager.Instance.debtPaymentAmount.ToString() + "€" + " = " + MoneyManager.Instance.Debt.ToString() + "€";
     }
 
     private void HandleNextDay()
@@ -63,6 +62,9 @@ private void Awake()
 
     private void HandleMainMenu()
     {
+        DayCycleManager.Instance.currentDay++;
+        SaveDataManager.Instance.SaveGame();
+        MoneyManager.Instance.ResetMoney();
         GameManager.Instance.ChangeState(GameState.MainMenu);
     }   
 }
