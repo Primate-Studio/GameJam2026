@@ -65,7 +65,7 @@ public class ClientManager : MonoBehaviour
         return -1;
     }
 
-    private void SpawnClientInSlot(int slotIndex)
+    public void SpawnClientInSlot(int slotIndex)
     {
         //Debug.Log($"<color=lime>👤 ClientManager: Spawneando cliente en slot {slotIndex}</color>");
         

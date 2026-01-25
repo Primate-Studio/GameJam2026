@@ -41,6 +41,9 @@ public class GameSceneManager : MonoBehaviour
             case GameState.Result:
                 LoadScene("ResultScene");
                 break;
+            case GameState.Tutorial:
+                LoadScene("TutorialScene");
+                break;
         }
     }
 

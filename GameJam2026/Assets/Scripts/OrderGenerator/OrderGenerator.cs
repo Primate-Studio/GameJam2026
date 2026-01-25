@@ -38,6 +38,8 @@ public class OrderGenerator : MonoBehaviour
     /// </summary>
     public Order GenerateNewClientOrder()
     {
+
+        //if (!TutorialManager.Instance.canGenerateOrder) return null;
         Order order = new Order();
         order.orderID = nextOrderID++;
         
@@ -91,6 +93,32 @@ public class OrderGenerator : MonoBehaviour
         Debug.Log($"New Order Generated: Monster - {order.monster.requirementName}, Condition - {order.condition.requirementName}, Environment - {(order.environment != null ? order.environment.requirementName : "None")} ");
         Debug.Log($"(From Pack: {selectedPack.packName}, Activity: {selectedActivity.activityName})");
         
+        return order;
+    }
+
+    public Order GenerateSpecificOrder(RequirementData monster, RequirementData condition, RequirementData environment)
+    {
+        Order order = new Order();
+        order.orderID = nextOrderID++;
+        order.monster = monster;
+        order.condition = condition;
+        order.environment = environment;
+
+        // Determinar cuántos objetos se necesitan según los requisitos dados
+        int requiredCount = 0;
+        if (monster != null) requiredCount++;
+        if (condition != null) requiredCount++;
+        if (environment != null) requiredCount++;
+
+        order.itemsNeeded = requiredCount;
+
+        // Actualizar variables para debug visual
+        currentMonster = order.monster;
+        currentCondition = order.condition;
+        currentEnvironment = order.environment;
+
+        Debug.Log($"Specific Order Generated: Monster - {order.monster.requirementName}, Condition - {order.condition.requirementName}, Environment - {(order.environment != null ? order.environment.requirementName : "None")} ");
+
         return order;
     }
 

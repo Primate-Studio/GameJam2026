@@ -887,6 +887,7 @@ MonoBehaviour:
   weaponPaycheck: 0
   debtPaymentAmount: 0
   itemsBenefits: 0
+  initialDayDebt: 0
   deathCount: 0
   successCount: 0
   totalItemsSold: 0
@@ -1108,7 +1109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1717,8 +1718,8 @@ Transform:
   m_GameObject: {fileID: 1560820608}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -200.42169, y: -351.00003, z: 2233.5632}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -170, y: -240, z: 1562.2}
+  m_LocalScale: {x: 0.69942, y: 0.69942, z: 0.69942}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1105991297}
@@ -2263,14 +2264,14 @@ RectTransform:
   m_GameObject: {fileID: 1844023485}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.0429, y: 2.0429, z: 2.0429}
+  m_LocalScale: {x: 1.4647593, y: 1.4647593, z: 1.4647593}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1136990766}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.3, y: 140}
+  m_AnchoredPosition: {x: -229, y: 140}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1844023487

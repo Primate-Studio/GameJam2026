@@ -10,6 +10,7 @@ public enum GameState
     Paused,
     GameOver,
     GameWin,
+    Tutorial,
     Result
 }
 
@@ -79,5 +80,13 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.Playing;
         OnGameStateChanged?.Invoke(currentState);
+    }
+
+    public void TutorialMode()
+    {
+        if(currentState == GameState.Tutorial)
+        {
+            
+        }
     }
 }
