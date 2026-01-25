@@ -127,6 +127,10 @@ public class MoneyManager : MonoBehaviour
     {
         get { return debtLevel; }
     }
+    public float GetDebt()
+    {
+        return Debt;
+    }
     private void CheckWinLoseConditions()
     {
         if (Debt <= 0)

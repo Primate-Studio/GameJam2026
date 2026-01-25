@@ -80,7 +80,10 @@ public class DayCycleManager : MonoBehaviour
         GameState nextState = MoneyManager.Instance.GetNextStateAfterDay();
         GameManager.Instance.ChangeState(nextState);
     }
-
+    public float GetProgress()
+    {
+        return Mathf.Clamp01(currentTime / dayDurationInSeconds);
+    }
     private void UpdateLighting(float progress)
     {
         if (sunLight == null) return;
