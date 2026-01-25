@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using UnityEditor.PackageManager;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class ClientMovement : MonoBehaviour
@@ -8,19 +9,35 @@ public class ClientMovement : MonoBehaviour
     private NavMeshAgent agent;
     public Action OnArrival; // Event que avisarà al Manager quan el client arribi
     private bool isLeaving = false;
+    public ClientAnimationController ClientAnimationController;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-    }
+        ClientAnimationController = GetComponent<ClientAnimationController>();
 
+    }
     public void MoveTo(Vector3 destination, bool isLeaving)
     {
         this.isLeaving = isLeaving;
         if (agent == null) return;
+
         agent.SetDestination(destination);
         StopAllCoroutines();
         StartCoroutine(CheckArrivalRoutine());
+    }
+    public void SetMovementEnabled(bool enabled)
+    {
+        if (agent == null) return;
+
+        // Aturem o reprenem l'agent
+        agent.isStopped = !enabled;
+
+        if (!enabled)
+        {
+            // Forcem que la velocitat sigui zero perquè no llisqui per inèrcia
+            agent.velocity = Vector3.zero;
+        }
     }
     private void Update()
     {
@@ -43,7 +60,11 @@ public class ClientMovement : MonoBehaviour
         }
 
         // Si arribem aquí, hem arribat al destí
+        //Animacio de parlar durant 3 segons
+        ClientAnimationController.SetTalking(true);
         OnArrival?.Invoke(); 
+        yield return new WaitForSeconds(3f);
+        ClientAnimationController.SetTalking(false);
     }
 
     public void Despawn()

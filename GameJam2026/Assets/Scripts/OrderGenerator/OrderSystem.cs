@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEditor.PackageManager;
 
 /// <summary>
 /// Sistema central de gestión de pedidos
@@ -68,9 +69,7 @@ public class OrderSystem : MonoBehaviour
     /// Llamado por ClientManager cuando el cliente llega
     /// </summary>
     public void GenerateOrderForClient(GameObject client, int slotIndex)
-    {
-        //Debug.Log($"<color=cyan>🔹 GenerateOrderForClient llamado para slot {slotIndex}. Pedidos activos: {activeClientOrders.Count}/3</color>");
-        
+    {        
         // Verificar si hay espacio (máximo 3 pedidos)
         if (activeClientOrders.Count >= 3)
         {
@@ -93,6 +92,8 @@ public class OrderSystem : MonoBehaviour
         }
         
         Order newOrder = OrderGenerator.Instance.GenerateNewClientOrder();
+        ClientAnimationController animationController = client.GetComponent<ClientAnimationController>();
+        if(animationController != null) newOrder.animationController = animationController;
         
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
@@ -114,6 +115,7 @@ public class OrderSystem : MonoBehaviour
         
         // Obtener o crear el ClientTimer
         ClientTimer clientTimer = client.GetComponent<ClientTimer>();
+        ClientAnimationController clientAnimationController = client.GetComponent<ClientAnimationController>();
         if (clientTimer == null)
         {
             clientTimer = client.AddComponent<ClientTimer>();
@@ -312,6 +314,7 @@ public class OrderSystem : MonoBehaviour
                     {
                         // Sin objetos = abandono total
                         Debug.Log($"<color=red>✗ NPC del pedido #{clientOrderData.order.orderID} ha ABANDONADO (0 objetos entregados)</color>");
+                        OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
                         RemoveOrder(clientOrderData);
                     }
                 }

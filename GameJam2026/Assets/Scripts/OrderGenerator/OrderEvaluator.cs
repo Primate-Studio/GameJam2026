@@ -37,20 +37,17 @@ public class OrderEvaluator : MonoBehaviour
         if (clientOrderData == null) return;
         
         Order order = clientOrderData.order;
-        //Debug.Log($"<color=yellow>📦 Pedido #{order.orderID} completado! Procesando...</color>");
         
-        // Calcular P(misión) usando el nuevo sistema de categorías (CON LOGS comentados)
-        float missionSuccessRate = order.CalculateMissionSuccessRate(false); // Cambiar a true para ver logs detallados
+        // Calcular P(misión) usando el nuevo sistema de categorías
+        float missionSuccessRate = order.CalculateMissionSuccessRate();
         
         // Calcular P(desesperación) usando el ClientTimer
-        float desperationPenalty = CalculateTimePenalty(clientOrderData.clientTimer);
+        float desperationPenalty = CalculateTimePenalty(clientOrderData.clientTimer, order);
         
         // Obtener el nivel de desesperación para mostrar
         DesperationLevel level = clientOrderData.clientTimer != null ? 
             clientOrderData.clientTimer.GetDesperationLevel() : DesperationLevel.None;
-        
-        //Debug.Log($"<color=magenta>\n⏱️ Nivel de Desesperación: {level} → Penalización: {desperationPenalty}%</color>");
-        
+                
         // P(total) = P(misión) - P(desesperación)
         float totalSuccessRate = missionSuccessRate - desperationPenalty;
         
@@ -68,28 +65,30 @@ public class OrderEvaluator : MonoBehaviour
     /// Calcula la penalización por tiempo según el ClientTimer
     /// Usa directamente el nivel de desesperación calculado por ClientTimer
     /// </summary>
-    private float CalculateTimePenalty(ClientTimer clientTimer)
+    private float CalculateTimePenalty(ClientTimer clientTimer, Order order = null)
     {
         if (clientTimer == null) return 0f;
         
         // Obtener el nivel de desesperación directamente desde ClientTimer
         DesperationLevel level = clientTimer.GetDesperationLevel();
-        
-        // Mapear nivel a penalización
-        switch (level)
+        bool isGood = level != DesperationLevel.Abandon;
+        // Triggear animación una sola vez
+        if (order != null && order.animationController != null)
         {
-            case DesperationLevel.None:
-                return 0f;
-            case DesperationLevel.Low:
-                return penalty_Nervioso;
-            case DesperationLevel.Medium:
-                return penalty_Impaciente;
-            case DesperationLevel.High:
-                return penalty_Desesperado;
-            case DesperationLevel.Abandon:
-                return penalty_Abandonado;
-            default:
-                return 0f;
+            if (isGood)
+                order.animationController.TriggerGood();
+            else
+                order.animationController.TriggerBad();
         }
+        // Mapear nivel a penalización
+        return level switch
+        {
+            DesperationLevel.None => 0f,
+            DesperationLevel.Low => penalty_Nervioso,
+            DesperationLevel.Medium => penalty_Impaciente,
+            DesperationLevel.High => penalty_Desesperado,
+            DesperationLevel.Abandon => penalty_Abandonado,
+            _ => 0f
+        };
     }
 }

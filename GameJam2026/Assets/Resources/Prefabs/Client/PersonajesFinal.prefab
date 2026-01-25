@@ -133,6 +133,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7970074662294738034}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8177887017890094416}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8692734030143322416}
   m_SourcePrefab: {fileID: 100100000, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
 --- !u!4 &1377040762592787811 stripped
 Transform:
@@ -227,6 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9d4abe4207c5e46a60e913adc3c91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClientMovement
+  ClientAnimationController: {fileID: 0}
 --- !u!114 &-7970074662294738034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +249,40 @@ MonoBehaviour:
   spriteTimerFill: {fileID: 21300000, guid: 0272222fc5170af4f8195e62033b575c, type: 3}
   timeRemaining: 0
   DebtLevel: 0
+--- !u!95 &-8177887017890094416
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345058963331473036}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}
+  m_Controller: {fileID: 9100000, guid: 3d2b928319925c0448c3562aa9fb20b2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8692734030143322416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345058963331473036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbb42a0acf300c49af24215312040b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClientAnimationController
 --- !u!4 &8684147643196081206 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1313f9cf396324c4b98f35bb393ec367, type: 3}

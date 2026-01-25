@@ -152,6 +152,7 @@ public class ClientManager : MonoBehaviour
     }
     public void CalculateTimer()
     {
+        MoneyManager.Instance.CalculateDebtLevel();
         switch (MoneyManager.Instance.DebtLevel)
         {
             case DebtLevel.High:

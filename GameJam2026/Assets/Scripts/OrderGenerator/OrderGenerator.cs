@@ -96,6 +96,7 @@ public class OrderGenerator : MonoBehaviour
 
     private void CalculateActivities(out int activePacks, out int activeActivities)
     {
+        MoneyManager.Instance.CalculateDebtLevel();
 
         if (MoneyManager.Instance.DebtLevel == DebtLevel.High)
         {

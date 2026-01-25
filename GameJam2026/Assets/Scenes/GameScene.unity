@@ -2325,7 +2325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6269da48893d5458642e67fca35fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayCycleManager
-  dayDurationInSeconds: 30
+  dayDurationInSeconds: 300
   currentDay: 1
   sunLight: {fileID: 1971323187}
   sunIntensity:

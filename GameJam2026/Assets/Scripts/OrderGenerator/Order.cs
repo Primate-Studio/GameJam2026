@@ -27,6 +27,7 @@ public class Order
     
     // ID único del pedido
     public int orderID;
+    public ClientAnimationController animationController;
     
     /// <summary>
     /// Verifica si el pedido está completo (tiene todos los objetos necesarios)
@@ -40,16 +41,11 @@ public class Order
     /// Calcula el porcentaje de éxito para una categoría específica (Monstruo, Condición o Environment)
     /// Ideal = 65%, Decente = 35%, Neutro = 0%, Pésimo = -40% (mín 0%)
     /// </summary>
-    public float CalculateCategoryScore(RequirementData requirement, bool showLogs = false)
+    public float CalculateCategoryScore(RequirementData requirement)
     {
         if (requirement == null) return 0f;
         
         float totalScore = 0f;
-        
-        //if (showLogs)
-        //{
-        //    Debug.Log($"<color=yellow>📋 Evaluando categoría: {requirement.requirementName} ({requirement.type})</color>");
-        //}
         
         foreach (ObjectType deliveredType in deliveredItems)
         {
@@ -85,21 +81,11 @@ public class Order
                 MoneyManager.Instance.AddMoney(2f);
                 MoneyManager.Instance.SubtractMoney(2f);
             }
-            
-            //if (showLogs)
-            //{
-            //    string color = quality == "Ideal" ? "green" : quality == "Decente" ? "cyan" : quality == "Pésimo" ? "red" : "gray";
-            //    Debug.Log($"  <color={color}>• {deliveredType} → {quality} ({scoreChange:+0;-0;0}%)</color>");
-            //}
+
         }
         
         // La puntuación nunca puede ser negativa
         float finalScore = Mathf.Max(0f, totalScore);
-        
-        //if (showLogs)
-        //{
-        //    Debug.Log($"  <color=yellow>Puntuación total: {totalScore}% → {finalScore}% (mín 0%)</color>");
-        //}
         
         return finalScore;
     }
@@ -108,51 +94,24 @@ public class Order
     /// Calcula el porcentaje total de éxito de la misión
     /// P(misión) = (V_monstruo + V_condición + V_entorno) / 3
     /// </summary>
-    public float CalculateMissionSuccessRate(bool showLogs = false)
+    public float CalculateMissionSuccessRate()
     {
-        //if (showLogs)
-        //{
-        //    Debug.Log($"<color=cyan>═══════════════════════════════════════</color>");
-        //    Debug.Log($"<color=cyan>📊 EVALUACIÓN DE PEDIDO #{orderID}</color>");
-        //    Debug.Log($"<color=cyan>═══════════════════════════════════════</color>");
-        //    Debug.Log($"<color=white>Objetos entregados: {deliveredItems.Count}/{itemsNeeded}</color>");
-        //    
-        //    string itemsList = "";
-        //    foreach (ObjectType item in deliveredItems)
-        //    {
-        //        itemsList += item.ToString() + ", ";
-        //    }
-        //    Debug.Log($"<color=white>Items: {itemsList.TrimEnd(',', ' ')}</color>");
-        //    Debug.Log("");
-        //}
         
-        float monsterScore = CalculateCategoryScore(monster, showLogs);
-        float conditionScore = CalculateCategoryScore(condition, showLogs);
-        float environmentScore = environment != null ? CalculateCategoryScore(environment, showLogs) : 0f;
+        float monsterScore = CalculateCategoryScore(monster);
+        float conditionScore = CalculateCategoryScore(condition);
+        float environmentScore = environment != null ? CalculateCategoryScore(environment) : 0f;
         
-        float missionScore = 0f;
+        float missionScore;
         
         // Si solo hay 2 requisitos (sin environment), calcular solo con esos 2
         if (environment == null)
         {
             missionScore = (monsterScore + conditionScore) / 2f;
-            
-            //if (showLogs)
-            //{
-            //    Debug.Log($"<color=yellow>\n🧮 Cálculo P(misión):</color>");
-            //    Debug.Log($"<color=yellow>  ({monsterScore}% + {conditionScore}%) / 2 = {missionScore:F1}%</color>");
-            //}
         }
         else
         {
             // Si hay 3 requisitos, calcular con los 3
             missionScore = (monsterScore + conditionScore + environmentScore) / 3f;
-            
-            //if (showLogs)
-            //{
-            //    Debug.Log($"<color=yellow>\n🧮 Cálculo P(misión):</color>");
-            //    Debug.Log($"<color=yellow>  ({monsterScore}% + {conditionScore}% + {environmentScore}%) / 3 = {missionScore:F1}%</color>");
-            //}
         }
         
         return missionScore;
@@ -163,9 +122,9 @@ public class Order
     /// </summary>
     public string GetEvaluationDetails()
     {
-        float monsterScore = CalculateCategoryScore(monster, false);
-        float conditionScore = CalculateCategoryScore(condition, false);
-        float environmentScore = environment != null ? CalculateCategoryScore(environment, false) : 0f;
+        float monsterScore = CalculateCategoryScore(monster);
+        float conditionScore = CalculateCategoryScore(condition);
+        float environmentScore = environment != null ? CalculateCategoryScore(environment) : 0f;
         
         string details = $"Monstruo ({monster.requirementName}): {monsterScore}%\n";
         details += $"Condición ({condition.requirementName}): {conditionScore}%\n";

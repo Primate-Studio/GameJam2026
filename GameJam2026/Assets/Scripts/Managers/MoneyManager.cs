@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum DebtLevel { None, LowLow, Low, Medium, High }
+public enum DebtLevel { Zero ,None, LowLow, Low, Medium, High }
 public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance { get; private set; }
@@ -76,6 +76,7 @@ public class MoneyManager : MonoBehaviour
     {
         totalMoney += currentMoney - InventoryCost*totalItemsSold;
         totalMoney -= debtPayment();
+        CheckWinLoseConditions();
     }
     public void CalculateDebtLevel()
     {
@@ -95,14 +96,32 @@ public class MoneyManager : MonoBehaviour
         {
             debtLevel = DebtLevel.High;
         }
-        else if( Debt <= 70)
+        else if( Debt <= 70 && Debt > 0 )
         {
             debtLevel = DebtLevel.None;
+        }
+        else if( Debt <= 0 )
+        {
+            Debt = 0;
+            debtLevel = DebtLevel.Zero;
         }
     }
     public DebtLevel DebtLevel
     {
         get { return debtLevel; }
+    }
+    private void CheckWinLoseConditions()
+    {
+        if (Debt <= 0)
+        {
+            Debt = 0;
+            GameManager.Instance.ChangeState(GameState.GameWin);
+            return;
+        }
+        if (totalMoney < 0)
+        {
+            GameManager.Instance.ChangeState(GameState.GameOver);
+        }
     }
 
     public void ResetDayPaycheck()

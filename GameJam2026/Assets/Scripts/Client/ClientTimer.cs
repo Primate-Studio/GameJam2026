@@ -11,12 +11,17 @@ public class ClientTimer : MonoBehaviour
     private bool isOrderActive = false;
     private bool timerUICreated = false;
     public DebtLevel DebtLevel;
+    private ClientAnimationController clientAnimationController;
 
     void Awake()
     {
 
     }
-    
+    void Start()
+    {
+        clientAnimationController = GetComponent<ClientAnimationController>();
+    }
+
     void Update()
     {
         if (isOrderActive)
@@ -61,6 +66,7 @@ public class ClientTimer : MonoBehaviour
         else if (percentage > 0f && percentage < 0.10f)
         {
             desperationLevel = DesperationLevel.High;
+            clientAnimationController.SetAngry(true);
         }
         else if (percentage <= 0f)
         {

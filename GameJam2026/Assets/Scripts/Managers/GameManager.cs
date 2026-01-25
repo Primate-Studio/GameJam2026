@@ -74,6 +74,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameScene");
         currentState = GameState.Playing;
         OnGameStateChanged?.Invoke(currentState);
-
+    }
+    public void StartEternalMode()
+    {
+        currentState = GameState.Playing;
+        OnGameStateChanged?.Invoke(currentState);
     }
 }
