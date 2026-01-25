@@ -95,7 +95,7 @@ public class ClientManager : MonoBehaviour
             }
         };
         
-        mover.MoveTo(targetPoints[slotIndex].position);
+        mover.MoveTo(targetPoints[slotIndex].position, false);
     }
 
     public void DismissFirstClient()
@@ -108,7 +108,7 @@ public class ClientManager : MonoBehaviour
                 activeClients[i] = null; // Alliberem el slot immediatament
 
                 ClientMovement mover = client.GetComponent<ClientMovement>();
-                mover.MoveTo(spawnPoint.position);
+                mover.MoveTo(spawnPoint.position, true);
                 
                 // Quan arribi al spawn, que es destrueixi
                 mover.OnArrival = () => mover.Despawn();
@@ -132,7 +132,7 @@ public class ClientManager : MonoBehaviour
         ClientMovement mover = client.GetComponent<ClientMovement>();
         if (mover != null)
         {
-            mover.MoveTo(spawnPoint.position);
+            mover.MoveTo(spawnPoint.position, true);
             
             // Li assignem la destrucció quan arribi al final
             // IMPORTANT: Alliberem el slot DESPRÉS que el client s'hagi destruït

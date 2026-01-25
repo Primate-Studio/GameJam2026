@@ -7,14 +7,16 @@ public class ClientMovement : MonoBehaviour
 {
     private NavMeshAgent agent;
     public Action OnArrival; // Event que avisarà al Manager quan el client arribi
+    private bool isLeaving = false;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void MoveTo(Vector3 destination)
+    public void MoveTo(Vector3 destination, bool isLeaving)
     {
+        this.isLeaving = isLeaving;
         if (agent == null) return;
         agent.SetDestination(destination);
         StopAllCoroutines();
@@ -22,7 +24,8 @@ public class ClientMovement : MonoBehaviour
     }
     private void Update()
     {
-        //Always Look at the camera
+        //Always Look at the camera, except when leaving
+        if (isLeaving) return;
         Vector3 lookPos = Camera.main.transform.position - transform.position;
         lookPos.y = 0;  
         Quaternion rotation = Quaternion.LookRotation(lookPos);
