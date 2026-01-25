@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
+  icon: {fileID: 21300000, guid: 67a3b18d6f7a45941a74e3758979ef5e, type: 3}
   requirementName: Escila Hidrofobica

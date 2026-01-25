@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 05000000
   Bad: 01000000
   type: 2
+  icon: {fileID: 21300000, guid: 3a16828b3af166142985b6ab99158dec, type: 3}
   requirementName: Medio del desierto

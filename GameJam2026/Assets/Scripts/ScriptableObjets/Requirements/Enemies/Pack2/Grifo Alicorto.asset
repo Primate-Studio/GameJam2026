@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
+  icon: {fileID: 21300000, guid: aa1b34f025b0119419f437da25c605f6, type: 3}
   requirementName: Grifo Alicorto

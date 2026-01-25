@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 05000000
   Bad: 06000000
   type: 2
+  icon: {fileID: 21300000, guid: eef3eba4b62fce94195e7750d9a515cb, type: 3}
   requirementName: Circo abandonado

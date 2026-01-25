@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 07000000
   Bad: 08000000
   type: 0
+  icon: {fileID: 21300000, guid: d3c3d779576a87346a148289870bd5dc, type: 3}
   requirementName: "Circe Son\xE1mbula"

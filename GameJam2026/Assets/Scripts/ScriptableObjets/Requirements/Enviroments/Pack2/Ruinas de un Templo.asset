@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 02000000
   Bad: 04000000
   type: 2
+  icon: {fileID: 21300000, guid: 6a06a1de2b3642a4d8d4bd9ac7b17274, type: 3}
   requirementName: Ruinas de un Templo

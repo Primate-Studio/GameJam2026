@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 0e000000
   type: 1
+  icon: {fileID: 21300000, guid: f871e8fb917e7e64e9c72b9fc404ea74, type: 3}
   requirementName: Viento Inexistente

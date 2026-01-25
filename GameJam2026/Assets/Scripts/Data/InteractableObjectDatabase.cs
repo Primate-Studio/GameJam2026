@@ -45,24 +45,53 @@ public class InteractableObjectDatabase : MonoBehaviour
             }
         }
     }
-    
-    /// <summary>
-    /// Obtiene el sprite/icono para un tipo de objeto
-    /// </summary>
+
     public Sprite GetIconForObjectType(ObjectType objectType)
     {
-        if (iconDictionary != null && iconDictionary.ContainsKey(objectType))
+        if (iconDictionary != null && iconDictionary.TryGetValue(objectType, out Sprite icon))
         {
-            return iconDictionary[objectType];
+            return icon;
         }
         
         Debug.LogWarning($"No se encontró icono para el objeto: {objectType}");
         return null;
     }
+
+    public Sprite GetEnvironmentIcon(ObjectType objectType)
+    {
+
+        Debug.LogWarning($"No se encontró icono Environment para el objeto: {objectType}");
+        return null;
+    }
+
+    public Sprite GetConditionIcon(ObjectType objectType)
+    {
+
+        Debug.LogWarning($"No se encontró icono Condition para el objeto: {objectType}");
+        return null;
+    }
+
+    public Sprite GetMonsterIcon(ObjectType objectType)
+    {
+
+        Debug.LogWarning($"No se encontró icono Monster para el objeto: {objectType}");
+        return null;
+    }
+    
+
+/// </summary>
+[System.Serializable]
+public class EnvironmentObjectIconData
+{
+    [Tooltip("Tipo de objeto Environment")]
+    public ObjectType objectType;
+    
+    [Tooltip("Sprite que representa este objeto Environment en el UI")]
+    public Sprite icon;
 }
 
 /// <summary>
-/// Datos de un objeto: tipo y su icono correspondiente
+/// Datos de un objeto de tipo Object
 /// </summary>
 [System.Serializable]
 public class ObjectIconData
@@ -73,3 +102,10 @@ public class ObjectIconData
     [Tooltip("Sprite que representa este objeto en el UI")]
     public Sprite icon;
 }
+
+}
+
+
+
+    
+

@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 07000000
   Bad: 08000000
   type: 0
+  icon: {fileID: 21300000, guid: 3df1395e93f2e0a488b24e60a0f425c4, type: 3}
   requirementName: Circe Gigante

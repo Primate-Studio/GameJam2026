@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 01000000
   Bad: 02000000
   type: 2
+  icon: {fileID: 21300000, guid: 0d4f76ee7076d4a49ae03b2a93cc916f, type: 3}
   requirementName: Termas naturales

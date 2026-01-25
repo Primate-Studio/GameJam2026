@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 03000000
   Bad: 02000000
   type: 2
+  icon: {fileID: 21300000, guid: 75236c3f1ce808949be41b14f8e8563d, type: 3}
   requirementName: "Ba\xF1os publicos"

@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 07000000
   Bad: 09000000
   type: 0
+  icon: {fileID: 21300000, guid: 57ece720e1b324c46a024fa73940338b, type: 3}
   requirementName: "Escila T\xEDmida"

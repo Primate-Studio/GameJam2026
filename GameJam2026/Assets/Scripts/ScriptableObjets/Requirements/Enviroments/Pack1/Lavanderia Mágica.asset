@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 04000000
   Bad: 06000000
   type: 2
+  icon: {fileID: 21300000, guid: 5bcfc226300dd254bb1d8d6da2ed45f3, type: 3}
   requirementName: "Lavanderia M\xE1gica"

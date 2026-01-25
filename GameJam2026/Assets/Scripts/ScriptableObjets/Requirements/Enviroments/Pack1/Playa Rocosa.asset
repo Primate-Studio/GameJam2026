@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 04000000
   Bad: 02000000
   type: 2
+  icon: {fileID: 21300000, guid: e5f58fd0f5bb9be4eb687e2ba6d7b6b7, type: 3}
   requirementName: Playa Rocosa

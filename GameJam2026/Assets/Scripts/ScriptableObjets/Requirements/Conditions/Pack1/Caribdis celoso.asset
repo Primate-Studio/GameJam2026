@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 0e000000
   type: 1
+  icon: {fileID: 21300000, guid: 12cd7114b6e2e3341a4926d9d4188fa4, type: 3}
   requirementName: Caribdis celoso

@@ -10,5 +10,6 @@ public class RequirementData : ScriptableObject
     public ObjectType[] Bad;
 
     public RequirementType type;
+    public Sprite icon;
     public string requirementName;
 }

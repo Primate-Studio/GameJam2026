@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 10000000
   type: 1
+  icon: {fileID: 21300000, guid: b159c1b70d62de84b9ad6858c622871b, type: 3}
   requirementName: Estampida de Ovejas

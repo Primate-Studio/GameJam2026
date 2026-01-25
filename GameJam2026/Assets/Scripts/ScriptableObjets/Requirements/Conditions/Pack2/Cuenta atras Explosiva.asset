@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 0e000000
   type: 1
+  icon: {fileID: 21300000, guid: b6f9231ce3dd93840aabe98dc3edf99a, type: 3}
   requirementName: Cuenta atras Explosiva

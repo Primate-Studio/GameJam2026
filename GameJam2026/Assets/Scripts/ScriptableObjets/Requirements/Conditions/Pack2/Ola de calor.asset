@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 05000000
   type: 1
+  icon: {fileID: 21300000, guid: 6b765ef62fed9c049900b6d7da8473ea, type: 3}
   requirementName: Ola de calor

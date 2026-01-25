@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
+  icon: {fileID: 21300000, guid: 25d4143e76376034baaec6895a22c8f1, type: 3}
   requirementName: Circe Invisible

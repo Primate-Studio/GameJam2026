@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 03000000
   Bad: 02000000
   type: 2
+  icon: {fileID: 21300000, guid: bfad0aec14d1ad742937838e4e30e3d5, type: 3}
   requirementName: "Sal\xF3n Banquete"

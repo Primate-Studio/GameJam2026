@@ -727,11 +727,108 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectDatabase
   objectIcons:
   - objectType: 1
-    icon: {fileID: 21300000, guid: 142ec08db03911246a6c4fb21aaf484d, type: 3}
+    icon: {fileID: 21300000, guid: d8a90fb4ef0f67f40af7f888376db3b2, type: 3}
   - objectType: 2
-    icon: {fileID: 21300000, guid: c3677a41297068244b12786e904e909a, type: 3}
+    icon: {fileID: 21300000, guid: 294a3e5fc1e4de84396ab2ef049b4bee, type: 3}
   - objectType: 3
+    icon: {fileID: 21300000, guid: e47106ed62cc2e44b9b656b010a4a690, type: 3}
+  - objectType: 4
+    icon: {fileID: 21300000, guid: b382bfcb8b010b94fb6989b515e65842, type: 3}
+  - objectType: 5
+    icon: {fileID: 21300000, guid: 57bc4e3d689f55545a3e3b4e649cc797, type: 3}
+  - objectType: 6
+    icon: {fileID: 21300000, guid: 877c0baf8bdd9ae42a24d12374824d87, type: 3}
+  - objectType: 7
+    icon: {fileID: 21300000, guid: 9c3f3a9794b796e4e8eeea9d72daaa14, type: 3}
+  - objectType: 8
+    icon: {fileID: 21300000, guid: cbf6401f91ee8714eac12a5c0393133f, type: 3}
+  - objectType: 9
+    icon: {fileID: 21300000, guid: cf43004011931ca468bead034d4c38b6, type: 3}
+  - objectType: 10
+    icon: {fileID: 21300000, guid: f9d003e372578ba42ba1494a1095ab02, type: 3}
+  - objectType: 11
+    icon: {fileID: 21300000, guid: 858fb5ae57139b244a7660a12098a896, type: 3}
+  - objectType: 12
+    icon: {fileID: 21300000, guid: 040bcd681faf83048bcdfebefec2c369, type: 3}
+  - objectType: 13
+    icon: {fileID: 21300000, guid: 8727ca5bee1f67a46849bf13230754b1, type: 3}
+  - objectType: 15
+    icon: {fileID: 21300000, guid: 08b36079fba1f3046be6ea399bca0c0a, type: 3}
+  - objectType: 14
+    icon: {fileID: 21300000, guid: cbea69225b26d67499e52ce8c68c37ec, type: 3}
+  - objectType: 17
+    icon: {fileID: 21300000, guid: 98bd7f892ab95fa4182ca4e05b9e777b, type: 3}
+  - objectType: 17
     icon: {fileID: 21300000, guid: d565bd00eeec2514c9eb549b36b6ec21, type: 3}
+  environmentObjectIcons:
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: d9c833bab2d6a6a47bc011b3225fc030, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 53e5b88013be2364e955f5747ac55122, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: e5f58fd0f5bb9be4eb687e2ba6d7b6b7, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 5bcfc226300dd254bb1d8d6da2ed45f3, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: b2649fbbe9da3c34aab4e10aadfa6125, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: bfad0aec14d1ad742937838e4e30e3d5, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 0d4f76ee7076d4a49ae03b2a93cc916f, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 75236c3f1ce808949be41b14f8e8563d, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 080c5fd10d8ea564d90ef04d6d35c8a8, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: a79aeab934a204a459804031b25a3fcb, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 45bfd28d6af98114ca98f7a544b19b47, type: 3}
+  - environmentObjectType: 2
+    icon: {fileID: 21300000, guid: 1feb1b3afdb45b542860541439e970fa, type: 3}
+  conditionObjectIcons:
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 313397df8eb6b284592060add0bfe46a, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 74c5ff7d6ba94a84c9e1989d6700276b, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: b159c1b70d62de84b9ad6858c622871b, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 41584cb440dc632458ec3f4fd88b1c92, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 04d5058e00fb8bb41843c18254c75109, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 41584cb440dc632458ec3f4fd88b1c92, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 6b65d3a631983be44a49d1b897971d3d, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: f871e8fb917e7e64e9c72b9fc404ea74, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 12cd7114b6e2e3341a4926d9d4188fa4, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 4cabe225a0dd4964b8b873f6ee15a055, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: d368e06364966bb44b4cc6f558feae95, type: 3}
+  - conditionObjectType: 1
+    icon: {fileID: 21300000, guid: 4c8b997cbc9d15e4981cfbc0120c73e5, type: 3}
+  monsterObjectIcons:
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 7eb502e45d3e6a94c902a35cdde7a6f3, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 573fd6f2e608b474c9d8552c34af9e20, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: b69fb925db5ad8d46ab74534399a00e8, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 3df1395e93f2e0a488b24e60a0f425c4, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 25d4143e76376034baaec6895a22c8f1, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: d3c3d779576a87346a148289870bd5dc, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 7d88ff4df57d6de4793594714e28e6aa, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 67a3b18d6f7a45941a74e3758979ef5e, type: 3}
+  - monsterObjectType: 0
+    icon: {fileID: 21300000, guid: 57ece720e1b324c46a024fa73940338b, type: 3}
 --- !u!1 &313522485
 GameObject:
   m_ObjectHideFlags: 0

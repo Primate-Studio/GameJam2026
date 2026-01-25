@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0b000000
   type: 0
+  icon: {fileID: 21300000, guid: 3fc9bc1a25113e04dadb65058564cabb, type: 3}
   requirementName: "Esfinge Disl\xE9xica"

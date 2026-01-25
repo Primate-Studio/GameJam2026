@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 01000000
   Bad: 05000000
   type: 2
-  requirementName: Environment2.3.3
+  icon: {fileID: 21300000, guid: ce19018fc42c49b4cb54b6e64fa6b1fa, type: 3}
+  requirementName: Cruce de Caminos

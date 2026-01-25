@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0f000000
   Bad: 10000000
   type: 1
+  icon: {fileID: 21300000, guid: 74c5ff7d6ba94a84c9e1989d6700276b, type: 3}
   requirementName: Olor a podrido

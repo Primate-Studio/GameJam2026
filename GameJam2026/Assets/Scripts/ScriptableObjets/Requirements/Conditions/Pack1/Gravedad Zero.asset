@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 0e000000
   type: 1
+  icon: {fileID: 21300000, guid: 04d5058e00fb8bb41843c18254c75109, type: 3}
   requirementName: Gravedad Zero

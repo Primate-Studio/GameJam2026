@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 07000000
   Bad: 09000000
   type: 0
+  icon: {fileID: 21300000, guid: b69fb925db5ad8d46ab74534399a00e8, type: 3}
   requirementName: Ciclope Bebe

@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0c000000
   Bad: 06000000
   type: 2
+  icon: {fileID: 21300000, guid: 011ef35f7e1f3484da8c2fb731a5d8d3, type: 3}
   requirementName: "Teatro en medio de una funci\xF3n"

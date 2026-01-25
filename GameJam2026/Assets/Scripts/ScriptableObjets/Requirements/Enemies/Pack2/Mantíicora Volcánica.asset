@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 09000000
   Bad: 08000000
   type: 0
+  icon: {fileID: 21300000, guid: cd32e3beb3483414e89ead1b25b80ed7, type: 3}
   requirementName: "Mnat\xEDcora Volcanica"

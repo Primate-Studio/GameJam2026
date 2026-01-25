@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
+  icon: {fileID: 21300000, guid: c2631bf8620989c4e83efa6427fbe807, type: 3}
   requirementName: Quimera Vegana

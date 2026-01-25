@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 11000000
   Bad: 05000000
   type: 2
+  icon: {fileID: 21300000, guid: d695da02a0025dc49896364339cc0f18, type: 3}
   requirementName: Pico Nevado

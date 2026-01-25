@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 11000000
   Bad: 05000000
   type: 1
+  icon: {fileID: 21300000, guid: d0d82df80d07efb4e899a9c95f836390, type: 3}
   requirementName: Granizo

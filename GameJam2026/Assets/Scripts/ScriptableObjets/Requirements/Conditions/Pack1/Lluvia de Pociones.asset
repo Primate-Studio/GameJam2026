@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 0f000000
   type: 1
+  icon: {fileID: 21300000, guid: 41584cb440dc632458ec3f4fd88b1c92, type: 3}
   requirementName: Lluvia de Pociones

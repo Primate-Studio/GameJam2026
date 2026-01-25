@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 10000000
   type: 1
+  icon: {fileID: 21300000, guid: f66482fd9af17c14fa2eca12e09004bb, type: 3}
   requirementName: Suelo Pegajoso

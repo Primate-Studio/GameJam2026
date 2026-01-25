@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 09000000
   Bad: 08000000
   type: 0
+  icon: {fileID: 21300000, guid: 7ce748ac5b6a25d47aa83e87371b6e30, type: 3}
   requirementName: Mnaticora Bifela

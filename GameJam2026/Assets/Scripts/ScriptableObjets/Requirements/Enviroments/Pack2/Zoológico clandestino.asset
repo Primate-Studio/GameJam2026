@@ -16,4 +16,5 @@ MonoBehaviour:
   Mid: 01000000
   Bad: 04000000
   type: 2
+  icon: {fileID: 21300000, guid: 537a14b32c6adf24bbd37bd4ea2b711d, type: 3}
   requirementName: "Zool\xF3gico clandestino"
