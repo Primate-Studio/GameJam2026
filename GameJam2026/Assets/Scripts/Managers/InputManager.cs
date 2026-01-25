@@ -28,6 +28,15 @@ public class InputManager : MonoBehaviour
     public bool ManualPressed => Input.GetKeyDown(manualKey);
     private bool isPaused = false;
     private GameState lastStateBeforePause = GameState.MainMenu;
+
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += HandleGameStateChanged;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= HandleGameStateChanged;
+    }
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -60,6 +69,11 @@ public class InputManager : MonoBehaviour
             
         }
     }
+    private void HandleGameStateChanged(GameState newState)
+    {
+        // Cada cop que el joc canviï d'estat (Win, Loss, etc.), actualitzem el cursor
+        UpdateCursorState();
+    }
     public void SetPauseState(bool pause)
     {
         if (pause)
@@ -77,10 +91,19 @@ public class InputManager : MonoBehaviour
         if (SettingsButtons.Instance != null)
             SettingsButtons.Instance.OnPause(isPaused);
 
-        bool unlockCursor = isPaused || GameManager.Instance.CurrentState == GameState.MainMenu || GameManager.Instance.CurrentState == GameState.Result;
+        UpdateCursorState();
+    }
+    public void UpdateCursorState()
+    {
+        bool unlockCursor = isPaused || 
+                        GameManager.Instance.CurrentState == GameState.MainMenu || 
+                        GameManager.Instance.CurrentState == GameState.Result ||
+                        GameManager.Instance.CurrentState == GameState.GameWin || 
+                        GameManager.Instance.CurrentState == GameState.GameOver;
+
         Cursor.lockState = unlockCursor ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = unlockCursor;
-    }
+    }    
     public bool HasMovementInput()
     {
         return !Mathf.Approximately(Horizontal, 0f) || !Mathf.Approximately(Vertical, 0f);

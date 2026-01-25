@@ -17,11 +17,11 @@ public class WinScene : MonoBehaviour
         if (eternalModeButton) eternalModeButton.onClick.RemoveListener(HandleEternalMode);
     }
 
-    private void HandleMainMenu()
+    public void HandleMainMenu()
     {
         GameManager.Instance.ChangeState(GameState.MainMenu);
     }
-    private void HandleEternalMode()
+    public void HandleEternalMode()
     {
         GameManager.Instance.StartEternalMode();
     }

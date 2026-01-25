@@ -18,6 +18,7 @@ public class MoneyManager : MonoBehaviour
     [HideInInspector] public float weaponPaycheck = 0;
     [HideInInspector] public float debtPaymentAmount = 0;
     [HideInInspector] public float itemsBenefits = 0;
+    [HideInInspector] public float initialDayDebt = 0;
 
     [HideInInspector] public int deathCount = 0;
     [HideInInspector] public int successCount = 0;
@@ -39,7 +40,22 @@ public class MoneyManager : MonoBehaviour
         Debt = PlayerPrefs.GetFloat("Debt", 250);
         totalMoney = PlayerPrefs.GetFloat("TotalMoney", 0);
     }
-
+    public GameState GetNextStateAfterDay()
+    {
+        CalculateTotalMoney();
+        
+        if (Debt <= 0)
+        {
+            Debt = 0;
+            return GameState.GameWin;
+            
+        }
+        if (totalMoney < 0)
+        {
+            return GameState.GameOver;
+        }
+        return GameState.Result;
+    }
     public void AddMoney(float amount)
     {
         currentMoney += amount;
@@ -66,6 +82,7 @@ public class MoneyManager : MonoBehaviour
 
     public float debtPayment()
     {
+        initialDayDebt = Debt;
         if(currentMoney <= 0) return 0f;
         debtPaymentAmount = currentMoney * debtPaymentRate;
         Debt -= debtPaymentAmount;
@@ -122,6 +139,7 @@ public class MoneyManager : MonoBehaviour
         {
             GameManager.Instance.ChangeState(GameState.GameOver);
         }
+        else return;
     }
 
     public void ResetDayPaycheck()

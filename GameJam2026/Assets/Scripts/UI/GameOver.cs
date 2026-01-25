@@ -17,12 +17,12 @@ public class GameOver : MonoBehaviour
         if (mainMenuButton) mainMenuButton.onClick.RemoveListener(HandleMainMenu);
     }
 
-    private void HandleMainMenu()
+    public void HandleMainMenu()
     {
         GameManager.Instance.ChangeState(GameState.MainMenu);
         PlayerPrefs.DeleteAll();
     }
-    private void HandleRetry()
+    public void HandleRetry()
     {
         GameManager.Instance.StartNewGame();
     }

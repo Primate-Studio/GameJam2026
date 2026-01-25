@@ -39,8 +39,7 @@ private void Awake()
 
     public void SetResults()
     {
-        debtText.text = MoneyManager.Instance.Debt.ToString() + "€";
-        MoneyManager.Instance.CalculateTotalMoney();
+        debtText.text = MoneyManager.Instance.initialDayDebt.ToString() + "€";
         exitMissionText.text = MoneyManager.Instance.successCount.ToString() + " x " + MoneyManager.Instance.successReward.ToString() + "€" + " = " + (MoneyManager.Instance.successCount * MoneyManager.Instance.successReward).ToString() + "€";
         soldItemsText.text = MoneyManager.Instance.totalItemsSold.ToString() + " = " + MoneyManager.Instance.itemsBenefits.ToString() + "€";
         failedMissionsText.text = MoneyManager.Instance.deathCount.ToString() + " x " + MoneyManager.Instance.deathPenalty.ToString() + "€" + " = " + (MoneyManager.Instance.deathCount * MoneyManager.Instance.deathPenalty).ToString() + "€";

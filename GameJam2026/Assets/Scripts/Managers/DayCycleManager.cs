@@ -77,14 +77,8 @@ public class DayCycleManager : MonoBehaviour
         isDayActive = false;
         OnDayEnd?.Invoke();
         Debug.Log("<color=red>🌙 La botiga ha tancat!</color>");
-        if(MoneyManager.Instance.DebtLevel == DebtLevel.Zero)
-        {
-            GameManager.Instance.ChangeState(GameState.GameWin);
-        }
-        else
-        {
-            GameManager.Instance.ChangeState(GameState.Result);
-        }
+        GameState nextState = MoneyManager.Instance.GetNextStateAfterDay();
+        GameManager.Instance.ChangeState(nextState);
     }
 
     private void UpdateLighting(float progress)

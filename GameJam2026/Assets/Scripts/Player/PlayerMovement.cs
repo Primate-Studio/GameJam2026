@@ -36,9 +36,11 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.useGravity = true;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         
-        // Bloquear cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (GameManager.Instance.CurrentState == GameState.Playing)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     void Update()
