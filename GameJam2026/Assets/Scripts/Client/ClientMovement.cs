@@ -9,6 +9,7 @@ public class ClientMovement : MonoBehaviour
     private NavMeshAgent agent;
     public Action OnArrival; // Event que avisarà al Manager quan el client arribi
     private bool isLeaving = false;
+    private int slotIndex = -1;
     public ClientAnimationController ClientAnimationController;
 
     void Awake()
@@ -17,9 +18,10 @@ public class ClientMovement : MonoBehaviour
         ClientAnimationController = GetComponent<ClientAnimationController>();
 
     }
-    public void MoveTo(Vector3 destination, bool isLeaving)
+    public void MoveTo(Vector3 destination, bool isLeaving, int SlotIndex = -1)
     {
         this.isLeaving = isLeaving;
+        this.slotIndex = SlotIndex;
         if (agent == null) return;
 
         agent.SetDestination(destination);
@@ -54,17 +56,14 @@ public class ClientMovement : MonoBehaviour
         // Esperem un frame perquè el NavMesh calculi el camí
         yield return null; 
 
-        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
-        {
-            yield return null;
-        }
+        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance) yield return null;
 
-        // Si arribem aquí, hem arribat al destí
-        //Animacio de parlar durant 3 segons
-        ClientAnimationController.SetTalking(true);
-        OnArrival?.Invoke(); 
-        yield return new WaitForSeconds(3f);
-        ClientAnimationController.SetTalking(false);
+        if (!isLeaving)
+        {
+            // Ara cridem al nou mètode de registre
+            ClientAnimationController.SetIdle(true);
+            OrderSystem.Instance.RegisterClientArrival(this.gameObject, slotIndex);
+        }
     }
 
     public void Despawn()

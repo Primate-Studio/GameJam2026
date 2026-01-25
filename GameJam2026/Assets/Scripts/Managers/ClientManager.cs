@@ -95,7 +95,7 @@ public class ClientManager : MonoBehaviour
             }
         };
         
-        mover.MoveTo(targetPoints[slotIndex].position, false);
+        mover.MoveTo(targetPoints[slotIndex].position, false, slotIndex);
     }
 
     public void DismissFirstClient()

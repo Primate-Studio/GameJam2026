@@ -23,6 +23,7 @@ public class ClientAnimationController : MonoBehaviour
 
     public void SetTalking(bool state) => anim.SetBool("isTalking", state);
     public void SetAngry(bool state) => anim.SetBool("isAngry", state);
+    public void SetIdle(bool state) => anim.SetBool("isIdle", state);
    public void TriggerGood()
     {
         anim.SetTrigger("Good");

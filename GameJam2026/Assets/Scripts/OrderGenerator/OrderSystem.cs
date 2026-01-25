@@ -37,7 +37,9 @@ public class OrderSystem : MonoBehaviour
 
     public Transform uiContainer;
     public GameObject orderUIPrefab;
-    
+    public bool playerInZone = false;
+    private Dictionary<GameObject, int> clientsWaitingQueue = new Dictionary<GameObject, int>(); 
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -69,7 +71,7 @@ public class OrderSystem : MonoBehaviour
     /// Llamado por ClientManager cuando el cliente llega
     /// </summary>
     public void GenerateOrderForClient(GameObject client, int slotIndex)
-    {        
+    {
         // Verificar si hay espacio (máximo 3 pedidos)
         if (activeClientOrders.Count >= 3)
         {
@@ -154,6 +156,45 @@ public class OrderSystem : MonoBehaviour
         Debug.Log($"<color=cyan>Requisitos ({newOrder.itemsNeeded}): {requirements}</color>");
         Debug.Log($"<color=yellow>Objetos necesarios: {newOrder.itemsNeeded}</color>");
 
+    }
+
+    public void SetPlayerAtCounter(bool isAtCounter)
+    {
+        playerInZone = isAtCounter;
+
+        if (playerInZone)
+        {
+            // Quan el jugador entra, recorrem el diccionari i generem les comandes pendents
+            foreach (var entry in clientsWaitingQueue)
+            {
+                // Cridem a la teva funció original passant-li el client i el seu slotIndex guardat
+                GenerateOrderForClient(entry.Key, entry.Value);
+            }
+            // Un cop generades totes, buidem la cua
+            clientsWaitingQueue.Clear();
+        }
+    }
+    public void RegisterClientArrival(GameObject client, int slotIndex)
+    {
+        if (playerInZone)
+        {
+            // Si ja hi ets, genera-la al moment
+            GenerateOrderForClient(client, slotIndex);
+        }
+        else
+        {
+            // Si no hi ets, guarda el client i el seu slot a la cua
+            if (!clientsWaitingQueue.ContainsKey(client))
+            {
+                clientsWaitingQueue.Add(client, slotIndex);
+                Debug.Log($"<color=yellow>Slot {slotIndex}: Client esperant que el jugador s'apropi.</color>");
+            }
+        }
+    }
+    public void RemoveWaitingClient(GameObject client)
+    {
+        if (clientsWaitingQueue.ContainsKey(client))
+            clientsWaitingQueue.Remove(client);
     }
     
     /// <summary>

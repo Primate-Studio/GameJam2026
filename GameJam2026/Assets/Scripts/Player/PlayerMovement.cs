@@ -51,10 +51,8 @@ public class PlayerMovement : MonoBehaviour
         // Capturar input de movimiento
         CaptureMovementInput();
     }
-    
     void FixedUpdate()
     {
-        // Aplicar movimiento (en FixedUpdate para física)
         ApplyMovement();
     }
 
