@@ -6,6 +6,7 @@ public class ClientAnimationController : MonoBehaviour
 {
     private Animator anim;
     private NavMeshAgent agent;
+    public bool isTalking = false;
 
     void Awake()
     {
@@ -24,6 +25,7 @@ public class ClientAnimationController : MonoBehaviour
 
     public IEnumerator SetTalking(bool state, float duration = 2.0f)
     {
+        isTalking = state;
         anim.SetBool("isTalking", state);
         yield return new WaitForSeconds(duration);
         anim.SetBool("isTalking", false);

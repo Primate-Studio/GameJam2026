@@ -31,6 +31,7 @@ public class PortraitCamera : MonoBehaviour
 
         // Fem la còpia (el clone naixerà amb l'agent desactivat i no donarà error)
         GameObject clone = Instantiate(originalClient, spawnPoint.position, spawnPoint.rotation);
+        clone.GetComponentInChildren<OrderUIItem>()?.gameObject.SetActive(false); // Assegurem que la UI del client no es vegi al retrat
         
         // Tornem a activar l'agent de l'original perquè pugui seguir la seva vida a la botiga
         if (agent != null) agent.enabled = agentWasEnabled;

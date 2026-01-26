@@ -501,6 +501,8 @@ MonoBehaviour:
   activeClientOrders: []
   uiContainer: {fileID: 258380513}
   orderUIPrefab: {fileID: 2338146073600518809, guid: fe1e7d7a54c6a0a44ac30ed34e829955, type: 3}
+  orderBubblePrefab: {fileID: 8651514599663663233, guid: 1e42c0083a9692244ae910496223d4be, type: 3}
+  bubbleOffset: {x: 0, y: 2.5, z: 0}
   playerInZone: 0
 --- !u!4 &94718096
 Transform:
@@ -1489,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2e1d99aab8e264b8c9c68e49d059aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRaycast
-  rayDistance: 5
+  rayDistance: 1.3
   interactableLayer:
     serializedVersion: 2
     m_Bits: 8

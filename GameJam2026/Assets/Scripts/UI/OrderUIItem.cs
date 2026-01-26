@@ -12,7 +12,11 @@ public class OrderUIItem : MonoBehaviour
 
     public void Setup(Order order, Sprite photo)
     {
-        portraitImg.sprite = photo;
+        if (portraitImg != null) // Comprovació de seguretat
+        {
+            portraitImg.sprite = photo;
+            portraitImg.gameObject.SetActive(photo != null);
+        }
         
         // Iconos de requisitos - usar los sprites directamente del RequirementData
         monsterIconImg.sprite = order.monster.icon;

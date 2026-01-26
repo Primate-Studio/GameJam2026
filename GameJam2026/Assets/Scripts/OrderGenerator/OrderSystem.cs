@@ -21,6 +21,7 @@ public class OrderSystem : MonoBehaviour
         public ClientTimer clientTimer;
         public int slotIndex;
         public GameObject uiElement;
+        public GameObject bubbleElement;
     }
     
     [Header("Spawn Positions")]
@@ -37,6 +38,8 @@ public class OrderSystem : MonoBehaviour
 
     public Transform uiContainer;
     public GameObject orderUIPrefab;
+    public GameObject orderBubblePrefab;
+    public Vector3 bubbleOffset = new Vector3(0, 2.5f, 0);
     public bool playerInZone = false;
     private Dictionary<GameObject, int> clientsWaitingQueue = new Dictionary<GameObject, int>(); 
 
@@ -99,8 +102,12 @@ public class OrderSystem : MonoBehaviour
         {
             newOrder.animationController = animationController;
             StartCoroutine(animationController.SetTalking(true));
-            
         }
+        GameObject bubbleObj = Instantiate(orderBubblePrefab, client.transform.position + bubbleOffset, Quaternion.identity, client.transform);
+        bubbleObj.SetActive(false);
+        bubbleObj.GetComponent<OrderUIItem>().Setup(newOrder, null);
+        bubbleObj.SetActive(true);
+        StartCoroutine(DisableBubbleAfter(bubbleObj, 2f));
         
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
@@ -148,7 +155,9 @@ public class OrderSystem : MonoBehaviour
             box = box,
             clientTimer = clientTimer,
             slotIndex = slotIndex,
-            uiElement = uiObj // <--- GUARDEM LA REFERÈNCIA
+            uiElement = uiObj, 
+            bubbleElement = bubbleObj
+
         };
         activeClientOrders.Add(clientOrderData);
         
@@ -164,7 +173,14 @@ public class OrderSystem : MonoBehaviour
         Debug.Log($"<color=yellow>Objetos necesarios: {newOrder.itemsNeeded}</color>");
 
     }
-
+    private IEnumerator DisableBubbleAfter(GameObject bubble, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (bubble != null)
+        {
+            bubble.SetActive(false);
+        }
+    }
     public void SetPlayerAtCounter(bool isAtCounter)
     {
         playerInZone = isAtCounter;
@@ -306,11 +322,17 @@ public class OrderSystem : MonoBehaviour
         {
             clientOrderData.order.animationController.SetTalking(false);
         }
+
         if (clientOrderData.uiElement != null)
         {
             Destroy(clientOrderData.uiElement);
         }
                 
+        if (clientOrderData.bubbleElement != null)
+        {
+            Destroy(clientOrderData.bubbleElement);
+        }
+
         // Destruir la caja
         if (clientOrderData.box != null)
         {
