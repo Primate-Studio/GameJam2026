@@ -84,9 +84,8 @@ public class GameManager : MonoBehaviour
 
     public void TutorialMode()
     {
-        if(currentState == GameState.Tutorial)
-        {
-            
-        }
+        // Solo cambiar el estado, el TutorialManager se inicializará cuando cargue la escena
+        ChangeState(GameState.Tutorial);
+        Debug.Log("<color=cyan>✓ GameManager: Cambiando a modo Tutorial</color>");
     }
 }

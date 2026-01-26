@@ -104,6 +104,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (InputManager.Instance == null || GameManager.Instance.CurrentState == GameState.Paused) return;
         
+        // En tutorial, solo permitir mover cámara si está habilitado
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && 
+            TutorialManager.Instance != null && 
+            !TutorialManager.Instance.canPlayerMoveCamera)
+        {
+            return;
+        }
+        
         float mouseX = InputManager.Instance.MouseX * mouseSensitivity;
         transform.Rotate(Vector3.up * mouseX);
         
@@ -124,6 +132,15 @@ public class PlayerMovement : MonoBehaviour
     private void CaptureMovementInput()
     {
         if (InputManager.Instance == null)
+        {
+            moveDirection = Vector3.zero;
+            return;
+        }
+        
+        // En tutorial, solo permitir movimiento si está habilitado
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && 
+            TutorialManager.Instance != null && 
+            !TutorialManager.Instance.canPlayerMove)
         {
             moveDirection = Vector3.zero;
             return;

@@ -47,6 +47,14 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void HandleInteraction()
     {
+        // En tutorial, solo permitir interacción si está habilitado
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && 
+            TutorialManager.Instance != null && 
+            !TutorialManager.Instance.canPlayerInteract)
+        {
+            return;
+        }
+
         bool hasObject = !InventoryManager.Instance.IsCurrentSlotEmpty();
         bool isNearObject = objectInRange != null;
         

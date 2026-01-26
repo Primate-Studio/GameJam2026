@@ -26,6 +26,12 @@ public class OrderGenerator : MonoBehaviour
 
     void Update()
     {
+        // Deshabilitar generación manual en tutorial
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GenerateNewClientOrder();

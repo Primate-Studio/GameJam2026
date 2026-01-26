@@ -28,12 +28,25 @@ public class DayCycleManager : MonoBehaviour
 
     private void Start()
     {
-        StartDay(); // En una versió final, això es cridaria des d'un botó "Obrir Botiga"
+        // NO iniciar el día automáticamente si estamos en tutorial
+        if (GameManager.Instance.CurrentState != GameState.Tutorial)
+        {
+            StartDay(); // En una versión final, esto se llamaría desde un botón "Abrir Tienda"
+        }
+        else
+        {
+            Debug.Log("<color=cyan>⌛ DayCycleManager: Modo tutorial, día no iniciado</color>");
+        }
+        
         currentDay = PlayerPrefs.GetInt("CurrentDay", 1);
     }
 
     private void Update()
     {
+        // No procesar el ciclo del día en modo tutorial
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+            return;
+            
         if (!isDayActive) return;
 
         currentTime += Time.deltaTime;
@@ -55,7 +68,11 @@ public class DayCycleManager : MonoBehaviour
         ClientManager.Instance.clientsCount = 0;
         Debug.Log("<color=yellow>☀ La botiga ha obert!</color>");
         
-        GameManager.Instance.ChangeState(GameState.Playing);
+        // NO cambiar el estado si estamos en tutorial
+        if (GameManager.Instance.CurrentState != GameState.Tutorial)
+        {
+            GameManager.Instance.ChangeState(GameState.Playing);
+        }
     }
 
     public void NextDay()

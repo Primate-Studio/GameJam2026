@@ -30,6 +30,16 @@ public class ClientManager : MonoBehaviour
         activeClients = new GameObject[targetPoints.Length];
     }
 
+    void Start()
+    {
+        // En modo tutorial, resetear el timer para evitar spawns inmediatos
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            spawnTimer = 99999f; // Timer muy alto para que nunca se ejecute
+            Debug.Log("<color=yellow>⚠ ClientManager: Spawning desactivado para tutorial</color>");
+        }
+    }
+
     void Update()
     {
         HandleSpawning();
@@ -43,6 +53,12 @@ public class ClientManager : MonoBehaviour
 
     private void HandleSpawning()
     {
+        // En tutorial, no spawnear clientes automáticamente
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            return;
+        }
+
         spawnTimer -= Time.deltaTime;
 
         if (spawnTimer <= 0)

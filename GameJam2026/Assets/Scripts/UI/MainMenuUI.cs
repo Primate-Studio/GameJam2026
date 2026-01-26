@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class MainMenuUI : MonoBehaviour
 {
     public Button newGameButton;
+    public Button tutorialButton;
     public Button continueGameButton;
     public Button settingsButton;
     public Button exitButton;
@@ -19,6 +20,10 @@ public class MainMenuUI : MonoBehaviour
         GameManager.Instance.StartNewGame();
     }
 
+    public void OnTutorialPressed()
+    {
+        GameManager.Instance.TutorialMode();
+    }
     public void OnSettingsPressed()
     {
     }

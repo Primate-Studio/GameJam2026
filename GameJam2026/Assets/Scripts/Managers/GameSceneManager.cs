@@ -42,7 +42,31 @@ public class GameSceneManager : MonoBehaviour
                 LoadScene("ResultScene");
                 break;
             case GameState.Tutorial:
-                LoadScene("TutorialScene");
+                // Si TutorialScene no está en Build Settings, usar GameScene
+                string tutorialSceneName = "TutorialScene";
+                
+                // Verificar si la escena existe en Build Settings
+                bool sceneExists = false;
+                for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+                {
+                    string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+                    string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+                    if (sceneName == tutorialSceneName)
+                    {
+                        sceneExists = true;
+                        break;
+                    }
+                }
+                
+                if (sceneExists)
+                {
+                    LoadScene(tutorialSceneName);
+                }
+                else
+                {
+                    Debug.LogWarning($"⚠ TutorialScene no está en Build Settings, usando GameScene");
+                    LoadScene("GameScene");
+                }
                 break;
         }
     }

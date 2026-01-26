@@ -78,6 +78,14 @@ public class InventoryManager : MonoBehaviour
     
     void Update()
     {
+        // En tutorial, solo permitir cambiar inventario si está habilitado
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && 
+            TutorialManager.Instance != null && 
+            !TutorialManager.Instance.canPlayerUseInventory)
+        {
+            return;
+        }
+
         // Cambiar de bolsillo con la rueda del mouse
         float scroll = InputManager.Instance.MouseScrollDelta;
         
