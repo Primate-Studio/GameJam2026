@@ -94,8 +94,13 @@ public class OrderSystem : MonoBehaviour
         }
         
         Order newOrder = OrderGenerator.Instance.GenerateNewClientOrder();
-        ClientAnimationController animationController = client.GetComponent<ClientAnimationController>();
-        if(animationController != null) newOrder.animationController = animationController;
+        ClientAnimationController animationController = client.GetComponentInChildren<ClientAnimationController>(true);
+        if (animationController != null)
+        {
+            newOrder.animationController = animationController;
+            StartCoroutine(animationController.SetTalking(true));
+            
+        }
         
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
@@ -117,7 +122,6 @@ public class OrderSystem : MonoBehaviour
         
         // Obtener o crear el ClientTimer
         ClientTimer clientTimer = client.GetComponent<ClientTimer>();
-        ClientAnimationController clientAnimationController = client.GetComponent<ClientAnimationController>();
         if (clientTimer == null)
         {
             clientTimer = client.AddComponent<ClientTimer>();
@@ -132,6 +136,9 @@ public class OrderSystem : MonoBehaviour
         // Necessites tenir 'public GameObject orderUIPrefab' i 'public Transform uiContainer' a l'OrderSystem
         GameObject uiObj = Instantiate(orderUIPrefab, uiContainer);
         uiObj.GetComponent<OrderUIItem>().Setup(newOrder, clientPhoto);
+
+        UIOrderSlide slideEffect = uiObj.GetComponentInChildren<UIOrderSlide>();
+        if (slideEffect != null) slideEffect.StartSlide();
 
         // 3. Creem el ClientOrderData incloent la UI
         ClientOrderData clientOrderData = new ClientOrderData
@@ -295,14 +302,15 @@ public class OrderSystem : MonoBehaviour
     private void RemoveOrder(ClientOrderData clientOrderData)
     {
         if (clientOrderData == null) return;
-        
+        if (clientOrderData.order?.animationController != null)
+        {
+            clientOrderData.order.animationController.SetTalking(false);
+        }
         if (clientOrderData.uiElement != null)
         {
             Destroy(clientOrderData.uiElement);
         }
-        
-        //Debug.Log($"<color=yellow>🗑️ RemoveOrder: Eliminando pedido #{clientOrderData.order.orderID} del slot {clientOrderData.slotIndex}</color>");
-        
+                
         // Destruir la caja
         if (clientOrderData.box != null)
         {
@@ -317,8 +325,6 @@ public class OrderSystem : MonoBehaviour
         
         // Remover de la lista activa
         activeClientOrders.Remove(clientOrderData);
-        
-        //Debug.Log($"<color=yellow>🗑️ Pedido eliminado. Pedidos activos restantes: {activeClientOrders.Count}/3</color>");
     }
     
     /// <summary>

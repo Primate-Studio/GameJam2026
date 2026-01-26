@@ -64,6 +64,7 @@ public class ClientMovement : MonoBehaviour
             ClientAnimationController.SetIdle(true);
             OrderSystem.Instance.RegisterClientArrival(this.gameObject, slotIndex);
         }
+        else Despawn();
     }
 
     public void Despawn()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class ClientAnimationController : MonoBehaviour
 {
@@ -21,7 +22,13 @@ public class ClientAnimationController : MonoBehaviour
         }
     }
 
-    public void SetTalking(bool state) => anim.SetBool("isTalking", state);
+    public IEnumerator SetTalking(bool state, float duration = 2.0f)
+    {
+        anim.SetBool("isTalking", state);
+        yield return new WaitForSeconds(duration);
+        anim.SetBool("isTalking", false);
+    }
+
     public void SetAngry(bool state) => anim.SetBool("isAngry", state);
     public void SetIdle(bool state) => anim.SetBool("isIdle", state);
    public void TriggerGood()
@@ -35,8 +42,7 @@ public class ClientAnimationController : MonoBehaviour
         anim.SetTrigger("Bad");
         StartCoroutine(PauseMovementDuringReaction());
     }
-
-    private System.Collections.IEnumerator PauseMovementDuringReaction()
+    private IEnumerator PauseMovementDuringReaction()
     {
         ClientMovement mover = GetComponent<ClientMovement>();
         
