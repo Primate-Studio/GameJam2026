@@ -17,6 +17,14 @@ public class PlayerMovement : MonoBehaviour
     private float cameraVerticalRotation = 0f;
     private Vector3 moveDirection;
 
+    [Header("Head Bobbing")]
+    public float bobFrequency = 12f; // Velocitat del balanceig
+    public float bobHorizontalAmplitude = 0.05f; // Moviment lateral (opcional)
+    public float bobVerticalAmplitude = 0.05f;   // Moviment amunt i avall
+    [Range(0, 1)] public float headBobSmoothing = 0.1f;
+    private float bobTimer = 0f;
+    private Vector3 defaultCameraLocalPos;
+
     void Start()
     {
         // Configurar cámara
@@ -24,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerCamera = Camera.main;
         }
-        
+        defaultCameraLocalPos = playerCamera.transform.localPosition;
         // Configurar rigidbody
         playerRigidbody = GetComponent<Rigidbody>();
         if (playerRigidbody == null)
@@ -50,12 +58,45 @@ public class PlayerMovement : MonoBehaviour
         
         // Capturar input de movimiento
         CaptureMovementInput();
+
+        HandleHeadBob();
     }
     void FixedUpdate()
     {
         ApplyMovement();
     }
 
+
+    private void HandleHeadBob()
+    {
+        if (playerCamera == null) return;
+
+        // Comprovem si el jugador s'està movent realment (basat en el Rigidbody)
+        float speed = new Vector3(playerRigidbody.linearVelocity.x, 0, playerRigidbody.linearVelocity.z).magnitude;
+
+        if (speed > 0.1f)
+        {
+            // El "rellotge" del balanceig avança segons la velocitat
+            bobTimer += Time.deltaTime * bobFrequency;
+
+            // Calculem la nova posició amb Sinus (vertical) i Cosinus (horitzontal)
+            Vector3 targetPos = defaultCameraLocalPos;
+            targetPos.y += Mathf.Sin(bobTimer) * bobVerticalAmplitude;
+            targetPos.x += Mathf.Cos(bobTimer / 2) * bobHorizontalAmplitude;
+
+            playerCamera.transform.localPosition = targetPos;
+        }
+        else
+        {
+            // Si estem quiets, la càmera torna suaument al centre
+            bobTimer = 0f;
+            playerCamera.transform.localPosition = Vector3.Lerp(
+                playerCamera.transform.localPosition, 
+                defaultCameraLocalPos, 
+                headBobSmoothing
+            );
+        }
+    }
     /// <summary>
     /// Maneja la rotación del jugador y la cámara con el ratón
     /// </summary>
@@ -63,17 +104,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (InputManager.Instance == null || GameManager.Instance.CurrentState == GameState.Paused) return;
         
-        // Rotación horizontal del jugador
         float mouseX = InputManager.Instance.MouseX * mouseSensitivity;
         transform.Rotate(Vector3.up * mouseX);
         
-        // Rotación vertical de la cámara
         float mouseY = InputManager.Instance.MouseY * mouseSensitivity;
         cameraVerticalRotation -= mouseY;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -verticalLookLimit, verticalLookLimit);
         
         if (playerCamera != null)
         {
+            // IMPORTANT: Fem servir localRotation per no interferir amb la localPosition del bobbing
             playerCamera.transform.localRotation = Quaternion.Euler(cameraVerticalRotation, 0f, 0f);
         }
     }

@@ -1479,6 +1479,10 @@ MonoBehaviour:
   acceleration: 5
   mouseSensitivity: 2
   verticalLookLimit: 90
+  bobFrequency: 12
+  bobHorizontalAmplitude: 0.05
+  bobVerticalAmplitude: 0.05
+  headBobSmoothing: 0.1
 --- !u!114 &453222046
 MonoBehaviour:
   m_ObjectHideFlags: 0
