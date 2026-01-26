@@ -28,12 +28,12 @@ public class TutorialDog : MonoBehaviour
 
     void Update()
     {
-        HandleHovering();
-        
         if (isMoving)
         {
             MoveToTarget();
         }
+        else HandleHovering();
+        
     }
 
     /// <summary>
@@ -42,21 +42,13 @@ public class TutorialDog : MonoBehaviour
     public void MoveTo(Vector3 position)
     {
         targetPosition = position;
-        basePosition = position;
+        basePosition = transform.position;
         isMoving = true;
         
-        if (dogAnimator != null)
-        {
-            dogAnimator.SetBool("IsFlying", true);
-        }
-    }
-
-    /// <summary>
-    /// Hace que el perro se mueva a un transform específico
-    /// </summary>
-    public void MoveTo(Transform target)
-    {
-        MoveTo(target.position);
+        // if (dogAnimator != null)
+        // {
+        //     dogAnimator.SetBool("IsFlying", true);
+        // }
     }
 
     /// <summary>
@@ -67,10 +59,10 @@ public class TutorialDog : MonoBehaviour
         isMoving = false;
         basePosition = transform.position;
         
-        if (dogAnimator != null)
-        {
-            dogAnimator.SetBool("IsFlying", false);
-        }
+        // if (dogAnimator != null)
+        // {
+        //     dogAnimator.SetBool("IsFlying", false);
+        // }
     }
 
     /// <summary>

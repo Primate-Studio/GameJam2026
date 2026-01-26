@@ -322,6 +322,7 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.Introduction);
         
         tutorialText.text = "¡Arriba, gandul! Bienvenido al Oasis, el imperio viral de Ulises. Anoche te bebiste hasta el agua de los floreros.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         Debug.Log("<color=yellow>Mensaje 1 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
 
@@ -352,8 +353,10 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "No me pierdas de vista o estaremos aquí todo el día. Mueve el cuello y búscame, estoy volando detrás de ti.";
         if (dogController != null && dogTransforms.Length > 0)
         {
-            dogController.MoveTo(dogTransforms[0]); // Posición detrás del jugador
+            dogController.MoveTo(dogTransforms[0].position);
+            yield return new WaitUntil (() => isDoginPlace(dogTransforms[0]) == true); // Posición detrás del jugador
         }
+        dogController.LookAt(playerPosition.position);
         
         yield return StartCoroutine(WaitForContinueButton());
         
@@ -373,13 +376,15 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.sprite = movementSprite;
             tutorialImage.gameObject.SetActive(true);
         }
-        
+        canPlayerMoveCamera = false;
         tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
         yield return StartCoroutine(WaitForContinueButton());
-        
+        canPlayerMoveCamera = true;
+
         tutorialImage.gameObject.SetActive(false);
+        
         canPlayerMove = true;
-        yield return new WaitUntil(() => playerInZone(playerTransforms[0].position));
+        yield return new WaitUntil(() => playerInZone(dogTransforms[0].position));
         canPlayerMove = false;
         
       
@@ -393,12 +398,11 @@ public class TutorialManager : MonoBehaviour
         // El perro se posiciona junto al primer objeto
         if (dogController != null && dogTransforms.Length > 1)
         {
-            dogController.MoveTo(dogTransforms[1]);
+            dogController.MoveTo(dogTransforms[1].position);
         }
-        
+        canPlayerMoveCamera = false;
         tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra eso.";
         yield return StartCoroutine(WaitForContinueButton());
-        
         // Pop Up Imagen de interacción
         if (interactionSprite != null)
         {
@@ -406,12 +410,13 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
         
+        canPlayerMoveCamera = true;
         canPlayerMove = true;
         canPlayerInteract = true;
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Odre));
         canPlayerInteract = false;
         tutorialImage.gameObject.SetActive(false);
-
+        canPlayerMoveCamera = false;
         tutorialText.text = "Bien. Escucha que esto es importante. En la Agencia vendemos imitaciones baratas de armas divinas.";
         yield return StartCoroutine(WaitForContinueButton());
 
@@ -433,16 +438,19 @@ public class TutorialManager : MonoBehaviour
         // El perro se mueve al segundo objeto
         if (dogController != null && dogTransforms.Length > 2)
         {
-            dogController.MoveTo(dogTransforms[2]);
+            dogController.MoveTo(dogTransforms[2].position);
         }
         
         yield return StartCoroutine(WaitForContinueButton());
 
+        canPlayerMoveCamera = true;
         canPlayerMove = true;
         yield return new WaitUntil(() => playerInZone(playerTransforms[1].position));
         canPlayerInteract = true;
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco));
 
+        canPlayerMove = false;
+        canPlayerMoveCamera = false;
         tutorialText.text = "Ojo, aquí las cosas parecen infinitas, pero reponerlas cuesta dinero. Ten en cuenta que una vez cojas un objeto este tardará en aparecer.";
         yield return StartCoroutine(WaitForContinueButton());
 
@@ -474,7 +482,6 @@ public class TutorialManager : MonoBehaviour
         
         tutorialImage.gameObject.SetActive(false);
         
-        // Preparar la aparición del primer cliente
         canPlayerMove = false;
         canPlayerMoveCamera = false;
     }
@@ -495,6 +502,7 @@ public class TutorialManager : MonoBehaviour
         // Generar pedido específico del tutorial
         canGenerateOrder = true;
         isWaitingForFirstClientOrder = true;
+        CreateClientOrder(ciclopeIntellectual, estampidaOvejas, null);
         yield return new WaitUntil(() => isClientOrderDone(ciclopeIntellectual, estampidaOvejas, null));
 
         // Pop Up Imagen del bocadillo de pedido
@@ -747,8 +755,12 @@ public class TutorialManager : MonoBehaviour
 
     public bool isClientOrderDone(RequirementData monster, RequirementData condition, RequirementData environment)
     {
+       // OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
+        return true;
+    }
+    public void CreateClientOrder(RequirementData monster, RequirementData condition, RequirementData environment)
+    {
         OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
-        return isWaitingForFirstClientOrder == false;
     }
 
     public bool isPlayerLooking(GameObject target)
@@ -756,7 +768,7 @@ public class TutorialManager : MonoBehaviour
         // Verificar primero si el ángulo es razonable
         Vector3 directionToTarget = target.transform.position - Camera.main.transform.position;
         float angle = Vector3.Angle(Camera.main.transform.forward, directionToTarget);
-
+    
         if (angle > 30f) // Si está fuera del ángulo, no está mirando
         {
             return false;
@@ -770,13 +782,18 @@ public class TutorialManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100f))
         {
             // Verificar si el objeto golpeado es el target o un hijo del target
-            if (hit.collider.gameObject == target || hit.collider.transform.IsChildOf(target.transform))
+            if (hit.collider.gameObject == target || hit.collider.transform.IsChildOf(target.transform)||hit.collider.gameObject.layer==target.layer)
             {
                 return true;
             }
         }
 
         return false;
+    }
+    public bool isDoginPlace(Transform dogTransform)
+    {
+        float distance = Vector3.Distance(tutorialDog.transform.position, dogTransform.position);
+        return distance < 1.5f; // Ajusta el umbral según sea necesario
     }
 
     public bool manualPageChanged()

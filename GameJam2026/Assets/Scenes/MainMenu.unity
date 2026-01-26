@@ -952,6 +952,7 @@ GameObject:
   - component: {fileID: 976066002}
   - component: {fileID: 976066004}
   - component: {fileID: 976066005}
+  - component: {fileID: 976066006}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1066,6 +1067,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9c6d1a97ef3bc40afd56eb389f8f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveDataManager
+--- !u!114 &976066006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976065998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018a8aba3b29e784dab79edb3a83d87b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TypeWritterEffect
 --- !u!1 &983790162
 GameObject:
   m_ObjectHideFlags: 0
