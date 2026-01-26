@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     [SerializeField] private KeyCode pauseKey = KeyCode.Escape;
     [SerializeField] private KeyCode manualKey = KeyCode.Tab;
+    [SerializeField] private KeyCode manualNextKey = KeyCode.E;
+    [SerializeField] private KeyCode manualPrevKey = KeyCode.Q;
 
     // Movement
     public float Horizontal => Input.GetAxis("Horizontal");
@@ -21,6 +23,10 @@ public class InputManager : MonoBehaviour
     public float MouseX => Input.GetAxis("Mouse X");
     public float MouseY => Input.GetAxis("Mouse Y");
     public float MouseScrollDelta => Input.mouseScrollDelta.y;
+
+    //Manual
+    public bool ManualNext => Input.GetKeyDown(manualNextKey);
+    public bool ManualPrev => Input.GetKeyDown(manualPrevKey);
 
     public bool JumpPressed => Input.GetKeyDown(jumpKey);
     public bool InteractPressed => Input.GetKeyDown(interactKey);
