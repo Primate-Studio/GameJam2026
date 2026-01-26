@@ -4,6 +4,9 @@ public class ManualUI : MonoBehaviour
 {
     public GameObject manualPanel;
     [SerializeField] private GameObject[] pages;
+    
+    private int currentPage = 0;
+    public bool pageHasChanged = false;
 
     public void Start()
     {
@@ -19,6 +22,12 @@ public class ManualUI : MonoBehaviour
     }
     public void TurnPage(int pageIndex)
     {
+        if (currentPage != pageIndex)
+        {
+            pageHasChanged = true;
+            currentPage = pageIndex;
+        }
+        
         for (int i = 0; i < pages.Length; i++)
         {
             pages[i].SetActive(i == pageIndex);

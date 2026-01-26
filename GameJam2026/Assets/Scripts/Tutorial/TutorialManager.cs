@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using Unity.Android.Gradle.Manifest;
+using NUnit.Framework;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class TutorialManager : MonoBehaviour
     public bool canPlayerMoveCamera = false;
     public bool canPlayerInteract = false;
     public bool canPlayerOpenManual = false;
+    public bool canPlayerChangePage = false;
     public bool canPlayerUseInventory = false;
     public bool isWaitingForPlayerAction = false;
     public bool canGenerateOrder = false;
@@ -53,6 +55,7 @@ public class TutorialManager : MonoBehaviour
     public bool isWaitingForManualOpen = false;
     public bool isWaitingForManualClose = false;
     public bool tutorialIsPaused = false;
+    public bool isPlayerLookingAt = false;
     public bool playerHasDoneTutorial = false;
 
     [Header("Transforms")]
@@ -67,6 +70,16 @@ public class TutorialManager : MonoBehaviour
     public RequirementData ciclopeBebe;
     public RequirementData muchoPolvo;
     public RequirementData interiorCueva;
+    
+    [Header("GameObjects References")]
+    public GameObject orderBocadillo;
+    public GameObject bag;
+
+
+
+    public ManualUI manualUI;
+
+    private int lastManualPageIndex = 0;
 
 
 
@@ -78,18 +91,10 @@ public class TutorialManager : MonoBehaviour
         PlayerMovement,
         Interaccion, // agafar els dos objectes ideals de la primera comanda
         Inventario,
-        PrimerCliente, // la seva comanda es ciclope intelectual y estampida de ovejas
-        MoverseMostrador,
-        TomarPedido, //explicacio de comanda
-        SistemaDesesperacion, //explicacio de sistema de desesperacion
-        GestionPedidos, // explicacio de 3 comandes
-        Manual,
-        SistemaPuntuacion,
-        FinManual,
+        PrimerCliente, // la seva comanda es ciclope intelectual y estampida de ovejas, explicacio de com funciona el temps de desesperacio
         EntregaPedido, // explicacio de entrega de comanda y entrega dels dos primers objectes
-        JornadaLaboral, // explicacio de jornada laboral de les seves condicions de finalitzacio
+        Manual,
         SegundoCliente, // la seva comanda es ciclope bebe mucho polvo y interior cueva
-        FinJornada, // resum de la jornada laboral,
         FacturaDiaria, // foto resultscene  
         FinTutorial // final del tutorial
     }
@@ -253,18 +258,213 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = true;
 
         yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
-
-        tutorialText.text = "No te va a decir, quiero una espada. Te dirá qué Monstruo quiere matar, qué Condición hay y dónde está. Recuerda los iconos de cada categoría. ";
-        isWaitingContinueButton = true;
-        yield return new WaitUntil(() => isWaitingContinueButton == false);
-
-        tutorialText.text = "Siempre que el pedido esté activo verás las condiciones específicas en una nota en la derecha.";
-        isWaitingContinueButton = true;
-        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        canPlayerMove = false;
 
         canGenerateOrder = true;
         isWaitingForFirstClientOrder = true;
         yield return new WaitUntil(() => isClientOrderDone(ciclopeIntellectual, estampidaOvejas, null));
+
+        tutorialText.text = "No te va a decir, quiero una espada. Te dirá qué Monstruo quiere matar, qué Condición hay y dónde está. Recuerda los iconos de cada categoría.";
+        isPlayerLookingAt = false;
+        yield return new WaitUntil(() => isPlayerLooking(orderBocadillo) == true);
+
+        // señalar las notas de pedido
+        tutorialText.text = "Siempre que el pedido esté activo verás las condiciones específicas en una nota en la derecha.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        //Popear imagen de la desesperacion 
+        tutorialText.text = "Ese reloj de colores es su nivel de desesperación. Si llega a rojo, se enfadan. Si llega a cero, se enfrentará a una muerte segura ";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Eso solo significa una cosa: perder dinero. Así que date prisa en atenderles.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Ten en cuenta que solo puedes atender a un máximo de tres clientes a la vez. ";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Así que no te emociones que no eres un pulpo.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+    }
+
+    public IEnumerator SixthTutorialPass()
+    {
+        SetTutorialState(TutorialState.Manual);
+        
+        tutorialText.text = "No te asustes todavía, para poder saber qué es lo mejor para cada situación tienes el manual. Abrelo.";
+        isWaitingContinueButton = true;
+ 
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        isWaitingForManualOpen = true;
+        yield return new WaitUntil(() => playerOpenManual() == true);
+        isWaitingForManualOpen = false;
+        isWaitingForManualClose = true;
+        tutorialText.text = "Ten en cuenta que mientras tengas el manual abierto el tiempo seguirá corriendo igual, por lo que cuando antes te acostumbre mejor.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Cada entrada del manual está dividida por la categoría que te he explicado antes.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Prueba a pasar de página y verlo por ti mismo.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        
+        canPlayerChangePage = true;
+        yield return new WaitUntil(() => manualPageChanged());
+
+        tutorialText.text = "Aquí verás que items son exactamente los necesarios para las condiciones específicas de la aventura que te está pidiendo el cliente.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Si te fijas la nota sigue activa incluso con el manual abierto.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false); 
+
+        tutorialText.text = "Para cada situación específica te saldrán tres objetos debajo con su utilidad a la derecha.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Dependiendo cual elijas el cliente tendrá más o menos probabilidades de salir victorioso.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Recuerda que los objetos no son eternos. Si cojes uno tardará en aparecer otro igual.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Cuando termines cierra el manual.";
+        isWaitingForManualClose = true;
+        yield return new WaitUntil(() => playerCloseManual() == true);
+        isWaitingForManualClose = false;
+
+        canPlayerMove = true;
+        canPlayerMoveCamera = true;
+        tutorialText.text = "Casualmente los objetos de tus bolsillos son justo lo que el cliente quiere. Ve a entregárselos.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+    }
+
+    public IEnumerator SeventhTutorialPass()
+    {
+        SetTutorialState(TutorialState.EntregaPedido);
+
+        tutorialText.text = "Bien, fijate que el cliente cuando ha hecho el pedido ha dejado una mochila. Es en esa mochila donde pondremos los objetos.";
+        isPlayerLookingAt = false;
+        yield return new WaitUntil(() => isPlayerLooking(bag) == true);
+
+        tutorialText.text = "Cojo uno de los objetos de tus bolsillos y colócalo dentro. Ten en cuenta que una vez colocado el objeto no hay vuelta atrás. Ahora pon el siguiente.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        canPlayerInteract = true;
+        yield return new WaitUntil(() => playerDropObject(ObjectType.Odre) || playerDropObject(ObjectType.Arco));
+        canPlayerInteract = false;
+
+        tutorialText.text = "Para que el pedido sea completado tienes que colocar los mismos objetos que especificaciones te pida el cliente.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        tutorialText.text = "En este caso eran dos así que con dos objetos basta. Ten en cuenta que te pueden venir pedidos de tres especificaciones también.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        tutorialText.text = "¡Perfecto! Ahora entrega el segundo objeto asi acabamos.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+        canPlayerInteract = true;
+
+        yield return new WaitUntil(() => playerDropObject(ObjectType.Arco) || playerDropObject(ObjectType.Odre));
+
+    }
+
+    public IEnumerator EighthTutorialPass()
+    {
+        SetTutorialState(TutorialState.SegundoCliente);
+        
+        tutorialText.text = "Ahora que ya sabes como va el tema, atiende a tu segundo cliente que ya está llegando.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Para este pedido, intenta usar todos los objetos ideales para que el cliente quede satisfecho.";
+        canPlayerMove = true;
+        canPlayerMoveCamera = true;
+        canPlayerOpenManual = true;
+        canPlayerChangePage = true;
+
+        isWaitingForSecondClientOrder = true;
+        yield return new WaitUntil(() => isClientOrderDone(ciclopeBebe, muchoPolvo, interiorCueva));
+        isWaitingForSecondClientOrder = false;
+        yield return new WaitUntil(() => playerDropObject(ObjectType.CascoA) && playerDropObject(ObjectType.Mascaras) && playerDropObject(ObjectType.Espejo));
+
+        tutorialText.text = "Bien hecho, has sido capaz de completar el pedido por tu cuenta.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Ten en cuenta que el día se dará por terminado si te quedas sin clientes o si se acaba el día. Puedes ver cuánto queda debajo de la deuda a la izquierda.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+    }
+
+    public IEnumerator NinthTutorialPass()
+    {
+        SetTutorialState(TutorialState.FacturaDiaria);
+        
+        tutorialText.text = "¡Felicidades! Has completado tu primer día en la Agencia. Ahora veamos cómo te ha ido.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+
+        //Enseñamos imagen de la factura diaria
+        tutorialImage.sprite = resultSceneSprite;
+        tutorialText.text = "Esto de aquí es la factura del día. Aquí podrás ver los frutos de tu rendimiento durante el día. ";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "En la columna izquierda tienes los ingresos. Aquí afectará cuantos objetos hayas vendido a los clientes. Y cuántos de esos clientes han tenido éxito.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Ten en cuenta que cuanto mejores sean los objetos para la misión del cliente más te pagarán por ellos.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "En la columna del medio tienes los gastos. Aquí se tienen en cuenta cuántos clientes han fallado su misión y el coste por reponer cada objeto vendido.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Por último en la Columna de la derecha tienes el total. Siempre que el total sea positivo una parte de él irá a pagar tu deuda. ";
+        isWaitingContinueButton = true; 
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Recuerda que si al final del día no has pagado toda tu deuda... bueno, digamos que Ulises no es muy tolerante con los impagos.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+    }
+
+    public IEnumerator TenthTutorialPass()
+    {
+        SetTutorialState(TutorialState.FinTutorial);
+        
+        tutorialText.text = "En fin, este es todo mi trabajo por hoy, que Ulises no paga a las niñeros.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Si me ves por aquí será en mi caseta que está en la pared del fondo. Aunque más te vale no verme porque si aparezco será para avisarte de que uno de los clientes ha muerto.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        tutorialText.text = "Para pasar al siguiente día dale al botón de abajo que pone ir al siguiente día.";
+        isWaitingContinueButton = true;
+        yield return new WaitUntil(() => isWaitingContinueButton == false);
+
+        playerHasDoneTutorial = true;
 
     }
 
@@ -282,6 +482,16 @@ public class TutorialManager : MonoBehaviour
         return true;
     }
 
+    public bool playerDropObject( ObjectType item)
+    {
+        if (InventoryManager.Instance.GetCurrentObjectType() != item)
+        {
+            return false;
+        }
+        else
+            return true;
+    }
+
     public bool usedWheelInInventory()
     {
         if(InputManager.Instance.MouseScrollDelta == 0)
@@ -292,15 +502,77 @@ public class TutorialManager : MonoBehaviour
         return true;
     }
 
-    public void InstanceClient(int slotIndex)
+    public bool playerOpenManual()
     {
-        ClientManager.Instance.SpawnClientInSlot(slotIndex);
+        // Detecta si el manual está abierto
+        if (manualUI != null && manualUI.manualPanel.activeSelf)
+        {
+            return true;
+        }
+        return false;
     }
+
+    public bool playerCloseManual()
+    {
+        // Detecta si el manual está cerrado
+        if (manualUI != null && !manualUI.manualPanel.activeSelf)
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     public bool isClientOrderDone(RequirementData monster, RequirementData condition, RequirementData environment)
     {
         OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
         return isWaitingForFirstClientOrder == false;
+    }
+
+    public bool isPlayerLooking(GameObject target)
+    {
+        // Verificar primero si el ángulo es razonable
+        Vector3 directionToTarget = target.transform.position - Camera.main.transform.position;
+        float angle = Vector3.Angle(Camera.main.transform.forward, directionToTarget);
+
+        if (angle > 30f) // Si está fuera del ángulo, no está mirando
+        {
+            return false;
+        }
+
+        // Hacer raycast desde la cámara hacia el centro de la pantalla
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(UnityEngine.Screen.width / 2, UnityEngine.Screen.height / 2, 0));
+        RaycastHit hit;
+
+        // Realizar el raycast (ajusta la distancia según necesites)
+        if (Physics.Raycast(ray, out hit, 100f))
+        {
+            // Verificar si el objeto golpeado es el target o un hijo del target
+            if (hit.collider.gameObject == target || hit.collider.transform.IsChildOf(target.transform))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool manualPageChanged()
+    {
+        if (manualUI != null && manualUI.pageHasChanged)
+        {
+            manualUI.pageHasChanged = false; 
+            canPlayerChangePage = false;
+            return true;
+        }
+        
+        return false;
+    }
+
+    // voids
+    public void InstanceClient(int slotIndex)
+    {
+        ClientManager.Instance.SpawnClientInSlot(slotIndex);
     }
 
 
