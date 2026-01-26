@@ -201,7 +201,6 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(FirstTutorialPass());
         yield return StartCoroutine(SecondTutorialPass());
         yield return StartCoroutine(ThirdTutorialPass());
-        yield return StartCoroutine(FourthTutorialPass());
         yield return StartCoroutine(FifthTutorialPass());
         yield return StartCoroutine(SixthTutorialPass());
         yield return StartCoroutine(SeventhTutorialPass());
@@ -281,7 +280,9 @@ public class TutorialManager : MonoBehaviour
         // Desbloquear cursor para poder hacer clic
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
+        canPlayerMove = false;
+        canPlayerMoveCamera = false;
+
         if (continueButton != null)
         {
             continueButton.gameObject.SetActive(true);
@@ -376,6 +377,13 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.sprite = movementSprite;
             tutorialImage.gameObject.SetActive(true);
         }
+
+        if (dogController != null && dogTransforms.Length > 0)
+        {
+            dogController.MoveTo(dogTransforms[1].position);
+            yield return new WaitUntil (() => isDoginPlace(dogTransforms[1]) == true); // Posición detrás del jugador
+        }
+
         canPlayerMoveCamera = false;
         tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
         yield return StartCoroutine(WaitForContinueButton());
@@ -384,7 +392,7 @@ public class TutorialManager : MonoBehaviour
         tutorialImage.gameObject.SetActive(false);
         
         canPlayerMove = true;
-        yield return new WaitUntil(() => playerInZone(dogTransforms[0].position));
+        yield return new WaitUntil(() => playerInZone(playerTransforms[0].position));
         canPlayerMove = false;
         
       
@@ -395,11 +403,6 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Interaccion);
         
-        // El perro se posiciona junto al primer objeto
-        if (dogController != null && dogTransforms.Length > 1)
-        {
-            dogController.MoveTo(dogTransforms[1].position);
-        }
         canPlayerMoveCamera = false;
         tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra eso.";
         yield return StartCoroutine(WaitForContinueButton());
@@ -413,6 +416,7 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = true;
         canPlayerMove = true;
         canPlayerInteract = true;
+        
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Odre));
         canPlayerInteract = false;
         tutorialImage.gameObject.SetActive(false);
@@ -434,7 +438,32 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(WaitForContinueButton());
         tutorialImage.gameObject.SetActive(false);
 
-        tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto.";
+        // Pop Up Imagen del inventario
+        if (inventorySprite != null)
+        {
+            tutorialImage.sprite = inventorySprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
+        
+
+        tutorialText.text = "Ahora, fíjate en la parte de abajo. Eso de ahí son tus bolsillos, cada objeto ocupa una ranura en tus bolsillos.";
+        yield return StartCoroutine(WaitForContinueButton());
+
+        canPlayerMove = false;
+        canPlayerMoveCamera = false;
+        tutorialText.text = "Puedes intercambiar de ranuras, vamos, pruébalo.";
+        yield return StartCoroutine(WaitForContinueButton());
+        
+        canPlayerUseInventory = true;
+        yield return new WaitUntil(() => usedWheelInInventory());
+        
+        tutorialImage.gameObject.SetActive(false);
+        
+        canPlayerMove = false;
+        canPlayerMoveCamera = false;
+        
+        InstanceClient(0);
+        tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, poniendolo en otro de tus bolsillos.";
         // El perro se mueve al segundo objeto
         if (dogController != null && dogTransforms.Length > 2)
         {
@@ -456,35 +485,6 @@ public class TutorialManager : MonoBehaviour
 
     }
 
-    public IEnumerator FourthTutorialPass()
-    {
-        SetTutorialState(TutorialState.Inventario);
-        
-        // Pop Up Imagen del inventario
-        if (inventorySprite != null)
-        {
-            tutorialImage.sprite = inventorySprite;
-            tutorialImage.gameObject.SetActive(true);
-        }
-        
-        tutorialText.text = "Fíjate en la parte de abajo. Eso de ahí son tus bolsillos, cada objeto ocupa una ranura en tus bolsillos.";
-        yield return StartCoroutine(WaitForContinueButton());
-
-
-        InstanceClient(0);
-        canPlayerMove = false;
-        canPlayerMoveCamera = false;
-        tutorialText.text = "Puedes intercambiar de ranuras, vamos, pruébalo.";
-        yield return StartCoroutine(WaitForContinueButton());
-        
-        canPlayerUseInventory = true;
-        yield return new WaitUntil(() => usedWheelInInventory());
-        
-        tutorialImage.gameObject.SetActive(false);
-        
-        canPlayerMove = false;
-        canPlayerMoveCamera = false;
-    }
 
     public IEnumerator FifthTutorialPass()
     {
