@@ -12,10 +12,18 @@ public class DeliveryBox : MonoBehaviour
     [Tooltip("Texto opcional para mostrar info del pedido")]
     public TextMeshProUGUI orderInfoText;
     
+    [Header("Animation")]
+    [Tooltip("Escala máxima del efecto (1.2 = 20% más grande)")]
+    [SerializeField] private float scaleAmount = 1.2f;
+    [Tooltip("Duración del efecto en segundos")]
+    [SerializeField] private float scaleDuration = 0.3f;
+    
     [Header("Assigned Order")]
     [SerializeField] private Order assignedOrder;
     
     private InteractableObject interactableObj;
+    private Vector3 originalScale;
+    private bool isScaling = false;
     
     void Awake()
     {
@@ -28,6 +36,9 @@ public class DeliveryBox : MonoBehaviour
             interactableObj.isDeliveryZone = true;
             interactableObj.objectType = ObjectType.None;
         }
+        
+        // Guardar escala original
+        originalScale = transform.localScale;
     }
     
     /// <summary>
@@ -65,7 +76,10 @@ public class DeliveryBox : MonoBehaviour
             Debug.LogWarning("Esta caja no tiene pedido asignado!");
             return false;
         }
-        
+        if (!isScaling)
+        {
+            StartCoroutine(ScaleEffect());
+        }
         bool success = OrderSystem.Instance.TryDeliverItem(assignedOrder, itemType);
         
         if (success)
@@ -100,6 +114,37 @@ public class DeliveryBox : MonoBehaviour
         }
         
         // TODO: Añadir más feedback visual (colores, efectos, etc.)
+        
+    }
+
+    private System.Collections.IEnumerator ScaleEffect()
+    {
+        isScaling = true;
+        float elapsed = 0f;
+        float halfDuration = scaleDuration / 2f;
+        
+        // Crecer
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / halfDuration;
+            transform.localScale = Vector3.Lerp(originalScale, originalScale * scaleAmount, t);
+            yield return null;
+        }
+        
+        elapsed = 0f;
+        
+        // Volver al tamaño original
+        while (elapsed < halfDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / halfDuration;
+            transform.localScale = Vector3.Lerp(originalScale * scaleAmount, originalScale, t);
+            yield return null;
+        }
+        
+        transform.localScale = originalScale;
+        isScaling = false;
     }
     
     void OnDrawGizmos()
