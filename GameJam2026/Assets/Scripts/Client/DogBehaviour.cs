@@ -1,0 +1,304 @@
+using UnityEngine;
+using System.Collections;
+using TMPro;
+
+public class DogBehaviour : MonoBehaviour
+{
+    public enum DogState
+    {
+        Idle,
+        Flying,
+        Talking
+    }
+
+    [Header("Animation")]
+    public Animator animator;
+
+    [Header("Movement")]
+    public Transform offScreenPosition; // Posición fuera de escena (punto inicial)
+    public float moveSpeed = 3f;
+    public Transform talkingPosition; // Posición donde habla sobre las muertes
+    public Transform newActivitiesPosition; // Posición donde habla sobre nuevas actividades
+    
+    [Header("Waypoints for L Movement")]
+    public Transform[] deathWaypoints; // Waypoints para ir a hablar de muertes (movimiento en L)
+    public Transform[] activitiesWaypoints; // Waypoints para ir a hablar de actividades (movimiento en L)
+
+    [Header("Death Messages")]
+    public TextMeshProUGUI dialogueText;
+    public float dialogueDuration = 5f;
+    
+    private string[] deathMessages = new string[]
+    {
+        "¡Uyuyuy! Se te han muerto {0} clientes. ¡Tienes que mejorar!",
+        "¡Vaya desastre! {0} clientes no sobrevivieron. ¡Concéntrate más!",
+        "¡Esto es inaceptable! {0} muertes en tu turno. ¡Hazlo mejor!",
+        "¡Qué tragedia! Perdiste {0} clientes. ¡Más cuidado la próxima vez!",
+        "¡Ay no! {0} clientes fallecieron. ¡Necesitas ser más rápido!",
+        "¡Houston, tenemos un problema! {0} bajas. ¡Mejora tu técnica!",
+        "¡Catástrofe! {0} clientes no lo lograron. ¡Pon más atención!"
+    };
+
+    private string[] newActivitiesMessages = new string[]
+    {
+        "¡Oye! Hay nuevas actividades disponibles en el manual. ¡Revísalo antes de que vengan los clientes!",
+        "¡Atención! Se desbloquearon nuevas actividades. ¡Consulta el manual ahora!",
+        "¡Novedad! Nuevas actividades en el manual. ¡Échale un vistazo rápido!",
+        "¡Hey! El manual tiene nuevas actividades. ¡Míralo antes de empezar!"
+    };
+
+    [Header("Death System")]
+    public float deathCheckDelay = 10f;
+    private int pendingDeaths = 0;
+    private bool isWaitingForDeaths = false;
+    private Coroutine deathCheckCoroutine;
+
+    [Header("Activity Check")]
+    public float dayStartCheckDelay = 2f;
+    private int lastKnownActivityCount = 0;
+
+    private DogState currentState = DogState.Idle;
+
+    void Start()
+    {
+        if (dialogueText != null)
+            dialogueText.gameObject.SetActive(false);
+
+        if (offScreenPosition != null)
+        {
+            transform.position = offScreenPosition.position;
+        }
+
+        UpdateAnimatorState();
+    }
+
+    void Update()
+    {
+        UpdateAnimatorState();
+    }
+
+    private void UpdateAnimatorState()
+    {
+        if (animator == null) return;
+
+        animator.SetBool("isFlying", currentState == DogState.Flying);
+        animator.SetBool("isTalking", currentState == DogState.Talking);
+    }
+
+    #region Death Notification System
+    
+    public void NotifyClientDeath()
+    {
+        pendingDeaths++;
+        Debug.Log($"🐕 Muerte registrada. Total pendiente: {pendingDeaths}");
+
+        if (!isWaitingForDeaths)
+        {
+            if (deathCheckCoroutine != null)
+                StopCoroutine(deathCheckCoroutine);
+            
+            deathCheckCoroutine = StartCoroutine(DeathCheckRoutine());
+        }
+    }
+
+    private IEnumerator DeathCheckRoutine()
+    {
+        isWaitingForDeaths = true;
+        yield return new WaitForSeconds(deathCheckDelay);
+
+        if (pendingDeaths > 0)
+        {
+            int deathsToReport = pendingDeaths;
+            pendingDeaths = 0; // Resetear ANTES de mostrar mensaje
+            
+            Debug.Log($"🐕 Reportando {deathsToReport} muerte(s)");
+            
+            // Mover en L usando waypoints hacia talkingPosition
+            if (deathWaypoints != null && deathWaypoints.Length > 0)
+            {
+                yield return StartCoroutine(MoveAlongWaypoints(deathWaypoints));
+            }
+            else if (talkingPosition != null)
+            {
+                yield return StartCoroutine(MoveToPosition(talkingPosition.position));
+            }
+
+            // Mostrar mensaje
+            ShowDeathMessage(deathsToReport);
+            yield return new WaitForSeconds(dialogueDuration);
+            HideDialogue();
+
+            // Volver a offScreen usando los waypoints en reversa
+            if (deathWaypoints != null && deathWaypoints.Length > 0)
+            {
+                yield return StartCoroutine(MoveAlongWaypointsReverse(deathWaypoints));
+            }
+            else if (offScreenPosition != null)
+            {
+                yield return StartCoroutine(MoveToPosition(offScreenPosition.position));
+            }
+        }
+
+        isWaitingForDeaths = false;
+        deathCheckCoroutine = null;
+    }
+
+    private void ShowDeathMessage(int deathCount)
+    {
+        if (dialogueText == null) return;
+
+        string randomMessage = deathMessages[Random.Range(0, deathMessages.Length)];
+        string finalMessage = string.Format(randomMessage, deathCount);
+
+        dialogueText.text = finalMessage;
+        dialogueText.gameObject.SetActive(true);
+        currentState = DogState.Talking;
+    }
+
+    #endregion
+
+    #region New Activities Notification
+
+    public void CheckNewActivitiesOnDayStart(int currentActivityCount)
+    {
+        StartCoroutine(CheckNewActivitiesRoutine(currentActivityCount));
+    }
+
+    private IEnumerator CheckNewActivitiesRoutine(int currentActivityCount)
+    {
+        yield return new WaitForSeconds(dayStartCheckDelay);
+
+        if (currentActivityCount > lastKnownActivityCount && lastKnownActivityCount > 0)
+        {
+            // Mover en L usando waypoints hacia newActivitiesPosition
+            if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
+            {
+                yield return StartCoroutine(MoveAlongWaypoints(activitiesWaypoints));
+            }
+            else if (newActivitiesPosition != null)
+            {
+                yield return StartCoroutine(MoveToPosition(newActivitiesPosition.position));
+            }
+
+            ShowNewActivitiesMessage();
+            yield return new WaitForSeconds(dialogueDuration);
+            HideDialogue();
+
+            // Volver a offScreen usando los waypoints en reversa
+            if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
+            {
+                yield return StartCoroutine(MoveAlongWaypointsReverse(activitiesWaypoints));
+            }
+            else if (offScreenPosition != null)
+            {
+                yield return StartCoroutine(MoveToPosition(offScreenPosition.position));
+            }
+        }
+
+        lastKnownActivityCount = currentActivityCount;
+    }
+
+    private void ShowNewActivitiesMessage()
+    {
+        if (dialogueText == null) return;
+
+        string randomMessage = newActivitiesMessages[Random.Range(0, newActivitiesMessages.Length)];
+        
+        dialogueText.text = randomMessage;
+        dialogueText.gameObject.SetActive(true);
+        currentState = DogState.Talking;
+    }
+
+    #endregion
+
+    #region Movement
+
+    private IEnumerator MoveToPosition(Vector3 targetPosition)
+    {
+        currentState = DogState.Flying;
+        
+        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+            }
+            
+            yield return null;
+        }
+
+        currentState = DogState.Idle;
+    }
+
+    private IEnumerator MoveAlongWaypoints(Transform[] waypoints)
+    {
+        currentState = DogState.Flying;
+
+        foreach (Transform waypoint in waypoints)
+        {
+            if (waypoint == null) continue;
+
+            while (Vector3.Distance(transform.position, waypoint.position) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, waypoint.position, moveSpeed * Time.deltaTime);
+                
+                Vector3 direction = (waypoint.position - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                }
+                
+                yield return null;
+            }
+        }
+
+        currentState = DogState.Idle;
+    }
+
+    private IEnumerator MoveAlongWaypointsReverse(Transform[] waypoints)
+    {
+        currentState = DogState.Flying;
+
+        for (int i = waypoints.Length - 1; i >= 0; i--)
+        {
+            Transform waypoint = waypoints[i];
+            if (waypoint == null) continue;
+
+            while (Vector3.Distance(transform.position, waypoint.position) > 0.1f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, waypoint.position, moveSpeed * Time.deltaTime);
+                
+                Vector3 direction = (waypoint.position - transform.position).normalized;
+                if (direction != Vector3.zero)
+                {
+                    Quaternion lookRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                }
+                
+                yield return null;
+            }
+        }
+
+        currentState = DogState.Idle;
+    }
+
+    #endregion
+
+    private void HideDialogue()
+    {
+        if (dialogueText != null)
+            dialogueText.gameObject.SetActive(false);
+        
+        currentState = DogState.Idle;
+    }
+
+    public DogState GetCurrentState()
+    {
+        return currentState;
+    }
+}

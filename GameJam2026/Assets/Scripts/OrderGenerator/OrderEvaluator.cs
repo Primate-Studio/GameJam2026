@@ -18,6 +18,9 @@ public class OrderEvaluator : MonoBehaviour
     [Tooltip("Penalización por Abandono")]
     [Range(0, 100)] public float penalty_Abandonado = 95f;
 
+    [Header("Dog Reference")]
+    private DogBehaviour dogBehaviour;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,6 +29,16 @@ public class OrderEvaluator : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    void Start()
+    {
+        // Buscar el perro en la escena
+        dogBehaviour = FindObjectOfType<DogBehaviour>();
+        if (dogBehaviour == null)
+        {
+            Debug.LogWarning("⚠️ No se encontró DogBehaviour en la escena");
+        }
     }
 
     /// <summary>
@@ -59,6 +72,18 @@ public class OrderEvaluator : MonoBehaviour
         
         // Determinar resultado inmediatamente
         OrderSystem.Instance.DetermineOrderOutcomeImmediate(clientOrderData, totalSuccessRate);
+    }
+    
+    /// <summary>
+    /// Notifica al perro cuando muere un cliente
+    /// </summary>
+    public void NotifyClientDeath()
+    {
+        if (dogBehaviour != null)
+        {
+            dogBehaviour.NotifyClientDeath();
+            Debug.Log("🐕 Perro notificado de muerte de cliente");
+        }
     }
     
     /// <summary>
