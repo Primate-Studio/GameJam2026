@@ -1,12 +1,7 @@
-using System;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
-using UnityEditor.UIElements;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
-using Unity.Android.Gradle.Manifest;
-using NUnit.Framework;
 
 public class TutorialManager : MonoBehaviour
 {
