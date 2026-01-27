@@ -113,7 +113,7 @@ public class OrderSystem : MonoBehaviour
         bubbleObj.SetActive(false);
         bubbleObj.GetComponent<OrderUIItem>().Setup(newOrder, null);
         bubbleObj.SetActive(true);
-        StartCoroutine(DisableBubbleAfter(bubbleObj, 2f));
+        StartCoroutine(DisableBubbleAfter(bubbleObj, 10f));
         
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);

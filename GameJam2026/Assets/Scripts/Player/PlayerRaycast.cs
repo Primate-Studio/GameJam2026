@@ -10,6 +10,7 @@ public class PlayerRaycast : MonoBehaviour
     [SerializeField] private Camera playerCamera; // Referència a la càmera
     
     private Outline currentOutline;
+    private GameObject lastHighlighted;
 
     void Start()
     {
@@ -22,40 +23,51 @@ public class PlayerRaycast : MonoBehaviour
         if (playerCamera == null) return;
 
         // Creem el llamp des del centre de la càmera (el centre de la pantalla)
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
-        // Dibuixa el llamp a l'editor per poder veure si està anant on vols
-        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red);
-
-        if (Physics.Raycast(ray, out hit, rayDistance, interactableLayer))
+        if (Physics.Raycast(ray, out hit, 3f)) // Distància de 3 metres
         {
-            // Busquem el component Outline a l'objecte impactat
-            Outline outline = hit.collider.GetComponent<Outline>();
-            
-            if (outline != null)
+            GameObject currentObject = hit.collider.gameObject;
+
+            if (currentObject.CompareTag("Items")) // Assegura't que l'objecte tingui aquest Tag
             {
-                // Si mirem un objecte nou, desactivem l'anterior
-                if (currentOutline != null && currentOutline != outline)
+                if (lastHighlighted != currentObject)
                 {
-                    SetOutlineState(currentOutline, false);
+                    ClearHighlight();
+                    lastHighlighted = currentObject;
+                    // Canviem la layer per activar l'outline del post-process i als children
+                    lastHighlighted.layer = LayerMask.NameToLayer("Highlighted");
+                    foreach (Transform child in lastHighlighted.transform)
+                    {
+                        child.gameObject.layer = LayerMask.NameToLayer("Highlighted");
+                    }
                 }
-                
-                // Activem el nou
-                SetOutlineState(outline, true);
-                currentOutline = outline;
             }
             else
             {
-                // Si l'objecte té la Layer però no té Outline component
-                ClearCurrentOutline();
+                ClearHighlight();
             }
         }
         else
         {
-            ClearCurrentOutline();
+            ClearHighlight();
         }
     }
+
+    void ClearHighlight()
+    {
+        if (lastHighlighted != null)
+        {
+            lastHighlighted.layer = LayerMask.NameToLayer("Items");
+            foreach (Transform child in lastHighlighted.transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Items");
+            }
+            lastHighlighted = null;
+        }
+    }
+
 
     private void SetOutlineState(Outline outline, bool state)
     {

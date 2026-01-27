@@ -5,23 +5,46 @@ public class Outline : MonoBehaviour
     //if player is looking the object, outline it
     public Material outlineMaterial;
     private Material[][] originalMaterials;
-    private MeshRenderer[] objectRenderers;
+    private Renderer[] objectRenderers;
+    private bool isInitialized = false;
     
     void Start()
     {
-        // Obtener todos los MeshRenderers (incluidos los de hijos)
-        objectRenderers = GetComponentsInChildren<MeshRenderer>();
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        if (isInitialized) return;
+        
+        // Obtener todos los Renderers (incluidos los de hijos)
+        objectRenderers = GetComponentsInChildren<Renderer>();
+        
+        if (objectRenderers.Length == 0)
+        {
+            Debug.LogWarning($"<color=red>No Renderers encontrados en {gameObject.name}</color>");
+            return;
+        }
+        
         originalMaterials = new Material[objectRenderers.Length][];
         
         // Guardar todos los materiales originales de cada renderer
         for (int i = 0; i < objectRenderers.Length; i++)
         {
             originalMaterials[i] = objectRenderers[i].materials;
+            Debug.Log($"Renderer encontrado: {objectRenderers[i].gameObject.name}");
         }
+        
+        isInitialized = true;
+        Debug.Log($"<color=green>Outline inicializado para {gameObject.name}</color>");
     }
 
     public void EnableOutline()
     {
+        Initialize(); // Asegurar que esté inicializado
+        
+        if (!isInitialized) return;
+        
         for (int i = 0; i < objectRenderers.Length; i++)
         {
             // Crear un nuevo array con espacio para un material extra
@@ -41,6 +64,10 @@ public class Outline : MonoBehaviour
 
     public void DisableOutline()
     {
+        Initialize();
+        
+        if (!isInitialized) return;
+        
         // Restaurar los materiales originales en todos los renderers
         for (int i = 0; i < objectRenderers.Length; i++)
         {

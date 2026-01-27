@@ -13,6 +13,7 @@ public class ClientManager : MonoBehaviour
     [Header("Estat")]
     private GameObject[] activeClients; // Guardem el client de cada slot (null si buit)
     private float spawnTimer = 0f;
+    public float spawnInterval = 15f;
 
     [Header("Configuració dels Clients")]
     public int maxClientsPerDay = 5;
@@ -28,6 +29,7 @@ public class ClientManager : MonoBehaviour
         }
         Instance = this;
         activeClients = new GameObject[targetPoints.Length];
+        spawnTimer = 0f;
     }
 
     void Start()
@@ -67,7 +69,8 @@ public class ClientManager : MonoBehaviour
             if (freeSlot != -1)
             {
                 SpawnClientInSlot(freeSlot);
-                spawnTimer = 4f; // Reset del timer
+                spawnInterval = Random.Range(10f, 20f);
+                spawnTimer = spawnInterval; // Reset del timer
             }
         }
     }

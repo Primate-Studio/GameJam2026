@@ -8,6 +8,7 @@ TagManager:
   - Arco
   - Lanza
   - TriggerZone
+  - Items
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - Portrait
   - Perro
-  - 
+  - Highlighted
   - 
   - 
   - 

@@ -107,7 +107,7 @@ public class DayCycleManager : MonoBehaviour
         // Rotació del sol (de matí a nit)
         // El sol gira uns 180 graus sobre l'eix X
         float xRotation = Mathf.Lerp(0f, 180f, progress);
-        sunLight.transform.rotation = Quaternion.Euler(xRotation, -90f, 0f);
+        sunLight.transform.rotation = Quaternion.Euler(xRotation, -180f, 0f);
 
         // Intensitat i color segons la corba i el gradient
         sunLight.intensity = sunIntensity.Evaluate(progress);
