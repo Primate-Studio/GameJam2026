@@ -4,38 +4,47 @@ public class Outline : MonoBehaviour
 {
     //if player is looking the object, outline it
     public Material outlineMaterial;
-    private Material originalMaterial;
-    private MeshRenderer objectRenderer;
+    private Material[][] originalMaterials;
+    private MeshRenderer[] objectRenderers;
+    
     void Start()
     {
-        objectRenderer = GetComponent<MeshRenderer>();
-        originalMaterial = objectRenderer.materials[0]; 
+        // Obtener todos los MeshRenderers (incluidos los de hijos)
+        objectRenderers = GetComponentsInChildren<MeshRenderer>();
+        originalMaterials = new Material[objectRenderers.Length][];
+        
+        // Guardar todos los materiales originales de cada renderer
+        for (int i = 0; i < objectRenderers.Length; i++)
+        {
+            originalMaterials[i] = objectRenderers[i].materials;
+        }
     }
 
     public void EnableOutline()
     {
-        //add outline material to the object
-        if(objectRenderer.materials.Length < 2) 
+        for (int i = 0; i < objectRenderers.Length; i++)
         {
-            Material[] mats = new Material[2];
-            mats[0] = originalMaterial;
-            mats[1] = outlineMaterial;
-            objectRenderer.materials = mats;
-        }
-        else
-        {
-            objectRenderer.materials[1] = outlineMaterial;
+            // Crear un nuevo array con espacio para un material extra
+            Material[] mats = new Material[originalMaterials[i].Length + 1];
+            
+            // Copiar todos los materiales originales
+            for (int j = 0; j < originalMaterials[i].Length; j++)
+            {
+                mats[j] = originalMaterials[i][j];
+            }
+            
+            // Añadir el outline al final
+            mats[originalMaterials[i].Length] = outlineMaterial;
+            objectRenderers[i].materials = mats;
         }
     }
 
     public void DisableOutline()
     {
-        //remove outline material from the object
-        if(objectRenderer.materials.Length >= 2) 
+        // Restaurar los materiales originales en todos los renderers
+        for (int i = 0; i < objectRenderers.Length; i++)
         {
-            Material[] mats = new Material[1];
-            mats[0] = originalMaterial;
-            objectRenderer.materials = mats;
+            objectRenderers[i].materials = originalMaterials[i];
         }
     }
 }

@@ -36,17 +36,22 @@ public class InteractableObject : MonoBehaviour
     private Rigidbody rb;
     private Collider col;
     private Renderer rend;
+    private Renderer[] childRenderers;
+    private Collider[] childColliders;
     
     // Posición inicial del objeto para respawn
     private Vector3 initialPosition;
     private Quaternion initialRotation;
+    private GameObject[] childGO;
     
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         rend = GetComponent<Renderer>();
-        
+        childRenderers = GetComponentsInChildren<Renderer>(true);
+        childColliders = GetComponentsInChildren<Collider>(true);
+
         // Guardar posición inicial para respawn
         initialPosition = transform.position;
         initialRotation = transform.rotation;
@@ -72,8 +77,14 @@ public class InteractableObject : MonoBehaviour
             }
             
             // Ocultar el objeto del mundo
-            gameObject.SetActive(false);
+            DespawnObject();
         }
+    }
+
+    private void DespawnObject()
+    {
+        gameObject.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
     
     /// <summary>
@@ -82,17 +93,17 @@ public class InteractableObject : MonoBehaviour
     private System.Collections.IEnumerator RespawnAfterDelay()
     {
         // Deshabilitar componentes para "ocultar" el objeto sin desactivar el GameObject
-        if (col != null) col.enabled = false;
-        if (rend != null) rend.enabled = false;
+        foreach (var c in childColliders) c.enabled = false;
+        foreach (var r in childRenderers) r.enabled = false;
         if (rb != null) rb.isKinematic = true;
-        
+
         // Esperar el tiempo de respawn
         yield return new WaitForSeconds(respawnTime);
-        
+
         // Resetear posición
         transform.position = initialPosition;
         transform.rotation = initialRotation;
-        
+
         // Resetear física si tiene
         if (rb != null)
         {
@@ -100,11 +111,11 @@ public class InteractableObject : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = false;
         }
-        
+
         // Reactivar componentes
-        if (col != null) col.enabled = true;
-        if (rend != null) rend.enabled = true;
-        
+        foreach (var c in childColliders) c.enabled = true;
+        foreach (var r in childRenderers) r.enabled = true;
+
         Debug.Log($"<color=cyan>✨ {objectType} regenerado!</color>");
     }
     
@@ -116,11 +127,14 @@ public class InteractableObject : MonoBehaviour
         // Reactivar el objeto
         gameObject.SetActive(true);
         transform.position = position;
-        
+
         // Reactivar física
         if (rb != null)
         {
             rb.isKinematic = false;
         }
+
+        foreach (var c in childColliders) c.enabled = true;
+        foreach (var r in childRenderers) r.enabled = true;
     }
 }
