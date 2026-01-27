@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 5644207020320963}
   - component: {fileID: 5577360957546613994}
   - component: {fileID: 6793677521183481434}
+  - component: {fileID: 5527848873245057697}
   m_Layer: 0
   m_Name: OrderBubblePrefab
   m_TagString: Untagged
@@ -316,7 +317,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1199560033162651178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,3 +427,17 @@ MonoBehaviour:
   monsterIconImg: {fileID: 8374895881386735303}
   conditionIconImg: {fileID: 4552087826603539422}
   environmentIconImg: {fileID: 8011782672026089691}
+--- !u!114 &5527848873245057697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8651514599663663233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58ed8725a3f31924bb62cca8cd162574, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPopEffect
+  duration: 0.3
+  targetScale: {x: 1, y: 1, z: 1}

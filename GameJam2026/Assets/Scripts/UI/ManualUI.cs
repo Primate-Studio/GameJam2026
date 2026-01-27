@@ -21,6 +21,7 @@ public class ManualUI : MonoBehaviour
     private int currentLeftPageIndex = 0; 
     public bool pageHasChanged = false;
     private bool isAnimating = false;
+    private bool isPopUpAnimating = false;
 
     void Start()
     {
@@ -31,7 +32,7 @@ public class ManualUI : MonoBehaviour
 
     void Update()
     {
-        if (manualPanel.activeSelf && !isAnimating)
+        if (manualPanel.activeSelf && !isAnimating && !isPopUpAnimating)
         {
             // Verificació pel TutorialManager
             if (GameManager.Instance.CurrentState == GameState.Tutorial && 
@@ -41,6 +42,59 @@ public class ManualUI : MonoBehaviour
             if (InputManager.Instance.ManualNext) NextPage(); 
             else if (InputManager.Instance.ManualPrev) PrevPage(); 
         }
+    }
+    private IEnumerator PopUp()
+    {
+        isPopUpAnimating = true;
+        float duration = 0.5f;
+        Vector3 targetScale = Vector3.one;
+
+        // Comencem des de zero
+        manualPanel.transform.localScale = Vector3.zero;
+        float elapsed = 0;
+
+        // Creixem fins a 1.1 (menys rebote)
+        while (elapsed < duration * 0.7f)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / (duration * 0.7f);
+            manualPanel.transform.localScale = Vector3.Lerp(Vector3.zero, targetScale * 1.02f, Mathf.Sin(t * Mathf.PI * 0.5f));
+            yield return null;
+        }
+
+        // Tornem al tamany normal (1.0)
+        elapsed = 0;
+        Vector3 currentScale = manualPanel.transform.localScale;
+        while (elapsed < duration * 0.3f)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / (duration * 0.3f);
+            manualPanel.transform.localScale = Vector3.Lerp(currentScale, targetScale, t);
+            yield return null;
+        }
+        
+        manualPanel.transform.localScale = targetScale;
+        isPopUpAnimating = false;
+    }
+    private IEnumerator PopDown()
+    {
+        isPopUpAnimating = true;
+        float duration = 0.25f;
+
+        // Disminuïm d'1.0 a 0
+        float elapsed = 0;
+        Vector3 currentScale = manualPanel.transform.localScale;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            manualPanel.transform.localScale = Vector3.Lerp(currentScale, Vector3.zero, t);
+            yield return null;
+        }
+
+        manualPanel.transform.localScale = Vector3.zero;
+        isPopUpAnimating = false;
+        manualPanel.SetActive(false);
     }
 
     public void NextPage()
@@ -141,6 +195,15 @@ public class ManualUI : MonoBehaviour
         rightStaticPage.sprite = pageSprites[currentLeftPageIndex + 1];
     }
 
-    public void OpenManual() { manualPanel.SetActive(true); UpdateStaticPages(); }
-    public void CloseManual() { manualPanel.SetActive(false); }
+    public void OpenManual() 
+    { 
+        manualPanel.SetActive(true); 
+        UpdateStaticPages();
+        StartCoroutine(PopUp());
+    }
+
+    public void CloseManual() 
+    { 
+        StartCoroutine(PopDown());        
+    }
 }
