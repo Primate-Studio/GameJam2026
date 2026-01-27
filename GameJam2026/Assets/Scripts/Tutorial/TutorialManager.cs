@@ -319,31 +319,24 @@ public class TutorialManager : MonoBehaviour
     
     public IEnumerator FirstTutorialPass()
     {
-        Debug.Log("<color=cyan>━━━ INICIANDO FIRST TUTORIAL PASS ━━━</color>");
         SetTutorialState(TutorialState.Introduction);
         
         tutorialText.text = "¡Arriba, gandul! Bienvenido al Oasis, el imperio viral de Ulises. Anoche te bebiste hasta el agua de los floreros.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        Debug.Log("<color=yellow>Mensaje 1 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
 
         tutorialText.text = "Ahora mismo estas trabajando para él en su tienda de objetos para las odiseas. La Odisea de TONI, para ser exactos.";
-        Debug.Log("<color=yellow>Mensaje 2 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
         
         tutorialText.text = "Pero antes de nada, hablemos de tu deuda con Ulises...";
-        Debug.Log("<color=yellow>Mensaje 3 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
 
         tutorialText.text = "La broma te sale por 250 monedas. Ulises es un tipo razonable, trabaja en la Agencia para pagarla o serás ejecutado al acabar el día. Tú eliges.";
-        Debug.Log("<color=yellow>Mensaje 4 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
 
         tutorialText.text = "Arriba a la izquierda siempre puedes observar lo que te queda por pagar. ¡Suerte!";
-        Debug.Log("<color=yellow>Mensaje 5 mostrado, esperando continuar...</color>");
         yield return StartCoroutine(WaitForContinueButton());
 
-        Debug.Log("<color=cyan>━━━ FIRST TUTORIAL PASS COMPLETADO ━━━</color>");
     }
 
     public IEnumerator SecondTutorialPass()
@@ -357,7 +350,7 @@ public class TutorialManager : MonoBehaviour
             dogController.MoveTo(dogTransforms[0].position);
             yield return new WaitUntil (() => isDoginPlace(dogTransforms[0]) == true); // Posición detrás del jugador
         }
-        dogController.LookAt(playerPosition.position);
+        dogController.LookAt(playerPosition);
         
         yield return StartCoroutine(WaitForContinueButton());
         
@@ -383,6 +376,7 @@ public class TutorialManager : MonoBehaviour
             dogController.MoveTo(dogTransforms[1].position);
             yield return new WaitUntil (() => isDoginPlace(dogTransforms[1]) == true); // Posición detrás del jugador
         }
+        dogController.LookAt(playerPosition);
 
         canPlayerMoveCamera = false;
         tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
@@ -468,7 +462,9 @@ public class TutorialManager : MonoBehaviour
         if (dogController != null && dogTransforms.Length > 2)
         {
             dogController.MoveTo(dogTransforms[2].position);
+            yield return new WaitUntil (() => isDoginPlace(dogTransforms[2]) == true);
         }
+        dogController.LookAt(playerPosition);
         
         yield return StartCoroutine(WaitForContinueButton());
 
@@ -497,6 +493,8 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = true;
 
         dogController.MoveTo(dogTransforms[3].position);
+        yield return new WaitUntil (() => isDoginPlace(dogTransforms[3]) == true);
+        dogController.LookAt(playerPosition);
 
         yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
         canPlayerMove = false;
@@ -686,12 +684,14 @@ public class TutorialManager : MonoBehaviour
     
     tutorialText.text = "Acércate al cliente para ver su pedido.";
     yield return StartCoroutine(WaitForContinueButton());
+    canPlayerMove = true;
+    canPlayerMoveCamera = true;
+    canPlayerInteract = true;
     
     // Esperar a que el jugador se acerque al trigger del cliente
     yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
-    
     canPlayerMove = false;
-    canPlayerMoveCamera = false;
+    canPlayerInteract = false;
 
     // Ahora sí, crear el pedido cuando tanto el cliente como el jugador están en posición
     isWaitingForSecondClientOrder = true;
@@ -701,6 +701,7 @@ public class TutorialManager : MonoBehaviour
     // Esperar a que el pedido se haya creado y mostrado completamente
     yield return new WaitUntil(() => orderHasBeenShown);
     yield return new WaitForSeconds(1f);
+
     
     tutorialText.text = "Este pedido tiene tres especificaciones. Necesitarás entregar tres objetos diferentes.";
     yield return StartCoroutine(WaitForContinueButton());
@@ -808,6 +809,8 @@ public bool IsClientInPosition(int slotIndex)
         yield return StartCoroutine(WaitForContinueButton());
 
         dogController.MoveTo(dogTransforms[4].position);
+        yield return new WaitUntil (() => isDoginPlace(dogTransforms[4]) == true);
+        dogController.LookAt(playerPosition);
 
         tutorialText.text = "Si me ves por aquí será en mi caseta que está en la pared del fondo. Aunque más te vale no verme porque si aparezco será para avisarte de que uno de los clientes ha muerto.";
         yield return StartCoroutine(WaitForContinueButton());
@@ -1003,7 +1006,7 @@ public bool IsClientInPosition(int slotIndex)
     public bool isDoginPlace(Transform dogTransform)
     {
         float distance = Vector3.Distance(tutorialDog.transform.position, dogTransform.position);
-        return distance < 1.5f; // Ajusta el umbral según sea necesario
+        return distance < 1f; // Ajusta el umbral según sea necesario
     }
 
     public bool manualPageChanged()
