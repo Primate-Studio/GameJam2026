@@ -295,7 +295,7 @@ public class TutorialManager : MonoBehaviour
     {
         Debug.Log("<color=yellow>⏸ WaitForContinueButton: Esperando input del jugador...</color>");
         
-        // Desbloquear cursor para poder hacer clic
+        // Desbloquear cursor para poder hacer clic, ponerlo donde esta el continueButton
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         canPlayerMove = false;
@@ -388,7 +388,7 @@ public class TutorialManager : MonoBehaviour
         }
         dogController.LookAt(playerPosition);
         
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         
         // Pop Up Imagen de controles de cámara
         if (cameraSprite != null)
@@ -400,17 +400,10 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = true;
         yield return new WaitUntil(() => isPlayerLooking(tutorialDog) == true); 
 
-        // Pop Up Imagen de controles de movimiento
-        if (movementSprite != null)
-        {
-            tutorialImage.sprite = movementSprite;
-            tutorialImage.gameObject.SetActive(true);
-        }
-
         if (dogController != null && dogTransforms.Length > 0)
         {
             dogController.MoveTo(dogTransforms[1].position);
-            yield return new WaitUntil (() => isDoginPlace(dogTransforms[1]) == true); // Posición detrás del jugador
+            yield return new WaitUntil (() => isDoginPlace(dogTransforms[1]) == true);
         }
         dogController.LookAt(playerPosition);
 
@@ -419,10 +412,14 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
+        // Pop Up Imagen de controles de movimiento
+        if (movementSprite != null)
+        {
+            tutorialImage.sprite = movementSprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
         canPlayerMoveCamera = true;
-
-        tutorialImage.gameObject.SetActive(false);
         
         canPlayerMove = true;
         yield return new WaitUntil(() => playerInZone(playerTransforms[0].position));
@@ -441,7 +438,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra el Odre.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         // Pop Up Imagen de interacción
         objectHint1.ShowHint(true);
         if (interactionSprite != null)
@@ -504,7 +501,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Puedes intercambiar de ranuras, vamos, pruébalo.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerUseInventory = true;
         yield return new WaitUntil(() => usedWheelInInventory());
@@ -528,7 +525,7 @@ public class TutorialManager : MonoBehaviour
         }
         dogController.LookAt(playerPosition);
         
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
 
         canPlayerMoveCamera = true;
         canPlayerMove = true;
@@ -556,7 +553,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "¿Oyes eso? Ha llegado tu primer cliente. Ve a atenderle.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerMove = true;
         canPlayerMoveCamera = true;
@@ -578,9 +575,7 @@ public class TutorialManager : MonoBehaviour
         // Esperar a que el pedido se haya creado y mostrado completamente
         yield return new WaitUntil(() => orderHasBeenShown);
         yield return new WaitForSeconds(0.5f); // Breve espera para que aparezca el bocadillo
-        
-        // PAUSAR EL TIEMPO para que el bocadillo no desaparezca y se pueda ver bien
-        PauseGameTime();
+
         
         isWaitingForFirstClientOrder = false;
 
@@ -597,18 +592,6 @@ public class TutorialManager : MonoBehaviour
         StopTalking();
         isWaitingContinueButton = true;
         yield return StartCoroutine(WaitForContinueButton());
-        
-        StartTalking();
-        tutorialText.text = "Fíjate bien en el pedido encima de su cabeza.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        isPlayerLookingAt = false;
-        canPlayerMoveCamera = true;
-        yield return new WaitUntil(() => isPlayerLooking(orderBocadillo) == true);
-        tutorialImage.gameObject.SetActive(false);
-        
-        // REANUDAR EL TIEMPO después de explicar el bocadillo
-        ResumeGameTime();
 
         // Pop Up Imagen de la nota de pedido
         if (orderNoteSprite != null)
@@ -666,7 +649,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "No te asustes todavía, para poder saber qué es lo mejor para cada situación tienes el manual. Abrelo.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         isWaitingForManualOpen = true;
         yield return new WaitUntil(() => playerOpenManual() == true);
 
@@ -691,7 +674,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Prueba a pasar de página y verlo por ti mismo.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
+        //yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerChangePage = true;
         yield return new WaitUntil(() => manualPageChanged());
@@ -860,13 +843,15 @@ public class TutorialManager : MonoBehaviour
     tutorialText.text = "Consulta el manual, encuentra los objetos correctos y completa este pedido por tu cuenta.";
     yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
     StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
+    //yield return StartCoroutine(WaitForContinueButton());
     
     isWaitingForSecondClientOrder = false;
     
+    isWaitingForManualOpen = true;
     canPlayerMove = true;
     canPlayerMoveCamera = true;
     canPlayerInteract = true;
+    canPlayerChangePage = true;
     canPlayerOpenManual = true;
     canPlayerUseInventory = true;
     
@@ -920,7 +905,7 @@ public bool IsClientInPosition(int slotIndex)
     
     // Verificar si el cliente está cerca de su posición objetivo
     float distance = Vector3.Distance(client.transform.position, targetPosition.position);
-    bool isInPosition = distance < 1.5f; // Ajusta este valor según el tamaño de tus slots
+    bool isInPosition = distance < 3f; // Ajusta este valor según el tamaño de tus slots
     
     if (isInPosition)
     {

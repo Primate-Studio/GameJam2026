@@ -42,8 +42,7 @@ public class DayCycleManager : MonoBehaviour
 
         UpdateLighting(progress);
 
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
-            return;
+        if (GameManager.Instance.CurrentState == GameState.Tutorial) return;
         if (currentTime >= dayDurationInSeconds || ClientManager.Instance.clientsCount >= ClientManager.Instance.maxClientsPerDay)
         {
             EndDay();
