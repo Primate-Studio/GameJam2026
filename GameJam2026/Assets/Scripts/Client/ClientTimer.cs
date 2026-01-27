@@ -39,6 +39,11 @@ public class ClientTimer : MonoBehaviour
 
             if (timeRemaining <= 0f)
             {
+                if(GameManager.Instance.CurrentState == GameState.Tutorial)
+                {
+                    // En tutorial, no hacer nada cuando se acabe el tiempo
+                    return;
+                }
                 isOrderActive = false;
                 if (TimerFillImage != null)
                 {

@@ -4,13 +4,6 @@ using TMPro;
 
 public class DogBehaviour : MonoBehaviour
 {
-    public enum DogState
-    {
-        Idle,
-        Flying,
-        Talking
-    }
-
     [Header("Animation")]
     public Animator animator;
 
@@ -58,7 +51,8 @@ public class DogBehaviour : MonoBehaviour
     public float dayStartCheckDelay = 2f;
     private int lastKnownActivityCount = 0;
 
-    private DogState currentState = DogState.Idle;
+    private bool isMoving = false;
+    private bool isTalking = false;
 
     void Start()
     {
@@ -77,21 +71,6 @@ public class DogBehaviour : MonoBehaviour
         {
             transform.position = offScreenPosition.position;
         }
-
-        UpdateAnimatorState();
-    }
-
-    void Update()
-    {
-        UpdateAnimatorState();
-    }
-
-    private void UpdateAnimatorState()
-    {
-        if (animator == null) return;
-
-        animator.SetBool("isFlying", currentState == DogState.Flying);
-        animator.SetBool("isTalking", currentState == DogState.Talking);
     }
 
     #region Death Notification System
@@ -173,7 +152,12 @@ public class DogBehaviour : MonoBehaviour
 
         dialogueText.text = finalMessage;
         dialogueText.gameObject.SetActive(true);
-        currentState = DogState.Talking;
+        
+        isTalking = true;
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", true);
+        }
     }
 
     #endregion
@@ -239,7 +223,12 @@ public class DogBehaviour : MonoBehaviour
         
         dialogueText.text = randomMessage;
         dialogueText.gameObject.SetActive(true);
-        currentState = DogState.Talking;
+        
+        isTalking = true;
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", true);
+        }
     }
 
     #endregion
@@ -248,7 +237,11 @@ public class DogBehaviour : MonoBehaviour
 
     private IEnumerator MoveToPosition(Vector3 targetPosition)
     {
-        currentState = DogState.Flying;
+        isMoving = true;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", true);
+        }
         
         while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
@@ -264,12 +257,20 @@ public class DogBehaviour : MonoBehaviour
             yield return null;
         }
 
-        currentState = DogState.Idle;
+        isMoving = false;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", false);
+        }
     }
 
     private IEnumerator MoveAlongWaypoints(Transform[] waypoints)
     {
-        currentState = DogState.Flying;
+        isMoving = true;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", true);
+        }
 
         foreach (Transform waypoint in waypoints)
         {
@@ -290,12 +291,20 @@ public class DogBehaviour : MonoBehaviour
             }
         }
 
-        currentState = DogState.Idle;
+        isMoving = false;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", false);
+        }
     }
 
     private IEnumerator MoveAlongWaypointsReverse(Transform[] waypoints)
     {
-        currentState = DogState.Flying;
+        isMoving = true;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", true);
+        }
 
         for (int i = waypoints.Length - 1; i >= 0; i--)
         {
@@ -317,7 +326,11 @@ public class DogBehaviour : MonoBehaviour
             }
         }
 
-        currentState = DogState.Idle;
+        isMoving = false;
+        if (animator != null)
+        {
+            animator.SetBool("isFlying", false);
+        }
     }
 
     #endregion
@@ -327,11 +340,10 @@ public class DogBehaviour : MonoBehaviour
         if (dialogueText != null)
             dialogueText.gameObject.SetActive(false);
         
-        currentState = DogState.Idle;
-    }
-
-    public DogState GetCurrentState()
-    {
-        return currentState;
+        isTalking = false;
+        if (animator != null)
+        {
+            animator.SetBool("isTalking", false);
+        }
     }
 }

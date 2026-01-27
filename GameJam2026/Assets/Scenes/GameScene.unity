@@ -5767,6 +5767,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Perro
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: e05403f5f5d7b9b48aebbe2b0458d5ae, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 71c9ca80c82e7a94cba420bddd21ddba, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
