@@ -20,6 +20,8 @@ public class TutorialDog : MonoBehaviour
     private bool isMoving = false;
     private float hoverTimer = 0f;
     private Vector3 basePosition;
+    private Transform lookAtTarget = null;
+    private bool shouldLookAtTarget = false;
 
     void Start()
     {
@@ -34,6 +36,16 @@ public class TutorialDog : MonoBehaviour
         }
         else HandleHovering();
         
+        // Mantener la mirada en el objetivo si está configurado
+        if (shouldLookAtTarget && lookAtTarget != null)
+        {
+            Vector3 direction = (lookAtTarget.position - transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+        }
     }
 
     /// <summary>
@@ -58,6 +70,7 @@ public class TutorialDog : MonoBehaviour
     {
         isMoving = false;
         basePosition = transform.position;
+        // No desactivamos shouldLookAtTarget aquí para mantener la mirada
         
         // if (dogAnimator != null)
         // {
@@ -114,11 +127,21 @@ public class TutorialDog : MonoBehaviour
     }
 
     /// <summary>
-    /// Hace que el perro mire hacia un transform específico
+    /// Hace que el perro mire hacia un transform específico y lo siga continuamente
     /// </summary>
     public void LookAt(Transform target)
     {
-        LookAt(target.position);
+        lookAtTarget = target;
+        shouldLookAtTarget = true;
+    }
+    
+    /// <summary>
+    /// Detiene el seguimiento de la mirada
+    /// </summary>
+    public void StopLookingAt()
+    {
+        shouldLookAtTarget = false;
+        lookAtTarget = null;
     }
 
     /// <summary>
