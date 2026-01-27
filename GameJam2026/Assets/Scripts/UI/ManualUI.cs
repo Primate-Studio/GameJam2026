@@ -5,6 +5,7 @@ using System.Collections;
 public class ManualUI : MonoBehaviour
 {
     public GameObject manualPanel;
+    public static bool IsOpen { get; private set; } = false;
     [Header("Contingut")]
     [SerializeField] private Sprite[] pageSprites; // Pàgines normals (es veuen bé a escala 1)
     [SerializeField] private Sprite[] pageTurningSprites; // Pàgines invertides (es veuen bé a escala -1)
@@ -27,6 +28,7 @@ public class ManualUI : MonoBehaviour
     {
         manualPanel.SetActive(false);
         flippingPageTransform.gameObject.SetActive(false);
+        IsOpen = false;
         UpdateStaticPages();
     }
 
@@ -95,6 +97,7 @@ public class ManualUI : MonoBehaviour
         manualPanel.transform.localScale = Vector3.zero;
         isPopUpAnimating = false;
         manualPanel.SetActive(false);
+        IsOpen = false;
     }
 
     public void NextPage()
@@ -199,11 +202,13 @@ public class ManualUI : MonoBehaviour
     { 
         manualPanel.SetActive(true); 
         UpdateStaticPages();
+        IsOpen = true;
         StartCoroutine(PopUp());
     }
 
     public void CloseManual() 
     { 
         StartCoroutine(PopDown());        
+        IsOpen = false;
     }
 }

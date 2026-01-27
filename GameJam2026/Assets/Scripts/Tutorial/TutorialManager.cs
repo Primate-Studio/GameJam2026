@@ -73,6 +73,8 @@ public class TutorialManager : MonoBehaviour
     [Header("GameObjects References")]
     public GameObject orderBocadillo;
     public GameObject bag;
+    [SerializeField] private TutorialHint objectHint1;
+    [SerializeField] private TutorialHint objectHint2;
 
 
 
@@ -401,6 +403,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra el Odre.";
         yield return StartCoroutine(WaitForContinueButton());
         // Pop Up Imagen de interacción
+        objectHint1.ShowHint(true);
         if (interactionSprite != null)
         {
             tutorialImage.sprite = interactionSprite;
@@ -412,6 +415,7 @@ public class TutorialManager : MonoBehaviour
         canPlayerInteract = true;
         
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Odre));
+        objectHint1.ShowHint(false);
         canPlayerInteract = false;
         tutorialImage.gameObject.SetActive(false);
         canPlayerMoveCamera = false;
@@ -458,6 +462,7 @@ public class TutorialManager : MonoBehaviour
         
         InstanceClient(0);
         tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, poniendolo en otro de tus bolsillos.";
+        objectHint2.ShowHint(true);
         // El perro se mueve al segundo objeto
         if (dogController != null && dogTransforms.Length > 2)
         {
@@ -473,6 +478,7 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitUntil(() => playerInZone(playerTransforms[1].position));
         canPlayerInteract = true;
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco));
+        objectHint2.ShowHint(false);
 
         canPlayerMove = false;
         canPlayerMoveCamera = false;
