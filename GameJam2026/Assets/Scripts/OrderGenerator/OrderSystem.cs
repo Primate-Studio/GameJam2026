@@ -75,6 +75,12 @@ public class OrderSystem : MonoBehaviour
     /// </summary>
     public void GenerateOrderForClient(GameObject client, int slotIndex)
     {
+        
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            return;
+        }
+
         // Verificar si hay espacio (máximo 3 pedidos)
         if (activeClientOrders.Count >= 3)
         {
@@ -173,6 +179,106 @@ public class OrderSystem : MonoBehaviour
         Debug.Log($"<color=yellow>Objetos necesarios: {newOrder.itemsNeeded}</color>");
 
     }
+
+    /// <summary>
+    /// Genera un pedido específico para el tutorial
+    /// Similar a GenerateOrderForClient pero usa GenerateSpecificOrder del OrderGenerator
+    /// </summary>
+    public void GenerateTutorialOrderForClient(GameObject client, int slotIndex, RequirementData monster, RequirementData condition, RequirementData environment = null)
+    {
+        // Verificar si hay espacio (máximo 3 pedidos)
+        if (activeClientOrders.Count >= 3)
+        {
+            Debug.LogWarning("<color=orange>⚠️ No hay espacio para más pedidos! (Máximo 3)</color>");
+            return;
+        }
+        
+        // Verificar si ya hay un pedido para este slot
+        if (activeClientOrders.Exists(cod => cod.slotIndex == slotIndex))
+        {
+            Debug.LogWarning($"<color=orange>⚠️ Ya existe un pedido activo para el slot {slotIndex}!</color>");
+            return;
+        }
+        
+        // Generar el pedido específico usando el OrderGenerator
+        if (OrderGenerator.Instance == null)
+        {
+            Debug.LogError("<color=red>OrderGenerator.Instance es null! Asegúrate de que hay un OrderGenerator en la escena.</color>");
+            return;
+        }
+        
+        Order newOrder = OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
+        
+        ClientAnimationController animationController = client.GetComponentInChildren<ClientAnimationController>(true);
+        if (animationController != null)
+        {
+            newOrder.animationController = animationController;
+            StartCoroutine(animationController.SetTalking(true));
+        }
+        
+        GameObject bubbleObj = Instantiate(orderBubblePrefab, client.transform.position + bubbleOffset, Quaternion.identity, client.transform);
+        bubbleObj.SetActive(false);
+        bubbleObj.GetComponent<OrderUIItem>().Setup(newOrder, null);
+        bubbleObj.SetActive(true);
+        StartCoroutine(DisableBubbleAfter(bubbleObj, 2f));
+        
+        // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
+        Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
+        
+        if (spawnPos == null)
+        {
+            Debug.LogError($"No hay posición de spawn para el slot {slotIndex}!");
+            return;
+        }
+        
+        // Instanciar la caja de entrega
+        GameObject box = Instantiate(deliveryBoxPrefab, spawnPos.position, spawnPos.rotation);
+        DeliveryBox deliveryBox = box.GetComponent<DeliveryBox>();
+        
+        if (deliveryBox != null)
+        {
+            deliveryBox.AssignOrder(newOrder);
+        }
+        
+        // Obtener o crear el ClientTimer
+        ClientTimer clientTimer = client.GetComponent<ClientTimer>();
+        if (clientTimer == null)
+        {
+            clientTimer = client.AddComponent<ClientTimer>();
+        }
+        clientTimer.StartNewOrderTimer();
+        
+        // Crear el UI del pedido
+        Sprite clientPhoto = PortraitCamera.Instance.TakePortrait(client);
+        GameObject uiObj = Instantiate(orderUIPrefab, uiContainer);
+        uiObj.GetComponent<OrderUIItem>().Setup(newOrder, clientPhoto);
+        
+        UIOrderSlide slideEffect = uiObj.GetComponentInChildren<UIOrderSlide>();
+        if (slideEffect != null) slideEffect.StartSlide();
+        
+        // Crear el ClientOrderData
+        ClientOrderData clientOrderData = new ClientOrderData
+        {
+            client = client,
+            order = newOrder,
+            box = box,
+            clientTimer = clientTimer,
+            slotIndex = slotIndex,
+            uiElement = uiObj,
+            bubbleElement = bubbleObj
+        };
+        activeClientOrders.Add(clientOrderData);
+        
+        Debug.Log($"<color=green>✓ Pedido de tutorial #{newOrder.orderID} generado!</color>");
+        
+        // Mostrar requisitos
+        string requirements = $"{newOrder.monster.requirementName} | {newOrder.condition.requirementName}";
+        if (newOrder.environment != null)
+        {
+            requirements += $" | {newOrder.environment.requirementName}";
+        }
+        Debug.Log($"<color=cyan>Requisitos ({newOrder.itemsNeeded}): {requirements}</color>");
+    }
     private IEnumerator DisableBubbleAfter(GameObject bubble, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -190,8 +296,18 @@ public class OrderSystem : MonoBehaviour
             // Quan el jugador entra, recorrem el diccionari i generem les comandes pendents
             foreach (var entry in clientsWaitingQueue)
             {
-                // Cridem a la teva funció original passant-li el client i el seu slotIndex guardat
-                GenerateOrderForClient(entry.Key, entry.Value);
+
+                if(GameManager.Instance.CurrentState == GameState.Tutorial && TutorialManager.Instance.isWaitingForFirstClientOrder)
+                {
+                    GenerateTutorialOrderForClient(entry.Key, entry.Value, TutorialManager.Instance.ciclopeIntellectual, TutorialManager.Instance.estampidaOvejas);
+                }else if(GameManager.Instance.CurrentState == GameState.Tutorial && TutorialManager.Instance.isWaitingForSecondClientOrder)
+                {
+                    GenerateTutorialOrderForClient(entry.Key, entry.Value, TutorialManager.Instance.ciclopeBebe, TutorialManager.Instance.muchoPolvo, TutorialManager.Instance.interiorCueva);
+                }
+                else
+                {
+                    GenerateOrderForClient(entry.Key, entry.Value);
+                }
             }
             // Un cop generades totes, buidem la cua
             clientsWaitingQueue.Clear();
@@ -389,5 +505,13 @@ public class OrderSystem : MonoBehaviour
                 }
             }
         }
+    }
+    
+    /// <summary>
+    /// Obtiene la lista de pedidos activos (para el tutorial)
+    /// </summary>
+    public List<ClientOrderData> GetActiveClientOrders()
+    {
+        return activeClientOrders;
     }
 }

@@ -188,4 +188,28 @@ public class ClientManager : MonoBehaviour
                 break;
         }
     }
+    
+    public GameObject GetClientInSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= activeClients.Length)
+        {
+            Debug.LogWarning($"Slot index {slotIndex} fuera de rango!");
+            return null;
+        }
+        return activeClients[slotIndex];
+    }
+
+    /// <summary>
+    /// Obtiene la Transform de posición de un slot específico
+    /// </summary>
+    public Transform GetClientSlotPosition(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < targetPoints.Length)
+        {
+            return targetPoints[slotIndex];
+        }
+        
+        Debug.LogError($"<color=red>Slot index {slotIndex} fuera de rango!</color>");
+        return null;
+    }
 }

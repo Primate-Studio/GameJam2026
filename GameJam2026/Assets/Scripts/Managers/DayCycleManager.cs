@@ -12,7 +12,6 @@ public class DayCycleManager : MonoBehaviour
     private bool isDayActive = false;
     public int currentDay = 1;
 
-
     [Header("Referències de Llum")]
     [SerializeField] private Light sunLight;
     [SerializeField] private AnimationCurve sunIntensity;
@@ -28,25 +27,14 @@ public class DayCycleManager : MonoBehaviour
 
     private void Start()
     {
-        // NO iniciar el día automáticamente si estamos en tutorial
-        if (GameManager.Instance.CurrentState != GameState.Tutorial)
-        {
-            StartDay(); // En una versión final, esto se llamaría desde un botón "Abrir Tienda"
-        }
-        else
-        {
-            Debug.Log("<color=cyan>⌛ DayCycleManager: Modo tutorial, día no iniciado</color>");
-        }
+        StartDay(); // En una versión final, esto se llamaría desde un botón "Abrir Tienda"
         
         currentDay = PlayerPrefs.GetInt("CurrentDay", 1);
     }
 
     private void Update()
     {
-        // No procesar el ciclo del día en modo tutorial
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
-            return;
-            
+
         if (!isDayActive) return;
 
         currentTime += Time.deltaTime;
@@ -54,6 +42,8 @@ public class DayCycleManager : MonoBehaviour
 
         UpdateLighting(progress);
 
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+            return;
         if (currentTime >= dayDurationInSeconds || ClientManager.Instance.clientsCount >= ClientManager.Instance.maxClientsPerDay)
         {
             EndDay();
@@ -62,6 +52,14 @@ public class DayCycleManager : MonoBehaviour
 
     public void StartDay()
     {
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            currentDay = 0;
+            isDayActive = true;
+            currentTime = 0f;
+            dayDurationInSeconds = 600f; 
+            return;
+        }
         currentTime = 0f;
         isDayActive = true;
         OnDayStart?.Invoke();
@@ -77,6 +75,7 @@ public class DayCycleManager : MonoBehaviour
 
     public void NextDay()
     {
+        
         currentDay++;
         SaveDataManager.Instance.SaveGame();
         currentTime = 0f;

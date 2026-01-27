@@ -44,7 +44,10 @@ public class OrderGenerator : MonoBehaviour
     /// </summary>
     public Order GenerateNewClientOrder()
     {
-
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            return null;
+        }
         //if (!TutorialManager.Instance.canGenerateOrder) return null;
         Order order = new Order();
         order.orderID = nextOrderID++;

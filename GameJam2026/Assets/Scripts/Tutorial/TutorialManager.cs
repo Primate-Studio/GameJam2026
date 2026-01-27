@@ -47,6 +47,7 @@ public class TutorialManager : MonoBehaviour
     public bool canPlayerMoveCamera = false;
     public bool canPlayerInteract = false;
     public bool canPlayerOpenManual = false;
+    public bool canPlayerCloseManual = false;
     public bool canPlayerChangePage = false;
     public bool canPlayerUseInventory = false;
     public bool isWaitingForPlayerAction = false;
@@ -59,6 +60,7 @@ public class TutorialManager : MonoBehaviour
     public bool tutorialIsPaused = false;
     public bool isPlayerLookingAt = false;
     public bool playerHasDoneTutorial = false;
+    public bool orderHasBeenShown = false;
 
     [Header("Transforms")]
 
@@ -205,6 +207,8 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(SixthTutorialPass());
         yield return StartCoroutine(SeventhTutorialPass());
         yield return StartCoroutine(EighthTutorialPass());
+        yield return StartCoroutine(NinthTutorialPass());
+        yield return StartCoroutine(TenthTutorialPass());
         
         // Tutorial completado
         CompleteTutorial();
@@ -296,9 +300,10 @@ public class TutorialManager : MonoBehaviour
         isWaitingContinueButton = true;
         
         // IMPORTANTE: Esperar hasta que isWaitingContinueButton sea false
+        // Usar WaitForSecondsRealtime para que funcione aunque Time.timeScale = 0
         while (isWaitingContinueButton)
         {
-            yield return null; // Esperar un frame
+            yield return null; // Esperar un frame (funciona incluso con timeScale = 0)
         }
         
         Debug.Log("<color=green>✓ Jugador continuó, siguiente paso...</color>");
@@ -404,7 +409,7 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.Interaccion);
         
         canPlayerMoveCamera = false;
-        tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra eso.";
+        tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra el Odre.";
         yield return StartCoroutine(WaitForContinueButton());
         // Pop Up Imagen de interacción
         if (interactionSprite != null)
@@ -496,14 +501,26 @@ public class TutorialManager : MonoBehaviour
         canPlayerMove = true;
         canPlayerMoveCamera = true;
 
+        dogController.MoveTo(dogTransforms[3].position);
+
         yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
         canPlayerMove = false;
+        canPlayerMoveCamera = false;
 
         // Generar pedido específico del tutorial
         canGenerateOrder = true;
         isWaitingForFirstClientOrder = true;
-        CreateClientOrder(ciclopeIntellectual, estampidaOvejas, null);
-        yield return new WaitUntil(() => isClientOrderDone(ciclopeIntellectual, estampidaOvejas, null));
+        orderHasBeenShown = false;
+        CreateClientOrder(0, ciclopeIntellectual, estampidaOvejas, null);
+        
+        // Esperar a que el pedido se haya creado y mostrado completamente
+        yield return new WaitUntil(() => orderHasBeenShown);
+        yield return new WaitForSeconds(0.5f); // Breve espera para que aparezca el bocadillo
+        
+        // PAUSAR EL TIEMPO para que el bocadillo no desaparezca y se pueda ver bien
+        PauseGameTime();
+        
+        isWaitingForFirstClientOrder = false;
 
         // Pop Up Imagen del bocadillo de pedido
         if (orderSprite != null)
@@ -513,9 +530,17 @@ public class TutorialManager : MonoBehaviour
         }
         
         tutorialText.text = "No te va a decir, quiero una espada. Te dirá qué Monstruo quiere matar, qué Condición hay y dónde está. Recuerda los iconos de cada categoría.";
+        isWaitingContinueButton = true;
+        yield return StartCoroutine(WaitForContinueButton());
+        
+        tutorialText.text = "Fíjate bien en el pedido encima de su cabeza.";
         isPlayerLookingAt = false;
+        canPlayerMoveCamera = true;
         yield return new WaitUntil(() => isPlayerLooking(orderBocadillo) == true);
         tutorialImage.gameObject.SetActive(false);
+        
+        // REANUDAR EL TIEMPO después de explicar el bocadillo
+        ResumeGameTime();
 
         // Pop Up Imagen de la nota de pedido
         if (orderNoteSprite != null)
@@ -559,6 +584,8 @@ public class TutorialManager : MonoBehaviour
         isWaitingForManualOpen = true;
         yield return new WaitUntil(() => playerOpenManual() == true);
         isWaitingForManualOpen = false;
+        canPlayerInteract = false;
+        canPlayerCloseManual = true;
         isWaitingForManualClose = true;
         tutorialText.text = "Ten en cuenta que mientras tengas el manual abierto el tiempo seguirá corriendo igual, por lo que cuando antes te acostumbre mejor.";
         yield return StartCoroutine(WaitForContinueButton());
@@ -586,6 +613,8 @@ public class TutorialManager : MonoBehaviour
 
         tutorialText.text = "Recuerda que los objetos no son eternos. Si cojes uno tardará en aparecer otro igual.";
         yield return StartCoroutine(WaitForContinueButton());
+        canPlayerChangePage = true;
+        canPlayerCloseManual= true;
 
         tutorialText.text = "Cuando termines cierra el manual.";
         isWaitingForManualClose = true;
@@ -593,6 +622,7 @@ public class TutorialManager : MonoBehaviour
         isWaitingForManualClose = false;
 
         canPlayerMove = true;
+        canPlayerInteract = true;
         canPlayerMoveCamera = true;
         tutorialText.text = "Casualmente los objetos de tus bolsillos son justo lo que el cliente quiere. Ve a entregárselos.";
         yield return StartCoroutine(WaitForContinueButton());
@@ -602,54 +632,148 @@ public class TutorialManager : MonoBehaviour
     public IEnumerator SeventhTutorialPass()
     {
         SetTutorialState(TutorialState.EntregaPedido);
-
         tutorialText.text = "Bien, fijate que el cliente cuando ha hecho el pedido ha dejado una mochila. Es en esa mochila donde pondremos los objetos.";
         isPlayerLookingAt = false;
+        canPlayerMoveCamera = true;
         yield return new WaitUntil(() => isPlayerLooking(bag) == true);
 
-        tutorialText.text = "Cojo uno de los objetos de tus bolsillos y colócalo dentro. Ten en cuenta que una vez colocado el objeto no hay vuelta atrás. Ahora pon el siguiente.";
-        yield return StartCoroutine(WaitForContinueButton());
+        tutorialText.text = "Coge uno de los objetos de tus bolsillos y colócalo dentro. Ten en cuenta que una vez colocado el objeto no hay vuelta atrás.";
         canPlayerInteract = true;
-        yield return new WaitUntil(() => playerDropObject(ObjectType.Odre) || playerDropObject(ObjectType.Arco));
+        canPlayerMove = true;
+
+        // Esperar a que se entregue el primer objeto (cualquiera de los dos)
+        yield return new WaitUntil(() => GetDeliveredItemsCount() >= 1);
+        
         canPlayerInteract = false;
+        canPlayerMove = false;
 
         tutorialText.text = "Para que el pedido sea completado tienes que colocar los mismos objetos que especificaciones te pida el cliente.";
         yield return StartCoroutine(WaitForContinueButton());
+        
         tutorialText.text = "En este caso eran dos así que con dos objetos basta. Ten en cuenta que te pueden venir pedidos de tres especificaciones también.";
         yield return StartCoroutine(WaitForContinueButton());
-        tutorialText.text = "¡Perfecto! Ahora entrega el segundo objeto asi acabamos.";
-        yield return StartCoroutine(WaitForContinueButton());
+        
+        tutorialText.text = "¡Perfecto! Ahora entrega el segundo objeto así acabamos.";
         canPlayerInteract = true;
+        canPlayerMoveCamera = true;
+        canPlayerMove = true;
 
-        yield return new WaitUntil(() => playerDropObject(ObjectType.Arco) || playerDropObject(ObjectType.Odre));
-
+        // Esperar a que el pedido se complete (el cliente desaparezca o el OrderSystem lo procese)
+        bool orderCompleted = false;
+        StartCoroutine(WaitForOrderCompletion(() => orderCompleted = true));
+        yield return new WaitUntil(() => orderCompleted);
+        
+        canPlayerInteract = false;
+        canPlayerMove = false;
+        
+        Debug.Log("<color=green>✓ SeventhTutorialPass completado - Pedido completado</color>");
     }
 
     public IEnumerator EighthTutorialPass()
+{
+    SetTutorialState(TutorialState.SegundoCliente);
+    
+    tutorialText.text = "Ahora que ya sabes como va el tema, atiende a tu segundo cliente que ya está llegando.";
+    yield return StartCoroutine(WaitForContinueButton());
+
+    // Instanciar el segundo cliente en el slot 1
+    InstanceClient(1);
+    
+    // ESPERAR A QUE EL CLIENTE ESTÉ EN SU POSICIÓN
+    tutorialText.text = "Espera un momento mientras el cliente llega a su posición...";
+    yield return new WaitUntil(() => IsClientInPosition(1));
+    
+    canPlayerMove = true;
+    canPlayerMoveCamera = true;
+    canPlayerOpenManual = true;
+    canPlayerChangePage = true;
+
+    
+    tutorialText.text = "Acércate al cliente para ver su pedido.";
+    yield return StartCoroutine(WaitForContinueButton());
+    
+    // Esperar a que el jugador se acerque al trigger del cliente
+    yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
+    
+    canPlayerMove = false;
+    canPlayerMoveCamera = false;
+
+    // Ahora sí, crear el pedido cuando tanto el cliente como el jugador están en posición
+    isWaitingForSecondClientOrder = true;
+    orderHasBeenShown = false;
+    CreateClientOrder(1, ciclopeBebe, muchoPolvo, interiorCueva);
+    
+    // Esperar a que el pedido se haya creado y mostrado completamente
+    yield return new WaitUntil(() => orderHasBeenShown);
+    yield return new WaitForSeconds(1f);
+    
+    tutorialText.text = "Este pedido tiene tres especificaciones. Necesitarás entregar tres objetos diferentes.";
+    yield return StartCoroutine(WaitForContinueButton());
+    
+    tutorialText.text = "Consulta el manual, encuentra los objetos correctos y completa este pedido por tu cuenta.";
+    yield return StartCoroutine(WaitForContinueButton());
+    
+    isWaitingForSecondClientOrder = false;
+    
+    canPlayerMove = true;
+    canPlayerMoveCamera = true;
+    canPlayerInteract = true;
+    canPlayerOpenManual = true;
+    canPlayerUseInventory = true;
+    
+    // Esperar a que se complete el segundo pedido
+    bool secondOrderCompleted = false;
+    StartCoroutine(WaitForOrderCompletion(() => secondOrderCompleted = true));
+    yield return new WaitUntil(() => secondOrderCompleted);
+    
+    canPlayerMove = false;
+    canPlayerMoveCamera = false;
+    canPlayerInteract = false;
+
+    tutorialText.text = "Bien hecho, has sido capaz de completar el pedido por tu cuenta.";
+    yield return StartCoroutine(WaitForContinueButton());
+
+    tutorialText.text = "Ten en cuenta que el día se dará por terminado si te quedas sin clientes o si se acaba el día. Puedes ver cuánto queda debajo de la deuda a la izquierda.";
+    yield return StartCoroutine(WaitForContinueButton());
+
+    Debug.Log("<color=green>✓ EighthTutorialPass completado</color>");
+}
+
+
+
+/// <summary>
+/// Verifica si un cliente está en su posición asignada en un slot específico
+/// </summary>
+public bool IsClientInPosition(int slotIndex)
+{
+    GameObject client = ClientManager.Instance.GetClientInSlot(slotIndex);
+    
+    if (client == null)
     {
-        SetTutorialState(TutorialState.SegundoCliente);
-        
-        tutorialText.text = "Ahora que ya sabes como va el tema, atiende a tu segundo cliente que ya está llegando.";
-        yield return StartCoroutine(WaitForContinueButton());
-
-        tutorialText.text = "Para este pedido, intenta usar todos los objetos ideales para que el cliente quede satisfecho.";
-        canPlayerMove = true;
-        canPlayerMoveCamera = true;
-        canPlayerOpenManual = true;
-        canPlayerChangePage = true;
-
-        isWaitingForSecondClientOrder = true;
-        yield return new WaitUntil(() => isClientOrderDone(ciclopeBebe, muchoPolvo, interiorCueva));
-        isWaitingForSecondClientOrder = false;
-        yield return new WaitUntil(() => playerDropObject(ObjectType.CascoA) && playerDropObject(ObjectType.Mascaras) && playerDropObject(ObjectType.Espejo));
-
-        tutorialText.text = "Bien hecho, has sido capaz de completar el pedido por tu cuenta.";
-        yield return StartCoroutine(WaitForContinueButton());
-
-        tutorialText.text = "Ten en cuenta que el día se dará por terminado si te quedas sin clientes o si se acaba el día. Puedes ver cuánto queda debajo de la deuda a la izquierda.";
-        yield return StartCoroutine(WaitForContinueButton());
-
+        Debug.LogWarning($"<color=yellow>Cliente en slot {slotIndex} no existe aún</color>");
+        return false;
     }
+    
+    // Obtener la posición objetivo del slot desde el ClientManager
+    Transform targetPosition = ClientManager.Instance.GetClientSlotPosition(slotIndex);
+    
+    if (targetPosition == null)
+    {
+        Debug.LogError($"<color=red>No se pudo obtener la posición del slot {slotIndex}</color>");
+        return false;
+    }
+    
+    // Verificar si el cliente está cerca de su posición objetivo
+    float distance = Vector3.Distance(client.transform.position, targetPosition.position);
+    bool isInPosition = distance < 1.5f; // Ajusta este valor según el tamaño de tus slots
+    
+    if (isInPosition)
+    {
+        Debug.Log($"<color=green>✓ Cliente en slot {slotIndex} ha llegado a su posición</color>");
+    }
+    
+    return isInPosition;
+}
 
     public IEnumerator NinthTutorialPass()
     {
@@ -688,6 +812,8 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "En fin, este es todo mi trabajo por hoy, que Ulises no paga a las niñeros.";
         yield return StartCoroutine(WaitForContinueButton());
 
+        dogController.MoveTo(dogTransforms[4].position);
+
         tutorialText.text = "Si me ves por aquí será en mi caseta que está en la pared del fondo. Aunque más te vale no verme porque si aparezco será para avisarte de que uno de los clientes ha muerto.";
         yield return StartCoroutine(WaitForContinueButton());
 
@@ -712,14 +838,62 @@ public class TutorialManager : MonoBehaviour
         return true;
     }
 
+    private IEnumerator WaitForOrderCompletion(System.Action onComplete)
+    {
+        int initialActiveOrders = GetActiveOrdersCount();
+        
+        // Esperar a que la cantidad de pedidos activos disminuya (significa que uno se completó)
+        yield return new WaitUntil(() => GetActiveOrdersCount() < initialActiveOrders);
+        
+        Debug.Log("<color=green>✓ Pedido completado detectado</color>");
+        onComplete?.Invoke();
+    }
+
+    
+
+    /// <summary>
+    /// Cuenta cuántos pedidos activos hay actualmente
+    /// </summary>
+    private int GetActiveOrdersCount()
+    {
+        if (OrderSystem.Instance != null)
+        {
+            return OrderSystem.Instance.GetActiveClientOrders().Count;
+        }
+        return 0;
+    }
+
     public bool playerDropObject( ObjectType item)
     {
-        if (InventoryManager.Instance.GetCurrentObjectType() != item)
+        // Verificar si el objeto ha sido entregado al pedido activo
+        if (OrderSystem.Instance != null)
         {
-            return false;
+            var activeOrders = OrderSystem.Instance.GetActiveClientOrders();
+            foreach (var clientOrder in activeOrders)
+            {
+                if (clientOrder.order.deliveredItems.Contains(item))
+                {
+                    return true;
+                }
+            }
         }
-        else
-            return true;
+        return false;
+    }
+    
+    /// <summary>
+    /// Cuenta cuántos objetos se han entregado al pedido activo
+    /// </summary>
+    private int GetDeliveredItemsCount()
+    {
+        if (OrderSystem.Instance != null)
+        {
+            var activeOrders = OrderSystem.Instance.GetActiveClientOrders();
+            foreach (var clientOrder in activeOrders)
+            {
+                return clientOrder.order.deliveredItems.Count;
+            }
+        }
+        return 0;
     }
 
     public bool usedWheelInInventory()
@@ -755,12 +929,53 @@ public class TutorialManager : MonoBehaviour
 
     public bool isClientOrderDone(RequirementData monster, RequirementData condition, RequirementData environment)
     {
-       // OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
-        return true;
+        // Verificar si existe un pedido activo que coincida con los requisitos
+        if (OrderSystem.Instance != null)
+        {
+            var activeOrders = OrderSystem.Instance.GetActiveClientOrders();
+            foreach (var clientOrder in activeOrders)
+            {
+                if (clientOrder.order.monster == monster && 
+                    clientOrder.order.condition == condition && 
+                    clientOrder.order.environment == environment)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
-    public void CreateClientOrder(RequirementData monster, RequirementData condition, RequirementData environment)
+    public void CreateClientOrder(int slotIndex, RequirementData monster, RequirementData condition, RequirementData environment)
     {
-        OrderGenerator.Instance.GenerateSpecificOrder(monster, condition, environment);
+        // Obtener el cliente del slot desde el ClientManager
+        GameObject client = ClientManager.Instance.GetClientInSlot(slotIndex);
+        
+        if (client == null)
+        {
+            Debug.LogError($"<color=red>No hay cliente en el slot {slotIndex}!</color>");
+            return;
+        }
+        
+        // Generar el pedido a través del OrderSystem para que se muestre correctamente
+        if (OrderSystem.Instance != null)
+        {
+            OrderSystem.Instance.GenerateTutorialOrderForClient(client, slotIndex, monster, condition, environment);
+            // El flag orderHasBeenShown se activará después de que el pedido se muestre
+            StartCoroutine(WaitForOrderToShow());
+        }
+        else
+        {
+            Debug.LogError("<color=red>OrderSystem.Instance es null!</color>");
+        }
+    }
+
+    
+    
+    private IEnumerator WaitForOrderToShow()
+    {
+        // Esperar un frame para que el pedido se cree
+        yield return null;
+        orderHasBeenShown = true;
     }
 
     public bool isPlayerLooking(GameObject target)
@@ -812,6 +1027,24 @@ public class TutorialManager : MonoBehaviour
     public void InstanceClient(int slotIndex)
     {
         ClientManager.Instance.SpawnClientInSlot(slotIndex);
+    }
+    
+    /// <summary>
+    /// Pausa el tiempo del juego (útil para mostrar animaciones o bocadillos)
+    /// </summary>
+    public void PauseGameTime()
+    {
+        Time.timeScale = 0f;
+        Debug.Log("<color=yellow>⏸ Tiempo del juego pausado</color>");
+    }
+    
+    /// <summary>
+    /// Reanuda el tiempo del juego
+    /// </summary>
+    public void ResumeGameTime()
+    {
+        Time.timeScale = 1f;
+        Debug.Log("<color=green>▶ Tiempo del juego reanudado</color>");
     }
 
 
