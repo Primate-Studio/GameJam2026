@@ -7,12 +7,12 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Fruto
+      name: Fruto.001
     second: {fileID: 2100000, guid: c57afdd4f6c6ceb49803960373538a1f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Hoja
+      name: Hoja.001
     second: {fileID: 2100000, guid: 34a42dda7592ddc4daf410d16e114120, type: 2}
   materials:
     materialImportMode: 2

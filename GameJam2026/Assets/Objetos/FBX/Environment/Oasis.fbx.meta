@@ -13,12 +13,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: MaderaRoja
-    second: {fileID: 2100000, guid: 9f8da2725e61d9e4ea84365483946d50, type: 2}
+    second: {fileID: 2100000, guid: 5822456bb293cc9409d2d53299cf2111, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Marmol
-    second: {fileID: 2100000, guid: 8eaa3d2a0bb412b43af23346617fda24, type: 2}
+    second: {fileID: 2100000, guid: d01426b8c742cbe4cb8a6adfa697e0a9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
