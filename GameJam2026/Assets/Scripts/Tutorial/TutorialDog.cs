@@ -163,11 +163,11 @@ public class TutorialDog : MonoBehaviour
     /// <summary>
     /// Reproduce una animación específica si está disponible
     /// </summary>
-    public void PlayAnimation(string animationName)
+    public void PlayAnimation(string animationName, bool active)
     {
         if (dogAnimator != null)
         {
-            dogAnimator.SetTrigger(animationName);
+            dogAnimator.SetBool(animationName, active);
         }
     }
 }

@@ -11,6 +11,7 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial Dog")]
     public GameObject tutorialDog;
     private TutorialDog dogController;
+    private Animator dogAnimator;
 
     [Header("Tutorial UI")]
     public Canvas tutorialUI;
@@ -99,6 +100,9 @@ public class TutorialManager : MonoBehaviour
     }
     public TutorialState currentState = TutorialState.StartTutorial;
 
+    public void StartTalking() => SetTalkingState(true);
+    public void StopTalking() => SetTalkingState(false);
+
     public void Awake()
     {
         if (Instance != null && Instance != this)
@@ -119,6 +123,11 @@ public class TutorialManager : MonoBehaviour
         if (tutorialDog != null)
         {
             dogController = tutorialDog.GetComponent<TutorialDog>();
+            dogAnimator = tutorialDog.GetComponent<Animator>();
+            if(dogAnimator == null)
+            {
+                Debug.LogError("<color=red>✗ ERROR: El Tutorial Dog NO tiene un Animator asignado!</color>");
+            }
             if (dogController == null)
             {
                 dogController = tutorialDog.AddComponent<TutorialDog>();
@@ -182,6 +191,14 @@ public class TutorialManager : MonoBehaviour
         StartCoroutine(RunCompleteTutorial());
     }
 
+    public void SetTalkingState(bool talking)
+    {
+        if (dogAnimator != null)
+        {
+            // IMPORTANT: El nom "isTalking" ha de ser idèntic al de l'Animator
+            dogAnimator.SetBool("isTalking", talking); 
+        }
+    }
     /// <summary>
     /// Desactiva los sistemas normales del juego durante el tutorial
     /// </summary>
@@ -247,7 +264,7 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         // Permitir continuar con tecla ESPACIO o ENTER como alternativa
-        if (isWaitingContinueButton && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
+        if (isWaitingContinueButton && Input.GetKeyDown(KeyCode.Return))
         {
             ContinueButtonPressed();
         }
@@ -323,20 +340,34 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Introduction);
         
+        StartTalking();
         tutorialText.text = "¡Arriba, gandul! Bienvenido al Oasis, el imperio viral de Ulises. Anoche te bebiste hasta el agua de los floreros.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Ahora mismo estas trabajando para él en su tienda de objetos para las odiseas. La Odisea de TONI, para ser exactos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
+        StartTalking();
         tutorialText.text = "Pero antes de nada, hablemos de tu deuda con Ulises...";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "La broma te sale por 250 monedas. Ulises es un tipo razonable, trabaja en la Agencia para pagarla o serás ejecutado al acabar el día. Tú eliges.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Arriba a la izquierda siempre puedes observar lo que te queda por pagar. ¡Suerte!";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
@@ -346,7 +377,10 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.PlayerMovement);
         
           // El perro vuela detrás del jugador
+        StartTalking();
         tutorialText.text = "No me pierdas de vista o estaremos aquí todo el día. Mueve el cuello y búscame, estoy volando detrás de ti.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         if (dogController != null && dogTransforms.Length > 0)
         {
             dogController.MoveTo(dogTransforms[0].position);
@@ -381,7 +415,10 @@ public class TutorialManager : MonoBehaviour
         dogController.LookAt(playerPosition);
 
         canPlayerMoveCamera = false;
+        StartTalking();
         tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         canPlayerMoveCamera = true;
 
@@ -400,7 +437,10 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.Interaccion);
         
         canPlayerMoveCamera = false;
+        StartTalking();
         tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra el Odre.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         // Pop Up Imagen de interacción
         objectHint1.ShowHint(true);
@@ -419,10 +459,16 @@ public class TutorialManager : MonoBehaviour
         canPlayerInteract = false;
         tutorialImage.gameObject.SetActive(false);
         canPlayerMoveCamera = false;
+        StartTalking();
         tutorialText.text = "Bien. Escucha que esto es importante. En la Agencia vendemos imitaciones baratas de armas divinas.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Se dividen en tres tipos: Ataque para los monstruos, Adaptabilidad para las condiciones raras y Utilidad para el entorno.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
         // Pop Up Imagen de tipos de objetos
@@ -431,8 +477,11 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.sprite = objectTypeSprite;
             tutorialImage.gameObject.SetActive(true);
         }
-
+        
+        StartTalking();
         tutorialText.text = "Cada uno de los tipos tiene su propio estante. Los puedes diferenciar por los Iconos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         tutorialImage.gameObject.SetActive(false);
 
@@ -443,13 +492,18 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
         
-
+        StartTalking();
         tutorialText.text = "Ahora, fíjate en la parte de abajo. Eso de ahí son tus bolsillos, cada objeto ocupa una ranura en tus bolsillos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         canPlayerMove = false;
         canPlayerMoveCamera = false;
+        StartTalking();
         tutorialText.text = "Puedes intercambiar de ranuras, vamos, pruébalo.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerUseInventory = true;
@@ -461,7 +515,10 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = false;
         
         InstanceClient(0);
+        StartTalking();
         tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, poniendolo en otro de tus bolsillos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         objectHint2.ShowHint(true);
         // El perro se mueve al segundo objeto
         if (dogController != null && dogTransforms.Length > 2)
@@ -482,7 +539,10 @@ public class TutorialManager : MonoBehaviour
 
         canPlayerMove = false;
         canPlayerMoveCamera = false;
+        StartTalking();
         tutorialText.text = "Ojo, aquí las cosas parecen infinitas, pero reponerlas cuesta dinero. Ten en cuenta que una vez cojas un objeto este tardará en aparecer.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
@@ -492,7 +552,10 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.PrimerCliente);
         // sonido de campana
+        StartTalking();
         tutorialText.text = "¿Oyes eso? Ha llegado tu primer cliente. Ve a atenderle.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerMove = true;
@@ -528,11 +591,17 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
         
+        StartTalking();
         tutorialText.text = "No te va a decir, quiero una espada. Te dirá qué Monstruo quiere matar, qué Condición hay y dónde está. Recuerda los iconos de cada categoría.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         isWaitingContinueButton = true;
         yield return StartCoroutine(WaitForContinueButton());
         
+        StartTalking();
         tutorialText.text = "Fíjate bien en el pedido encima de su cabeza.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         isPlayerLookingAt = false;
         canPlayerMoveCamera = true;
         yield return new WaitUntil(() => isPlayerLooking(orderBocadillo) == true);
@@ -548,7 +617,10 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
         
+        StartTalking();
         tutorialText.text = "Siempre que el pedido esté activo verás las condiciones específicas en una nota en la derecha.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         tutorialImage.gameObject.SetActive(false);
 
@@ -559,17 +631,29 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
         
+        StartTalking();
         tutorialText.text = "Ese reloj de colores es su nivel de desesperación. Si llega a rojo, se enfadan. Si llega a cero, se enfrentará a una muerte segura.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Eso solo significa una cosa: perder dinero. Así que date prisa en atenderles.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         tutorialImage.gameObject.SetActive(false);
 
+        StartTalking();
         tutorialText.text = "Ten en cuenta que solo puedes atender a un máximo de tres clientes a la vez.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Así que no te emociones que no eres un pulpo.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
@@ -578,44 +662,76 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Manual);
         
+        StartTalking();
         tutorialText.text = "No te asustes todavía, para poder saber qué es lo mejor para cada situación tienes el manual. Abrelo.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         isWaitingForManualOpen = true;
         yield return new WaitUntil(() => playerOpenManual() == true);
+
         isWaitingForManualOpen = false;
         canPlayerInteract = false;
         canPlayerCloseManual = true;
         isWaitingForManualClose = true;
+        
+        StartTalking();
         tutorialText.text = "Ten en cuenta que mientras tengas el manual abierto el tiempo seguirá corriendo igual, por lo que cuando antes te acostumbre mejor.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Cada entrada del manual está dividida por la categoría que te he explicado antes.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Prueba a pasar de página y verlo por ti mismo.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerChangePage = true;
         yield return new WaitUntil(() => manualPageChanged());
 
+        StartTalking();
         tutorialText.text = "Aquí verás que items son exactamente los necesarios para las condiciones específicas de la aventura que te está pidiendo el cliente.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Si te fijas la nota sigue activa incluso con el manual abierto.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton()); 
 
+        StartTalking();
         tutorialText.text = "Para cada situación específica te saldrán tres objetos debajo con su utilidad a la derecha.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Dependiendo cual elijas el cliente tendrá más o menos probabilidades de salir victorioso.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Recuerda que los objetos no son eternos. Si cojes uno tardará en aparecer otro igual.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         canPlayerChangePage = true;
         canPlayerCloseManual= true;
 
+        StartTalking();
         tutorialText.text = "Cuando termines cierra el manual.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         isWaitingForManualClose = true;
         yield return new WaitUntil(() => playerCloseManual() == true);
         isWaitingForManualClose = false;
@@ -623,7 +739,10 @@ public class TutorialManager : MonoBehaviour
         canPlayerMove = true;
         canPlayerInteract = true;
         canPlayerMoveCamera = true;
+        StartTalking();
         tutorialText.text = "Casualmente los objetos de tus bolsillos son justo lo que el cliente quiere. Ve a entregárselos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
@@ -631,12 +750,18 @@ public class TutorialManager : MonoBehaviour
     public IEnumerator SeventhTutorialPass()
     {
         SetTutorialState(TutorialState.EntregaPedido);
+        StartTalking();
         tutorialText.text = "Bien, fijate que el cliente cuando ha hecho el pedido ha dejado una mochila. Es en esa mochila donde pondremos los objetos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         isPlayerLookingAt = false;
         canPlayerMoveCamera = true;
         yield return new WaitUntil(() => isPlayerLooking(bag) == true);
 
+        StartTalking();
         tutorialText.text = "Coge uno de los objetos de tus bolsillos y colócalo dentro. Ten en cuenta que una vez colocado el objeto no hay vuelta atrás.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         canPlayerInteract = true;
         canPlayerMove = true;
 
@@ -646,13 +771,22 @@ public class TutorialManager : MonoBehaviour
         canPlayerInteract = false;
         canPlayerMove = false;
 
+        StartTalking();
         tutorialText.text = "Para que el pedido sea completado tienes que colocar los mismos objetos que especificaciones te pida el cliente.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
+        StartTalking();
         tutorialText.text = "En este caso eran dos así que con dos objetos basta. Ten en cuenta que te pueden venir pedidos de tres especificaciones también.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         
+        StartTalking();
         tutorialText.text = "¡Perfecto! Ahora entrega el segundo objeto así acabamos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         canPlayerInteract = true;
         canPlayerMoveCamera = true;
         canPlayerMove = true;
@@ -672,14 +806,20 @@ public class TutorialManager : MonoBehaviour
 {
     SetTutorialState(TutorialState.SegundoCliente);
     
+    StartTalking();
     tutorialText.text = "Ahora que ya sabes como va el tema, atiende a tu segundo cliente que ya está llegando.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
 
     // Instanciar el segundo cliente en el slot 1
     InstanceClient(1);
     
     // ESPERAR A QUE EL CLIENTE ESTÉ EN SU POSICIÓN
+    StartTalking();
     tutorialText.text = "Espera un momento mientras el cliente llega a su posición...";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return new WaitUntil(() => IsClientInPosition(1));
     
     canPlayerMove = true;
@@ -687,8 +827,10 @@ public class TutorialManager : MonoBehaviour
     canPlayerOpenManual = true;
     canPlayerChangePage = true;
 
-    
+    StartTalking();
     tutorialText.text = "Acércate al cliente para ver su pedido.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
     canPlayerMove = true;
     canPlayerMoveCamera = true;
@@ -708,11 +850,16 @@ public class TutorialManager : MonoBehaviour
     yield return new WaitUntil(() => orderHasBeenShown);
     yield return new WaitForSeconds(1f);
 
-    
+    StartTalking();
     tutorialText.text = "Este pedido tiene tres especificaciones. Necesitarás entregar tres objetos diferentes.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
     
+    StartTalking();
     tutorialText.text = "Consulta el manual, encuentra los objetos correctos y completa este pedido por tu cuenta.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
     
     isWaitingForSecondClientOrder = false;
@@ -732,10 +879,16 @@ public class TutorialManager : MonoBehaviour
     canPlayerMoveCamera = false;
     canPlayerInteract = false;
 
+    StartTalking();
     tutorialText.text = "Bien hecho, has sido capaz de completar el pedido por tu cuenta.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
 
+    StartTalking();
     tutorialText.text = "Ten en cuenta que el día se dará por terminado si te quedas sin clientes o si se acaba el día. Puedes ver cuánto queda debajo de la deuda a la izquierda.";
+    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+    StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
 
     Debug.Log("<color=green>✓ EighthTutorialPass completado</color>");
@@ -781,28 +934,50 @@ public bool IsClientInPosition(int slotIndex)
     {
         SetTutorialState(TutorialState.FacturaDiaria);
         
+        StartTalking();
         tutorialText.text = "¡Felicidades! Has completado tu primer día en la Agencia. Ahora veamos cómo te ha ido.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
 
         //Enseñamos imagen de la factura diaria
         tutorialImage.sprite = resultSceneSprite;
+        StartTalking();
         tutorialText.text = "Esto de aquí es la factura del día. Aquí podrás ver los frutos de tu rendimiento durante el día. ";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "En la columna izquierda tienes los ingresos. Aquí afectará cuantos objetos hayas vendido a los clientes. Y cuántos de esos clientes han tenido éxito.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Ten en cuenta que cuanto mejores sean los objetos para la misión del cliente más te pagarán por ellos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "En la columna del medio tienes los gastos. Aquí se tienen en cuenta cuántos clientes han fallado su misión y el coste por reponer cada objeto vendido.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+
+        StartTalking();
         tutorialText.text = "Por último en la Columna de la derecha tienes el total. Siempre que el total sea positivo una parte de él irá a pagar tu deuda. ";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Recuerda que si al final del día no has pagado toda tu deuda... bueno, digamos que Ulises no es muy tolerante con los impagos.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
@@ -811,17 +986,26 @@ public bool IsClientInPosition(int slotIndex)
     {
         SetTutorialState(TutorialState.FinTutorial);
         
+        StartTalking();
         tutorialText.text = "En fin, este es todo mi trabajo por hoy, que Ulises no paga a las niñeros.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         dogController.MoveTo(dogTransforms[4].position);
         yield return new WaitUntil (() => isDoginPlace(dogTransforms[4]) == true);
         dogController.LookAt(playerPosition);
 
+        StartTalking();
         tutorialText.text = "Si me ves por aquí será en mi caseta que está en la pared del fondo. Aunque más te vale no verme porque si aparezco será para avisarte de que uno de los clientes ha muerto.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        StartTalking();
         tutorialText.text = "Para pasar al siguiente día dale al botón de abajo que pone ir al siguiente día.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         playerHasDoneTutorial = true;
