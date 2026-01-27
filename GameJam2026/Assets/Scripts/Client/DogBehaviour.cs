@@ -24,7 +24,8 @@ public class DogBehaviour : MonoBehaviour
     public Transform[] deathWaypoints; // Waypoints para ir a hablar de muertes (movimiento en L)
     public Transform[] activitiesWaypoints; // Waypoints para ir a hablar de actividades (movimiento en L)
 
-    [Header("Death Messages")]
+    [Header("UI References")]
+    public GameObject dialoguePanel; // Panel que contiene el texto
     public TextMeshProUGUI dialogueText;
     public float dialogueDuration = 5f;
     
@@ -61,8 +62,16 @@ public class DogBehaviour : MonoBehaviour
 
     void Start()
     {
+        // Desactivar el panel al inicio
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(false);
+        }
+        
         if (dialogueText != null)
+        {
             dialogueText.gameObject.SetActive(false);
+        }
 
         if (offScreenPosition != null)
         {
@@ -109,9 +118,15 @@ public class DogBehaviour : MonoBehaviour
         if (pendingDeaths > 0)
         {
             int deathsToReport = pendingDeaths;
-            pendingDeaths = 0; // Resetear ANTES de mostrar mensaje
+            pendingDeaths = 0;
             
             Debug.Log($"🐕 Reportando {deathsToReport} muerte(s)");
+            
+            // ACTIVAR el panel antes de moverse
+            if (dialoguePanel != null)
+            {
+                dialoguePanel.SetActive(true);
+            }
             
             // Mover en L usando waypoints hacia talkingPosition
             if (deathWaypoints != null && deathWaypoints.Length > 0)
@@ -136,6 +151,12 @@ public class DogBehaviour : MonoBehaviour
             else if (offScreenPosition != null)
             {
                 yield return StartCoroutine(MoveToPosition(offScreenPosition.position));
+            }
+            
+            // DESACTIVAR el panel después de volver
+            if (dialoguePanel != null)
+            {
+                dialoguePanel.SetActive(false);
             }
         }
 
@@ -170,6 +191,12 @@ public class DogBehaviour : MonoBehaviour
 
         if (currentActivityCount > lastKnownActivityCount && lastKnownActivityCount > 0)
         {
+            // ACTIVAR el panel antes de moverse
+            if (dialoguePanel != null)
+            {
+                dialoguePanel.SetActive(true);
+            }
+            
             // Mover en L usando waypoints hacia newActivitiesPosition
             if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
             {
@@ -192,6 +219,12 @@ public class DogBehaviour : MonoBehaviour
             else if (offScreenPosition != null)
             {
                 yield return StartCoroutine(MoveToPosition(offScreenPosition.position));
+            }
+            
+            // DESACTIVAR el panel después de volver
+            if (dialoguePanel != null)
+            {
+                dialoguePanel.SetActive(false);
             }
         }
 
