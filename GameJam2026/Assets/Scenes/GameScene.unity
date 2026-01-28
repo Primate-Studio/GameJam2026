@@ -4113,7 +4113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &385591181
 PrefabInstance:
@@ -11113,7 +11113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &1008018925
 PrefabInstance:
@@ -11393,7 +11393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &1039707672
 PrefabInstance:
@@ -25549,7 +25549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &1432159283838710430
 PrefabInstance:
@@ -25853,7 +25853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &4335309005046044821
 PrefabInstance:
@@ -25990,7 +25990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.03
   startActive: 1
 --- !u!1001 &4943701389981143059
 PrefabInstance:
@@ -26161,7 +26161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &5025814924889183610
 PrefabInstance:
@@ -26286,7 +26286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &5145866745446288565
 PrefabInstance:
@@ -26407,7 +26407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &5249787555578091750
 PrefabInstance:
@@ -26549,7 +26549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &5874541433197704234
 PrefabInstance:
@@ -26978,7 +26978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &6394303470193724633
 PrefabInstance:
@@ -27144,7 +27144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &6623499668420678022
 PrefabInstance:
@@ -27486,7 +27486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &8094920338881236440
 PrefabInstance:
@@ -27690,7 +27690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.03
   startActive: 1
 --- !u!1001 &8143639086309473946
 PrefabInstance:
@@ -27828,7 +27828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.04
   startActive: 1
 --- !u!1001 &8369972891124177560
 PrefabInstance:
@@ -28174,7 +28174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Floating
   speed: 5
-  scaleAmount: 0.02
+  scaleAmount: 0.03
   startActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
