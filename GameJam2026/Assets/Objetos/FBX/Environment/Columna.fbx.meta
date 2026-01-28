@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Marmol
-    second: {fileID: 2100000, guid: 39377d9a30dc2db4e9bccf96d6764ece, type: 2}
+      name: Marmol.001
+    second: {fileID: 2100000, guid: d01426b8c742cbe4cb8a6adfa697e0a9, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

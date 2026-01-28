@@ -7,13 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Hoja
+      name: Hoja.001
     second: {fileID: 2100000, guid: 34a42dda7592ddc4daf410d16e114120, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: MaderaRoja
-    second: {fileID: 2100000, guid: 5822456bb293cc9409d2d53299cf2111, type: 2}
+      name: MaderaRoja.001
+    second: {fileID: 2100000, guid: 9f8da2725e61d9e4ea84365483946d50, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

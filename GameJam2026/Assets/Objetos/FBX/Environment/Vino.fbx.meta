@@ -13,7 +13,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Marron
-    second: {fileID: 2100000, guid: b93d7203acbb63c4881a1a41cfc88fe6, type: 2}
+    second: {fileID: 2100000, guid: 826781cce25a5a04783cec3c055cb7bb, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
