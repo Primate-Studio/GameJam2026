@@ -14643,8 +14643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f7c1d87fce5b94caf43e8e4cf7f7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionController
-  dropDistance: 1.5
-  showDebugInfo: 1
+  raycastSystem: {fileID: 453222046}
 --- !u!1001 &1868019128
 PrefabInstance:
   m_ObjectHideFlags: 0

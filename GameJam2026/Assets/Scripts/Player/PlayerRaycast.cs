@@ -11,6 +11,7 @@ public class PlayerRaycast : MonoBehaviour
     
     private Outline currentOutline;
     private GameObject lastHighlighted;
+    public InteractableObject CurrentTarget { get; private set; }
 
     void Start()
     {
@@ -29,9 +30,12 @@ public class PlayerRaycast : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 3f)) // Distància de 3 metres
         {
             GameObject currentObject = hit.collider.gameObject;
-
+            InteractableObject interactable = currentObject.GetComponent<InteractableObject>();
             if (currentObject.CompareTag("Items")) // Assegura't que l'objecte tingui aquest Tag
             {
+                if(interactable != null) CurrentTarget = interactable;
+                else CurrentTarget = null;
+                
                 if (lastHighlighted != currentObject)
                 {
                     ClearHighlight();
@@ -59,6 +63,7 @@ public class PlayerRaycast : MonoBehaviour
     {
         if (lastHighlighted != null)
         {
+            CurrentTarget = null; 
             lastHighlighted.layer = LayerMask.NameToLayer("Items");
             foreach (Transform child in lastHighlighted.transform)
             {

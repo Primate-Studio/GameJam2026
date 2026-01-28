@@ -1,230 +1,83 @@
 using UnityEngine;
 
-/// <summary>
-/// Controla las interacciones del jugador con objetos del mundo
-/// Gestiona el trigger delante de las manos, detecta objetos y maneja coger/cambiar/entregar
-/// Este script debe ir en el GameObject del jugador que tiene el trigger "InteractTrigger"
-/// </summary>
 [RequireComponent(typeof(Collider))]
 public class InteractionController : MonoBehaviour
 {
-    [Header("Interaction Settings")]
-    [Tooltip("Distancia delante del jugador donde aparecerán objetos soltados")]
-    [SerializeField] private float dropDistance = 1.5f;
-    
-    [Header("Debug")]
-    [SerializeField] private bool showDebugInfo = true;
-    
-    // Objeto actualmente en contacto con el trigger
-    private InteractableObject objectInRange = null;
-    
-    // Referencia al collider del trigger (debe ser configurado como Trigger en el Inspector)
-    private Collider triggerCollider;
-    
-    void Awake()
+    [Header("References")]
+    [SerializeField] private PlayerRaycast raycastSystem; // Referència al nou sistema
+
+    private void Start()
     {
-        triggerCollider = GetComponent<Collider>();
-        
-        // Asegurar que es un trigger
-        if (!triggerCollider.isTrigger)
-        {
-            Debug.LogWarning("El collider de InteractionController debe ser un Trigger! Configurando automáticamente...");
-            triggerCollider.isTrigger = true;
-        }
+        // Si no l'hem assignat manualment, el busquem al mateix objecte
+        if (raycastSystem == null) raycastSystem = GetComponent<PlayerRaycast>();
     }
     
     void Update()
     {
-        // Detectar cuando se presiona E
         if (InputManager.Instance.InteractPressed)
         {
             HandleInteraction();
         }
     }
     
-    /// <summary>
-    /// Maneja la lógica de interacción cuando se presiona E
-    /// </summary>
     private void HandleInteraction()
     {
-        // En tutorial, solo permitir interacción si está habilitado
         if (GameManager.Instance.CurrentState == GameState.Tutorial && 
             TutorialManager.Instance != null && 
-            !TutorialManager.Instance.canPlayerInteract)
-        {
-            return;
-        }
+            !TutorialManager.Instance.canPlayerInteract) return;
+
+        // CANVI CLAU: Ara l'objecte en rang ve del Raycast, no del Trigger
+        InteractableObject objectInRange = raycastSystem.CurrentTarget;
 
         bool hasObject = !InventoryManager.Instance.IsCurrentSlotEmpty();
         bool isNearObject = objectInRange != null;
         
-        // CASO 1: No tengo objeto Y estoy cerca de uno -> COGER
+        // La resta de la lògica es manté igual, però amb l'objecte del Raycast
         if (!hasObject && isNearObject && !objectInRange.isDeliveryZone)
         {
-            PickUpObject();
+            PickUpObject(objectInRange);
         }
-        // CASO 2: Tengo objeto Y estoy cerca de otro objeto -> CAMBIAR
         else if (hasObject && isNearObject && !objectInRange.isDeliveryZone)
         {
-            SwapObject();
+            SwapObject(objectInRange);
         }
-        // CASO 3: Tengo objeto Y estoy cerca de zona de entrega -> ENTREGAR
         else if (hasObject && isNearObject && objectInRange.isDeliveryZone)
         {
-            DeliverObject();
-        }
-        // CASO 4: No hay nada que hacer
-        else
-        {
-            if (showDebugInfo)
-            {
-                if (!hasObject && !isNearObject)
-                    Debug.Log("No tienes objeto y no hay nada cerca para coger");
-                else if (hasObject && !isNearObject)
-                    Debug.Log("Tienes un objeto pero no hay nada cerca para interactuar");
-            }
+            DeliverObject(objectInRange);
         }
     }
     
-    /// <summary>
-    /// Recoge un objeto del mundo y lo añade al inventario
-    /// </summary>
-    private void PickUpObject()
+    // Hem d'actualitzar els mètodes per acceptar l'objecte com a paràmetre
+    private void PickUpObject(InteractableObject obj)
     {
-        if (InventoryManager.Instance.TryAddToCurrentSlot(objectInRange))
+        if (InventoryManager.Instance.TryAddToCurrentSlot(obj))
         {
-            Debug.Log($"<color=green>✓ Objeto {objectInRange.objectType} recogido!</color>");
-            objectInRange = null; // Ya no está en rango porque está en el inventario
-        }
-        else
-        {
-            Debug.Log("<color=yellow>! El bolsillo actual está lleno. Cambia de bolsillo con la rueda del mouse.</color>");
+            Debug.Log($"<color=green>✓ Objeto {obj.objectType} recogido!</color>");
         }
     }
-    
-    /// <summary>
-    /// Cambia el objeto actual por otro del mundo
-    /// </summary>
-    private void SwapObject()
+
+    private void SwapObject(InteractableObject obj)
     {
         ObjectType oldType = InventoryManager.Instance.GetCurrentObjectType();
-        InventoryManager.Instance.SwapCurrentSlot(objectInRange);
-        
-        Debug.Log($"<color=cyan>↔ Objeto {oldType} cambiado por {objectInRange.objectType}</color>");
+        InventoryManager.Instance.SwapCurrentSlot(obj);
+        Debug.Log($"<color=cyan>↔ Objeto {oldType} cambiado por {obj.objectType}</color>");
     }
-    
-    /// <summary>
-    /// Entrega el objeto actual a la zona de entrega
-    /// Si es una DeliveryBox con pedido, lo entrega al pedido
-    /// Si no, es una entrega genérica
-    /// </summary>
-    private void DeliverObject()
+
+    private void DeliverObject(InteractableObject obj)
     {
         ObjectType deliveredType = InventoryManager.Instance.GetCurrentObjectType();
-        
-        // Verificar si es una DeliveryBox con pedido
-        DeliveryBox deliveryBox = objectInRange.GetComponent<DeliveryBox>();
+        DeliveryBox deliveryBox = obj.GetComponent<DeliveryBox>();
         
         if (deliveryBox != null && deliveryBox.HasOrder())
         {
-            // Entregar al pedido específico
             if (deliveryBox.TryDeliverItem(deliveredType))
-            {
-                // Si la entrega fue exitosa, vaciar el slot del inventario
                 InventoryManager.Instance.DeliverCurrentSlot();
-            }
         }
-        else
+        else if (InventoryManager.Instance.DeliverCurrentSlot())
         {
-            // Entrega genérica (compatibilidad con sistema antiguo)
-            if (InventoryManager.Instance.DeliverCurrentSlot())
-            {
-                Debug.Log($"<color=yellow>✓ Objeto {deliveredType} entregado!</color>");
-            }
+            Debug.Log($"<color=yellow>✓ Objeto {deliveredType} entregado!</color>");
         }
     }
-    
-    /// <summary>
-    /// Calcula la posición donde se debe soltar un objeto
-    /// </summary>
-    private Vector3 GetDropPosition()
-    {
-        // Posición delante del jugador
-        return transform.position + transform.forward * dropDistance;
-    }
-    
-    /// <summary>
-    /// Detecta cuando un objeto entra en el trigger
-    /// </summary>
-    private void OnTriggerEnter(Collider other)
-    {
-        // Detectar objetos interactuables
-        InteractableObject obj = other.GetComponent<InteractableObject>();
-        
-        if (obj != null && other.gameObject.activeInHierarchy && objectInRange != obj)
-        {
-            objectInRange = obj;
-            
-            if (showDebugInfo)
-            {
-                // Verificar si es una DeliveryBox
-                DeliveryBox deliveryBox = obj.GetComponent<DeliveryBox>();
-                
-                if (deliveryBox != null && deliveryBox.HasOrder())
-                {
-                    Order order = deliveryBox.GetOrder();
-                    Debug.Log($"<color=magenta>[Trigger] Caja de Pedido #{order.orderID} detectada - Presiona E para entregar</color>");
-                }
-                else if (obj.isDeliveryZone)
-                {
-                    Debug.Log($"<color=yellow>[Trigger] Zona de entrega detectada</color>");
-                }
-                else
-                {
-                    Debug.Log($"<color=cyan>[Trigger] Objeto {obj.objectType} detectado - Presiona E para interactuar</color>");
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    /// Detecta cuando un objeto sale del trigger
-    /// </summary>
-    private void OnTriggerExit(Collider other)
-    {
-        // Limpiar objeto interactuable
-        InteractableObject obj = other.GetComponent<InteractableObject>();
-        
-        if (obj != null && obj == objectInRange)
-        {
-            if (showDebugInfo)
-            {
-                Debug.Log($"<color=gray>[Trigger] Objeto fuera de rango</color>");
-            }
-            
-            objectInRange = null;
-        }
-    }
-    
-    /// <summary>
-    /// Dibuja el trigger en la vista de escena para debug
-    /// </summary>
-    private void OnDrawGizmos()
-    {
-        if (showDebugInfo && triggerCollider != null)
-        {
-            Gizmos.color = objectInRange != null ? Color.green : Color.yellow;
-            
-            // Dibujar el área del trigger
-            if (triggerCollider is BoxCollider box)
-            {
-                Gizmos.matrix = transform.localToWorldMatrix;
-                Gizmos.DrawWireCube(box.center, box.size);
-            }
-            else if (triggerCollider is SphereCollider sphere)
-            {
-                Gizmos.DrawWireSphere(transform.position + sphere.center, sphere.radius);
-            }
-        }
-    }
+
+    // Pots esborrar o desactivar els mètodes OnTriggerEnter/Exit si ja no els fas servir
 }
