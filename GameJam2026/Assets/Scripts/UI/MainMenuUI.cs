@@ -26,6 +26,7 @@ public class MainMenuUI : MonoBehaviour
     }
     public void OnSettingsPressed()
     {
+        SettingsButtons.Instance.OnPause(true);
     }
     public void OnContinueGamePressed()
     {

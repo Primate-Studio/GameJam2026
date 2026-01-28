@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class SettingsManager : MonoBehaviour
 {
-    public static SettingsManager Instance;
+    public static SettingsManager Instance { get; private set; }
 
     [Header("References")]
     [SerializeField] private AudioMixer mainMixer;
