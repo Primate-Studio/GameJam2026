@@ -1,15 +1,18 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using System;
-using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static AudioManager Instance { get; private set; }
 
-    [Header("Micer & Routing")]
+    [Header("Mixer & Routing")]
     [SerializeField] private AudioMixer mainMixer;
+
+    [Header("Pitch Variation (Game Feel)")]
+    [Range(0.5f, 1.5f)] [SerializeField] private float minPitch = 0.95f;
+    [Range(0.5f, 1.5f)] [SerializeField] private float maxPitch = 1.05f;
 
     [Header("Categories")]
     public SoundCategory[] musicList;
@@ -19,65 +22,117 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource musicSource, sfxSource, uiSource, ambientSource;
 
+    // Aquest mètode elimina el warning i assegura que la instància estigui neta
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void Init()
+    {
+        Instance = null;
+    }
+
     private void Awake()
     {
-        if(Application.isPlaying)
+        if (Application.isPlaying)
         {
-            if(Instance == null) {Instance = this; DontDestroyOnLoad(gameObject);}
-            else {Destroy(gameObject); return;}
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         SetupSources();
-    } 
+    }
 
     private void SetupSources()
     {
-        musicSource = CreateSound("MusicSource","Music");
-        sfxSource = CreateSound("SFXSource","SFX");
-        uiSource = CreateSound("UISource","UI");
-        ambientSource = CreateSound("AmbientSource","Ambient");
+        // Netegem fills antics si n'hi hagués (útil en l'editor)
+        foreach (Transform child in transform) { if (Application.isEditor) DestroyImmediate(child.gameObject); }
+
+        musicSource = GetOrCreateSource("MusicSource", "Music");
+        sfxSource = GetOrCreateSource("SFXSource", "SFX");
+        uiSource = GetOrCreateSource("UISource", "UI");
+        ambientSource = GetOrCreateSource("AmbientSource", "Ambient");
     }
+    private AudioSource GetOrCreateSource(string name, string group)
+    {
+        // 1. Busquem si ja existeix un fill amb aquest nom
+        Transform existingChild = transform.Find(name);
+        
+        if (existingChild != null)
+        {
+            // Si existeix, retornem el seu AudioSource
+            return existingChild.GetComponent<AudioSource>();
+        }
+
+        // 2. Si no existeix, el creem com feies abans
+        GameObject obj = new GameObject(name);
+        obj.transform.parent = transform;
+        AudioSource source = obj.AddComponent<AudioSource>();
+        
+        // Assignem el grup del Mixer
+        var groups = mainMixer.FindMatchingGroups(group);
+        if (groups.Length > 0)
+        {
+            source.outputAudioMixerGroup = groups[0];
+        }
+        
+        return source;
+    }
+
     private AudioSource CreateSound(string name, string group)
     {
         GameObject obj = new GameObject(name);
         obj.transform.parent = transform;
         AudioSource source = obj.AddComponent<AudioSource>();
-        source.outputAudioMixerGroup = mainMixer.FindMatchingGroups(group)[0];
+        
+        var groups = mainMixer.FindMatchingGroups(group);
+        if (groups.Length > 0) source.outputAudioMixerGroup = groups[0];
+        
         return source;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Playback Logic
-    
-    public void PlaySFX(SFXType type) => PlayRandom(type, sfxList, sfxSource);
-    public void PlayUI(UIType type) => PlayRandom(type, uiList, uiSource);
+    //--------------------------------------------------------------------------------
+    // Mètodes de Reproducció
+
+    public void PlaySFX(SFXType type, bool randomPitch = true) => PlayRandom(type, sfxList, sfxSource, randomPitch);
+    public void PlayUI(UIType type, bool randomPitch = false) => PlayRandom(type, uiList, uiSource, randomPitch);
 
     public void PlayMusic(MusicType type)
     {
-        var cat = musicList[(int) type];
-        musicSource.clip = cat.clips[0];
+        int index = (int)type;
+        if (index >= musicList.Length || musicList[index].clips.Length == 0) return;
+        
+        musicSource.clip = musicList[index].clips[0];
+        musicSource.volume = musicList[index].volume;
         musicSource.loop = true;
         musicSource.Play();
     }
-    public void PlayAmbient(AmbientType type)
-    {
-        var cat = ambientList[(int) type];
-        ambientSource.clip = cat.clips[0];
-        ambientSource.loop = true;
-        ambientSource.Play();
-    }
-    
-    private void PlayRandom(Enum type, SoundCategory[] list, AudioSource source)
+
+    private void PlayRandom(Enum type, SoundCategory[] list, AudioSource source, bool useRandomPitch)
     {
         int index = Convert.ToInt32(type);
-        if(index >= list.Length || list[index].clips.Length == 0) return;
+        if (index >= list.Length || list[index].clips.Length == 0) return;
 
         var category = list[index];
         AudioClip clip = category.clips[UnityEngine.Random.Range(0, category.clips.Length)];
+
+        // Apliquem pitch aleatori per donar varietat (com en el pas de pàgina)
+        source.pitch = useRandomPitch ? UnityEngine.Random.Range(minPitch, maxPitch) : 1f;
         source.PlayOneShot(clip, category.volume);
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Editor Logic
+    public AudioClip GetSFXClip(SFXType type)
+    {
+        int index = (int)type;
+        if (index >= sfxList.Length || sfxList[index].clips.Length == 0) return null;
+
+        // Retorna un clip a l'atzar de la categoria (per si en tens diversos d'idle)
+        var category = sfxList[index];
+        return category.clips[UnityEngine.Random.Range(0, category.clips.Length)];
+    }
+    //--------------------------------------------------------------------------------
+    // Lògica de l'Editor (Auto-nomena les llistes segons l'Enum)
     private void OnEnable()
     {
         UpdateListNames<MusicType>(ref musicList);
@@ -85,11 +140,11 @@ public class AudioManager : MonoBehaviour
         UpdateListNames<UIType>(ref uiList);
         UpdateListNames<AmbientType>(ref ambientList);
     }
-    private void UpdateListNames<T>(ref SoundCategory[] list ) where T : Enum
+
+    private void UpdateListNames<T>(ref SoundCategory[] list) where T : Enum
     {
         string[] names = Enum.GetNames(typeof(T));
-        Array.Resize(ref list, names.Length);
-        for(int i = 0; i < names.Length; i++) list[i].name = names[i];
+        if (list == null || list.Length != names.Length) Array.Resize(ref list, names.Length);
+        for (int i = 0; i < names.Length; i++) list[i].name = names[i];
     }
-
 }

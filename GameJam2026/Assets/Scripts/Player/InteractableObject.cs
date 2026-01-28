@@ -62,6 +62,7 @@ public class InteractableObject : MonoBehaviour
     /// </summary>
     public void PickUp()
     {
+        AudioManager.Instance.PlaySFX(SFXType.PickUp, true);
         if (infiniteRespawn)
         {
             // Sistema de respawn infinito - deshabilitar componentes pero mantener GameObject activo

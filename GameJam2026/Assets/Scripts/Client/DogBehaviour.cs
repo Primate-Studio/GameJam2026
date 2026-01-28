@@ -21,6 +21,9 @@ public class DogBehaviour : MonoBehaviour
     public GameObject dialoguePanel; // Panel que contiene el texto
     public TextMeshProUGUI dialogueText;
     public float dialogueDuration = 5f;
+
+    [Header("3D Audio")]
+    [SerializeField] private AudioSource idleAudioSource;
     
     private string[] deathMessages = new string[]
     {
@@ -184,6 +187,8 @@ public class DogBehaviour : MonoBehaviour
             // Mover en L usando waypoints hacia newActivitiesPosition
             if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
             {
+                PlayDogSound();
+
                 yield return StartCoroutine(MoveAlongWaypoints(activitiesWaypoints));
             }
             else if (newActivitiesPosition != null)
@@ -194,6 +199,7 @@ public class DogBehaviour : MonoBehaviour
             ShowNewActivitiesMessage();
             yield return new WaitForSeconds(dialogueDuration);
             HideDialogue();
+            
 
             // Volver a offScreen usando los waypoints en reversa
             if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
@@ -206,6 +212,7 @@ public class DogBehaviour : MonoBehaviour
             }
             
             // DESACTIVAR el panel después de volver
+            StopDogSound();
             if (dialoguePanel != null)
             {
                 dialoguePanel.SetActive(false);
@@ -335,6 +342,37 @@ public class DogBehaviour : MonoBehaviour
 
     #endregion
 
+    #region Sound Setup
+    public void PlayDogSound()
+    {
+        if (idleAudioSource == null) idleAudioSource = GetComponent<AudioSource>();
+
+        // Si ja està sonant, no fem res
+        if (idleAudioSource.isPlaying) return;
+
+        if (AudioManager.Instance != null)
+        {
+            // Agafem el clip de la llista centralitzada
+            AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.DogIdle);
+            
+            if (clip != null)
+            {
+                idleAudioSource.clip = clip;
+                idleAudioSource.loop = true;
+                idleAudioSource.Play();
+            }
+        }
+    }
+
+    // Mètode per aturar el so manualment
+    public void StopDogSound()
+    {
+        if (idleAudioSource != null && idleAudioSource.isPlaying)
+        {
+            idleAudioSource.Stop();
+        }
+    }
+    #endregion
     private void HideDialogue()
     {
         if (dialogueText != null)

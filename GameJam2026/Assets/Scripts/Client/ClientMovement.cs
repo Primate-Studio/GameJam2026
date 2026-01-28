@@ -56,7 +56,7 @@ public class ClientMovement : MonoBehaviour
         yield return null; 
 
         while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance) yield return null;
-
+        AudioManager.Instance.PlaySFX(SFXType.CampanaRing, false);
         if (!isLeaving)
         {
             // Ara cridem al nou mètode de registre

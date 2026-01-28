@@ -375,6 +375,7 @@ public class OrderSystem : MonoBehaviour
             {
                 if (OrderEvaluator.Instance != null)
                 {
+                    AudioManager.Instance.PlaySFX(SFXType.ClientGood, false);
                     OrderEvaluator.Instance.ProcessCompletedOrder(clientOrderData);
                 }
                 else

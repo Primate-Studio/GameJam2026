@@ -1,5 +1,4 @@
-
-public enum MusicType { MainMenu, Level1, Level2 }
-public enum SFXType { Jump, Attack, Hit, Footstep }
-public enum UIType { Click, Hover, PauseOpen }
-public enum AmbientType { Wind, Birds, Rain }
+public enum MusicType { MainMenu, ShopTheme }
+public enum SFXType { ManualOpen, ManualClose, PageFlip, PickUp, ItemDrop, Footstep, DogIdle, DogTalk, CampanaRing, TickTack, ClientGood }
+public enum UIType { Click, Hover, PopUp }
+public enum AmbientType { ShopAmbient, Nature }

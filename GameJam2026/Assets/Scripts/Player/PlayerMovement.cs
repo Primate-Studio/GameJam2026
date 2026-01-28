@@ -12,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Look")]
     public float mouseSensitivity = 2f;
     public float verticalLookLimit = 90f;
+
+    [SerializeField] private float footstepInterval = 0.4f; // Temps entre passos
+    private float footstepTimer;
     
     private Rigidbody playerRigidbody;
     private float cameraVerticalRotation = 0f;
@@ -60,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
         CaptureMovementInput();
 
         HandleHeadBob();
+        HandleFootsteps();
     }
     void FixedUpdate()
     {
@@ -123,6 +127,29 @@ public class PlayerMovement : MonoBehaviour
         {
             // IMPORTANT: Fem servir localRotation per no interferir amb la localPosition del bobbing
             playerCamera.transform.localRotation = Quaternion.Euler(cameraVerticalRotation, 0f, 0f);
+        }
+    }
+
+    private void HandleFootsteps()
+    {
+        if (playerRigidbody == null) return;
+
+        // Comprovem si el jugador s'està movent realment (basat en el Rigidbody)
+        float speed = new Vector3(playerRigidbody.linearVelocity.x, 0, playerRigidbody.linearVelocity.z).magnitude;
+
+        if (speed > 0.1f)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= footstepInterval)
+            {
+                // Reproduir so de pas
+                AudioManager.Instance.PlaySFX(SFXType.Footstep, true);
+                footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f; // Reiniciar temporitzador quan està quiet
         }
     }
 

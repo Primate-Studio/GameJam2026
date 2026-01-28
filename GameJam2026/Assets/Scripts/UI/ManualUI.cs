@@ -112,13 +112,18 @@ public class ManualUI : MonoBehaviour
         if (currentLeftPageIndex + 2 < maxSpritesAllowed && !isAnimating)
         {
             StartCoroutine(FlipForward());
+            AudioManager.Instance.PlaySFX(SFXType.PageFlip, true);
+
         }
     }
 
     public void PrevPage()
     {
-        if (currentLeftPageIndex - 2 >= 0 && !isAnimating)
+        if (currentLeftPageIndex - 2 >= 0 && !isAnimating) 
+        {
+            AudioManager.Instance.PlaySFX(SFXType.PageFlip, true);
             StartCoroutine(FlipBackward());
+        }
     }
 
     private IEnumerator FlipForward()
@@ -213,11 +218,13 @@ public class ManualUI : MonoBehaviour
         UpdateStaticPages();
         IsOpen = true;
         StartCoroutine(PopUp());
+        AudioManager.Instance.PlaySFX(SFXType.ManualOpen, false);
     }
 
     public void CloseManual() 
     { 
-        StartCoroutine(PopDown());        
+        AudioManager.Instance.PlaySFX(SFXType.ManualClose, false);        
+        StartCoroutine(PopDown());
         IsOpen = false;
     }
 }

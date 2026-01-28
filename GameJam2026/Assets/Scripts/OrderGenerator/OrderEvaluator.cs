@@ -34,7 +34,7 @@ public class OrderEvaluator : MonoBehaviour
     void Start()
     {
         // Buscar el perro en la escena
-        dogBehaviour = FindObjectOfType<DogBehaviour>();
+        dogBehaviour = FindFirstObjectByType<DogBehaviour>();
         if (dogBehaviour == null)
         {
             Debug.LogWarning("⚠️ No se encontró DogBehaviour en la escena");
