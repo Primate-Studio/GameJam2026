@@ -2837,39 +2837,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectDatabase
   objectIcons:
   - objectType: 1
-    icon: {fileID: 21300000, guid: d8a90fb4ef0f67f40af7f888376db3b2, type: 3}
+    icon: {fileID: 21300000, guid: e8cd65f1d9666274ab3d3a2d257bff25, type: 3}
   - objectType: 2
-    icon: {fileID: 21300000, guid: 294a3e5fc1e4de84396ab2ef049b4bee, type: 3}
+    icon: {fileID: 21300000, guid: 33c76301f682016479ad37d1d15b893f, type: 3}
   - objectType: 3
-    icon: {fileID: 21300000, guid: e47106ed62cc2e44b9b656b010a4a690, type: 3}
+    icon: {fileID: 21300000, guid: e207619d21119424aab70efa993d8871, type: 3}
   - objectType: 4
-    icon: {fileID: 21300000, guid: b382bfcb8b010b94fb6989b515e65842, type: 3}
+    icon: {fileID: 21300000, guid: 94f480cfbefcf7142b2aa46dcd6e6b39, type: 3}
   - objectType: 5
-    icon: {fileID: 21300000, guid: 57bc4e3d689f55545a3e3b4e649cc797, type: 3}
+    icon: {fileID: 21300000, guid: 341a22aa1ac5c6543a2bb2431f1b7947, type: 3}
   - objectType: 6
-    icon: {fileID: 21300000, guid: 877c0baf8bdd9ae42a24d12374824d87, type: 3}
+    icon: {fileID: 21300000, guid: c1a0514eb14e8aa419e93fcda3de6a0c, type: 3}
   - objectType: 7
-    icon: {fileID: 21300000, guid: 9c3f3a9794b796e4e8eeea9d72daaa14, type: 3}
+    icon: {fileID: 21300000, guid: 81965960a882fd44dbffe11376362325, type: 3}
   - objectType: 8
-    icon: {fileID: 21300000, guid: cbf6401f91ee8714eac12a5c0393133f, type: 3}
+    icon: {fileID: 21300000, guid: 808c99c6ba8bb5b44a5ceb61f3ab008c, type: 3}
   - objectType: 9
-    icon: {fileID: 21300000, guid: cf43004011931ca468bead034d4c38b6, type: 3}
+    icon: {fileID: 21300000, guid: 0b63c22b2b3bb324c90c7339a48b9fc2, type: 3}
   - objectType: 10
-    icon: {fileID: 21300000, guid: f9d003e372578ba42ba1494a1095ab02, type: 3}
+    icon: {fileID: 21300000, guid: c1608a217ccf4af428336c2e3c954099, type: 3}
   - objectType: 11
-    icon: {fileID: 21300000, guid: 858fb5ae57139b244a7660a12098a896, type: 3}
+    icon: {fileID: 21300000, guid: e87d03b066802f54faba5b74ed51ed27, type: 3}
   - objectType: 12
-    icon: {fileID: 21300000, guid: 040bcd681faf83048bcdfebefec2c369, type: 3}
+    icon: {fileID: 21300000, guid: 6576fc470e0ed8c46b1bbbcf182e57e3, type: 3}
   - objectType: 13
-    icon: {fileID: 21300000, guid: 8727ca5bee1f67a46849bf13230754b1, type: 3}
+    icon: {fileID: 21300000, guid: d8a3226235dc331408112952b92b90f9, type: 3}
   - objectType: 15
-    icon: {fileID: 21300000, guid: 08b36079fba1f3046be6ea399bca0c0a, type: 3}
+    icon: {fileID: 21300000, guid: e5d2290163fe7b64e8c825a69eaad7b9, type: 3}
   - objectType: 14
-    icon: {fileID: 21300000, guid: cbea69225b26d67499e52ce8c68c37ec, type: 3}
+    icon: {fileID: 21300000, guid: be7b972d201d042478e00008beb9a151, type: 3}
   - objectType: 17
-    icon: {fileID: 21300000, guid: 98bd7f892ab95fa4182ca4e05b9e777b, type: 3}
-  - objectType: 17
-    icon: {fileID: 21300000, guid: d565bd00eeec2514c9eb549b36b6ec21, type: 3}
+    icon: {fileID: 21300000, guid: e778ec588ece8c64e8924360b6993d67, type: 3}
+  - objectType: 16
+    icon: {fileID: 21300000, guid: 95bf70e64df9d3247b51255ce9944caf, type: 3}
 --- !u!1001 &274592320
 PrefabInstance:
   m_ObjectHideFlags: 0
