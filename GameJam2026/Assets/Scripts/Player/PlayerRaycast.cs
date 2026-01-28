@@ -31,10 +31,18 @@ public class PlayerRaycast : MonoBehaviour
         {
             GameObject currentObject = hit.collider.gameObject;
             InteractableObject interactable = currentObject.GetComponent<InteractableObject>();
-            if (currentObject.CompareTag("Items")) // Assegura't que l'objecte tingui aquest Tag
+            if (currentObject.CompareTag("Items") || currentObject.CompareTag("Bag")) // Assegura't que l'objecte tingui aquest Tag
             {
                 if(interactable != null) CurrentTarget = interactable;
                 else CurrentTarget = null;
+                if(currentObject.CompareTag("Items"))
+                {
+                    CurrentTarget.isDeliveryZone = false;
+                }
+                else if(currentObject.CompareTag("Bag"))
+                {
+                    CurrentTarget.isDeliveryZone = true;
+                }
                 
                 if (lastHighlighted != currentObject)
                 {
