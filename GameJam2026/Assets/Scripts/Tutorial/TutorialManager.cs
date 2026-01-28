@@ -21,8 +21,8 @@ public class TutorialManager : MonoBehaviour
     public TextMeshProUGUI tutorialDebtText;
     public Slider timeSlider;
     public Button continueButton;
-
-    public Canvas resultCanvas;
+    public GameObject textPanel;
+    public GameObject resultCanvas;
 
     [Header("Tutorial Sprites")]
     public Sprite movementSprite;
@@ -62,6 +62,7 @@ public class TutorialManager : MonoBehaviour
     public bool orderHasBeenShown = false;
     public ObjectType allowedObjectType = ObjectType.Odre;  // Nuevo: tipo de objeto permitido
     public bool isObjectTypeRestricted = false;  // Nuevo: si está restringido o no
+    public ObjectType[] allowedObjectTypes;
 
     [Header("Transforms")]
 
@@ -440,7 +441,7 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.gameObject.SetActive(true);
         }
 
-        SetAllowedObjectType(ObjectType.Odre, true);
+        SetAllowedObjectTypes(new ObjectType[] { ObjectType.Odre }, true);
         
         canPlayerMoveCamera = true;
         canPlayerMove = true;
@@ -513,7 +514,7 @@ public class TutorialManager : MonoBehaviour
         }
         dogController.LookAt(playerPosition);
         
-        SetAllowedObjectType(ObjectType.Arco, true);
+        SetAllowedObjectTypes(new ObjectType[] { ObjectType.Arco }, true);
 
         //yield return StartCoroutine(WaitForContinueButton());
 
@@ -538,6 +539,7 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.PrimerCliente);
         // sonido de campana
+        canPlayerInteract = false;
         StartTalking();
         tutorialText.text = "Ha arribat el teu primer client. Ves a atendre-li. El client sempre et demanarà de dos a tres objectes de categories diferents.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -601,6 +603,7 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Manual);
         
+        canPlayerInteract = false;
         StartTalking();
         tutorialText.text = "Per a poder saber què és el millor per a cada situació tens el manual. Obre-ho.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -611,7 +614,6 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitUntil(() => playerOpenManual() == true);
 
         isWaitingForManualOpen = false;
-        canPlayerInteract = false;
         canPlayerCloseManual = false;  
         
         StartTalking();
@@ -624,9 +626,8 @@ public class TutorialManager : MonoBehaviour
         tutorialText.text = "Aquí veuràs que objectes són exactament els necessaris per a les condicions que et demana el client.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        
-        canPlayerChangePage = true;
-        yield return new WaitUntil(() => manualPageChanged());
+        yield return StartCoroutine(WaitForContinueButton());
+
 
         StartTalking();
         tutorialText.text = "Per a cada situació específica et sortiran tres objectes amb la seva utilitat a la dreta.";
@@ -651,7 +652,7 @@ public class TutorialManager : MonoBehaviour
         isWaitingForManualClose = false;
 
         canPlayerMove = true;
-        canPlayerInteract = true;
+        canPlayerInteract = false;
         canPlayerMoveCamera = true;
     }
 
@@ -701,81 +702,91 @@ public class TutorialManager : MonoBehaviour
     }
 
     public IEnumerator EighthTutorialPass()
-{
-    SetTutorialState(TutorialState.SegundoCliente);
+    {
+        SetTutorialState(TutorialState.SegundoCliente);
 
-    // Instanciar el segundo cliente en el slot 1
-    InstanceClient(1);
-    
-    // ESPERAR A QUE EL CLIENTE ESTÉ EN SU POSICIÓN
-    StartTalking();
-    tutorialText.text = "Espera un moment! Ja que ve un altre client aprofita per practicar";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return new WaitUntil(() => IsClientInPosition(1));
-    
-    canPlayerMove = true;
-    canPlayerMoveCamera = true;
-    canPlayerOpenManual = true;
-    canPlayerChangePage = true;
+        // Instanciar el segundo cliente en el slot 1
+        InstanceClient(1);
+        
+        StartTalking();
+        tutorialText.text = "Espera un moment! Ja que ve un altre client aprofita per practicar i fes la seva comanfa pel teu compte.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
 
-    StartTalking();
-    tutorialText.text = "Apropat per rebre la comanda";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
-    canPlayerMove = true;
-    canPlayerMoveCamera = true;
-    canPlayerInteract = true;
-    
-    // Esperar a que el jugador se acerque al trigger del cliente
-    yield return new WaitUntil(() => playerInZone(playerTransforms[2].position));
-    canPlayerMove = false;
-    canPlayerInteract = false;
+        yield return StartCoroutine(WaitForContinueButton());
 
-    // Ahora sí, crear el pedido cuando tanto el cliente como el jugador están en posición
-    isWaitingForSecondClientOrder = true;
-    orderHasBeenShown = false;
-    CreateClientOrder(1, ciclopeBebe, muchoPolvo, interiorCueva);
-    
-    // Esperar a que el pedido se haya creado y mostrado completamente
-    yield return new WaitUntil(() => orderHasBeenShown);
-    yield return new WaitForSeconds(3f);
+        yield return new WaitUntil(() => IsClientInPosition(1));
+        
+        isWaitingForManualOpen = true;
+        canPlayerMove = true;
+        canPlayerMoveCamera = true;
+        canPlayerOpenManual = true;
+        canPlayerChangePage = true;
 
-    
-    isWaitingForSecondClientOrder = false;
-    
-    isWaitingForManualOpen = true;
-    canPlayerMove = true;
-    canPlayerMoveCamera = true;
-    canPlayerInteract = true;
-    canPlayerChangePage = true;
-    canPlayerOpenManual = true;
-    canPlayerUseInventory = true;
-    
-    // Esperar a que se complete el segundo pedido
-    bool secondOrderCompleted = false;
-    StartCoroutine(WaitForOrderCompletion(() => secondOrderCompleted = true));
-    yield return new WaitUntil(() => secondOrderCompleted);
-    
-    canPlayerMove = false;
-    canPlayerMoveCamera = false;
-    canPlayerInteract = false;
+        // NUEVO: Mostrar el mensaje
+        StartTalking();
+        tutorialText.text = "Apropat per rebre la comanda";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
+        // NUEVO: Esperar a que el jugador se acerque
+        yield return new WaitUntil(() => playerInZone(playerTransforms[3].position));
+        textPanel.SetActive(false);
+        
+        canPlayerMove = false;
+        canPlayerInteract = false;
 
-    StartTalking();
-    tutorialText.text = "Ben fet, has estat capaç de completar la comanda pel teu compte.";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
+        // Ahora sí, crear el pedido cuando tanto el cliente como el jugador están en posición
+        isWaitingForSecondClientOrder = true;
+        orderHasBeenShown = false;
+        CreateClientOrder(1, ciclopeBebe, muchoPolvo, interiorCueva);
+        
 
-    StartTalking();
-    tutorialText.text = "El dia es donarà per acabat si et quedes sense clients o si s'acaba el dia. Pots veure quant queda sota el deute a l'esquerra.";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
+        // Esperar a que el pedido se haya creado y mostrado completamente
+        yield return new WaitUntil(() => orderHasBeenShown);
+        yield return new WaitForSeconds(3f);
 
-    Debug.Log("<color=green>✓ EighthTutorialPass completado</color>");
-}
+        SetAllowedObjectTypes(new ObjectType[] { 
+            ObjectType.Espejo, 
+            ObjectType.Mascaras, 
+            ObjectType.CascoA 
+        }, true);
+        
+        isWaitingForSecondClientOrder = false;
+        
+        canPlayerMove = true;
+        canPlayerMoveCamera = true;
+        canPlayerInteract = true;
+        canPlayerChangePage = true;
+        canPlayerOpenManual = true;
+        canPlayerUseInventory = true;
+        
+        // Esperar a que se complete el segundo pedido
+        bool secondOrderCompleted = false;
+        StartCoroutine(WaitForOrderCompletion(() => secondOrderCompleted = true));
+        yield return new WaitUntil(() => secondOrderCompleted);
+        
+        RemoveObjectTypeRestriction();
+
+        canPlayerMove = false;
+        canPlayerMoveCamera = false;
+        canPlayerInteract = false;
+        textPanel.SetActive(true);
+
+        StartTalking();
+        tutorialText.text = "Ben fet, has estat capaç de completar la comanda pel teu compte.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
+        yield return StartCoroutine(WaitForContinueButton());
+        isWaitingForManualClose = true;
+
+        StartTalking();
+        tutorialText.text = "El dia es donarà per acabat si et quedes sense clients o si s'acaba el dia. Pots veure quant queda sota el deute a l'esquerra.";
+        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        StopTalking();
+        yield return StartCoroutine(WaitForContinueButton());
+
+        Debug.Log("<color=green>✓ EighthTutorialPass completado</color>");
+    }
 
 
 
@@ -784,7 +795,7 @@ public class TutorialManager : MonoBehaviour
     public IEnumerator NinthTutorialPass()
     {
         SetTutorialState(TutorialState.FacturaDiaria);
-        
+        canPlayerMoveCamera = true;
         StartTalking();
         tutorialText.text = "Felicitats! Has completat el teu primer día en la Agencia. A ver com t'ha anat.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -796,7 +807,7 @@ public class TutorialManager : MonoBehaviour
         tutorialImage.gameObject.SetActive(false);
         timeSlider.gameObject.SetActive(false);
         inventoryUI.gameObject.SetActive(false);  
-        resultCanvas.gameObject.SetActive(true);
+        resultCanvas.SetActive(true);
         
         StartTalking();
         tutorialText.text = "Això d'aquí és la factura del dia. Aquí podràs veure els fruits del teu rendiment durant el dia.";
@@ -828,9 +839,8 @@ public class TutorialManager : MonoBehaviour
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
-        resultCanvas.gameObject.SetActive(false);
+        resultCanvas.SetActive(false);
         tutorialDebtText.gameObject.SetActive(true);
-        tutorialImage.gameObject.SetActive(true);
         timeSlider.gameObject.SetActive(true);
         inventoryUI.gameObject.SetActive(true); 
         canPlayerMoveCamera = true;
@@ -840,6 +850,7 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.FinTutorial);
         
+        canPlayerMoveCamera = true;
         StartTalking();
         tutorialText.text = "En fi, aquest és tot el meu treball per avui, que Ulisses no paga a les mainaders.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -1013,11 +1024,51 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void SetAllowedObjectType(ObjectType objectType, bool restricted = true)
+     /// <summary>
+    /// Permite solo coger múltiples tipos de objetos específicos
+    /// </summary>
+    public void SetAllowedObjectTypes(ObjectType[] objectTypes, bool restricted = true)
     {
-        allowedObjectType = objectType;
+        allowedObjectTypes = objectTypes;
         isObjectTypeRestricted = restricted;
-        Debug.Log($"<color=yellow>📌 Solo se permite coger: {objectType}</color>");
+        string objectNames = string.Join(", ", allowedObjectTypes);
+        Debug.Log($"<color=yellow>📌 Solo se permite coger: {objectNames}</color>");
+    }
+
+    /// <summary>
+    /// Verifica si el jugador puede coger un objeto específico (versión mejorada)
+    /// </summary>
+    public bool CanPickupObjectType(ObjectType objectType)
+    {
+        if (!isObjectTypeRestricted)
+        {
+            return true; // Si no hay restricción, puede coger cualquiera
+        }
+
+        // Si hay un array de tipos permitidos, verificar contra el array
+        if (allowedObjectTypes != null && allowedObjectTypes.Length > 0)
+        {
+            foreach (ObjectType allowed in allowedObjectTypes)
+            {
+                if (objectType == allowed)
+                {
+                    return true;
+                }
+            }
+            
+            string allowedNames = string.Join(", ", allowedObjectTypes);
+            Debug.Log($"<color=red>✗ No puedes coger {objectType}. Solo puedes coger: {allowedNames}</color>");
+            return false;
+        }
+
+        // Fallback al sistema anterior (un solo objeto permitido)
+        if (objectType == allowedObjectType)
+        {
+            return true;
+        }
+
+        Debug.Log($"<color=red>✗ No puedes coger {objectType}. Solo puedes coger: {allowedObjectType}</color>");
+        return false;
     }
 
     /// <summary>
@@ -1029,24 +1080,6 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("<color=green>✓ Restricción de objeto removida</color>");
     }
 
-    /// <summary>
-    /// Verifica si el jugador puede coger un objeto específico
-    /// </summary>
-    public bool CanPickupObjectType(ObjectType objectType)
-    {
-        if (!isObjectTypeRestricted)
-        {
-            return true; // Si no hay restricción, puede coger cualquiera
-        }
-
-        if (objectType == allowedObjectType)
-        {
-            return true; // Es el tipo permitido
-        }
-
-        Debug.Log($"<color=red>✗ No puedes coger {objectType}. Solo puedes coger: {allowedObjectType}</color>");
-        return false;
-    }
     
     private IEnumerator WaitForOrderToShow()
     {
