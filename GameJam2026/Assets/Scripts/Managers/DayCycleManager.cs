@@ -3,9 +3,7 @@ using System;
 
 public class DayCycleManager : MonoBehaviour
 {
-    public static DayCycleManager Instance;
-
-    [Header("Configuració del Temps")]
+    public static DayCycleManager Instance;    [Header("Configuració del Temps")]
     public float dayDurationInSeconds = 300f; // 5 minuts
     private float currentTime = 0f;
     private bool isDayActive = false;
@@ -15,6 +13,14 @@ public class DayCycleManager : MonoBehaviour
     [SerializeField] private Light sunLight;
     [SerializeField] private AnimationCurve sunIntensity;
     [SerializeField] private Gradient sunColor;
+
+    [Header("Environment Lighting")]
+    [SerializeField] private AnimationCurve environmentIntensity;
+    [SerializeField] private AnimationCurve reflectionIntensity;
+
+    [Header("Skybox")]
+    [SerializeField] private Gradient skyboxTint;
+    [SerializeField] private AnimationCurve skyboxExposure;
 
     public static event Action OnDayStart;
     public static event Action OnDayEnd;
@@ -100,8 +106,7 @@ public class DayCycleManager : MonoBehaviour
     public float GetProgress()
     {
         return Mathf.Clamp01(currentTime / dayDurationInSeconds);
-    }
-    private void UpdateLighting(float progress)
+    }    private void UpdateLighting(float progress)
     {
         if (sunLight == null) return;
 
@@ -113,6 +118,33 @@ public class DayCycleManager : MonoBehaviour
         // Intensitat i color segons la corba i el gradient
         sunLight.intensity = sunIntensity.Evaluate(progress);
         sunLight.color = sunColor.Evaluate(progress);
+
+        // Actualitzar Environment Lighting
+        if (environmentIntensity != null)
+        {
+            RenderSettings.ambientIntensity = environmentIntensity.Evaluate(progress);
+        }
+
+        // Actualitzar Environment Reflections
+        if (reflectionIntensity != null)
+        {
+            RenderSettings.reflectionIntensity = reflectionIntensity.Evaluate(progress);
+            DynamicGI.UpdateEnvironment(); // Actualitza les reflections en temps real
+        }
+
+        // Actualitzar Skybox Tint i Exposure
+        if (RenderSettings.skybox != null)
+        {
+            if (skyboxTint != null && RenderSettings.skybox.HasProperty("_Tint"))
+            {
+                RenderSettings.skybox.SetColor("_Tint", skyboxTint.Evaluate(progress));
+            }
+
+            if (skyboxExposure != null && RenderSettings.skybox.HasProperty("_Exposure"))
+            {
+                RenderSettings.skybox.SetFloat("_Exposure", skyboxExposure.Evaluate(progress));
+            }
+        }
     }
     private bool AreAllClientsDismissed()
     {
