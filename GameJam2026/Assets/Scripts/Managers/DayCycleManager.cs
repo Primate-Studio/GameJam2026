@@ -41,8 +41,11 @@ public class DayCycleManager : MonoBehaviour
 
         UpdateLighting(progress);
 
+        bool allClientsServed = ClientManager.Instance.clientsCount >= ClientManager.Instance.maxClientsPerDay;
+        bool noActiveClients = AreAllClientsDismissed();
+
         if (GameManager.Instance.CurrentState == GameState.Tutorial) return;
-        if (currentTime >= dayDurationInSeconds || ClientManager.Instance.clientsCount >= ClientManager.Instance.maxClientsPerDay)
+        if (currentTime >= dayDurationInSeconds || (allClientsServed && noActiveClients))
         {
             EndDay();
         }
@@ -110,5 +113,17 @@ public class DayCycleManager : MonoBehaviour
         // Intensitat i color segons la corba i el gradient
         sunLight.intensity = sunIntensity.Evaluate(progress);
         sunLight.color = sunColor.Evaluate(progress);
+    }
+    private bool AreAllClientsDismissed()
+    {
+        // Verificar si hay algún cliente activo en la tienda
+        for (int i = 0; i < ClientManager.Instance.targetPoints.Length; i++)
+        {
+            if (ClientManager.Instance.GetClientInSlot(i) != null)
+            {
+                return false; // Todavía hay clientes activos
+            }
+        }
+        return true; // No hay clientes activos
     }
 }

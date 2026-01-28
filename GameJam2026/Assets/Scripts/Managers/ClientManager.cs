@@ -61,6 +61,12 @@ public class ClientManager : MonoBehaviour
             return;
         }
 
+        // Verificar que no se ha alcanzado el límite de clientes del día
+        if (clientsCount >= maxClientsPerDay)
+        {
+            return; // No spawnear más clientes
+        }
+
         spawnTimer -= Time.deltaTime;
 
         if (spawnTimer <= 0)

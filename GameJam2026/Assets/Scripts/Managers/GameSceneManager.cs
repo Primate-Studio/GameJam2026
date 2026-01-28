@@ -32,11 +32,11 @@ public class GameSceneManager : MonoBehaviour
                 break;
 
             case GameState.GameOver:
-                LoadScene("GameOverScene");
+                LoadScene("ResultSceneLOSE");
                 break;
 
             case GameState.GameWin:
-                LoadScene("GameWinScene");
+                LoadScene("ResultSceneWIN");
                 break;
             case GameState.Result:
                 LoadScene("ResultScene");
