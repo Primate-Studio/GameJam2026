@@ -513,7 +513,7 @@ public class TutorialManager : MonoBehaviour
         
         InstanceClient(0);
         StartTalking();
-        tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, poniendolo en otro de tus bolsillos.";
+        tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, pero asegúrate de tener seleccionado el bolsillo 2 o 3 antes de cogerlo.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         objectHint2.ShowHint(true);
@@ -529,9 +529,13 @@ public class TutorialManager : MonoBehaviour
 
         canPlayerMoveCamera = true;
         canPlayerMove = true;
-        yield return new WaitUntil(() => playerInZone(playerTransforms[1].position));
+        canPlayerUseInventory = true;
+        yield return new WaitUntil(() => playerInZone(playerTransforms[1].position));   
         canPlayerInteract = true;
-        yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco));
+        
+        // NUEVA CONDICIÓN: Solo permitir coger el objeto si NO está en el slot 1 (índice 0)
+        yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco) && InventoryManager.Instance.currentSlotIndex > 0);
+        
         objectHint2.ShowHint(false);
 
         canPlayerMove = false;
@@ -543,7 +547,6 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(WaitForContinueButton());
 
     }
-
 
     public IEnumerator FifthTutorialPass()
     {
@@ -1036,22 +1039,6 @@ public bool IsClientInPosition(int slotIndex)
         return 0;
     }
 
-    public bool playerDropObject( ObjectType item)
-    {
-        // Verificar si el objeto ha sido entregado al pedido activo
-        if (OrderSystem.Instance != null)
-        {
-            var activeOrders = OrderSystem.Instance.GetActiveClientOrders();
-            foreach (var clientOrder in activeOrders)
-            {
-                if (clientOrder.order.deliveredItems.Contains(item))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     
     /// <summary>
     /// Cuenta cuántos objetos se han entregado al pedido activo
@@ -1099,25 +1086,6 @@ public bool IsClientInPosition(int slotIndex)
         return false;
     }
 
-
-    public bool isClientOrderDone(RequirementData monster, RequirementData condition, RequirementData environment)
-    {
-        // Verificar si existe un pedido activo que coincida con los requisitos
-        if (OrderSystem.Instance != null)
-        {
-            var activeOrders = OrderSystem.Instance.GetActiveClientOrders();
-            foreach (var clientOrder in activeOrders)
-            {
-                if (clientOrder.order.monster == monster && 
-                    clientOrder.order.condition == condition && 
-                    clientOrder.order.environment == environment)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     public void CreateClientOrder(int slotIndex, RequirementData monster, RequirementData condition, RequirementData environment)
     {
         // Obtener el cliente del slot desde el ClientManager
@@ -1220,5 +1188,53 @@ public bool IsClientInPosition(int slotIndex)
         Debug.Log("<color=green>▶ Tiempo del juego reanudado</color>");
     }
 
-
+    /// <summary>
+    /// Verifica si el jugador puede interactuar con un objeto durante el tutorial
+    /// </summary>
+    public bool CanInteractWithObject(ObjectType objectType)
+    {
+        // Si no estamos en tutorial, permitir interacción normal
+        if (GameManager.Instance.CurrentState != GameState.Tutorial)
+        {
+            return true;
+        }
+        
+        // Si es el segundo objeto del tutorial (Arco) y estamos en el ThirdTutorialPass
+        if (objectType == ObjectType.Arco && currentState == TutorialState.Interaccion)
+        {
+            // Solo permitir cogerlo si NO está en el slot 1 (índice 0)
+            if (InventoryManager.Instance.GetCurrentSlotIndex() == 0)
+            {
+                Debug.Log("<color=yellow>⚠ No puedes coger este objeto con el bolsillo 1 seleccionado. Cambia al bolsillo 2 o 3.</color>");
+                return false;
+            }
+        }
+        
+        // Para cualquier otro caso, permitir la interacción normal
+        return canPlayerInteract;
+    }
+    /// <summary>
+    /// Verifica si el jugador puede cambiar al slot especificado durante el tutorial
+    /// </summary>
+    public bool CanChangeToSlot(int slotIndex)
+    {
+        // Si no estamos en tutorial, permitir cambio normal
+        if (GameManager.Instance.CurrentState != GameState.Tutorial)
+        {
+            return true;
+        }
+        
+        // Si estamos en el paso del segundo objeto del tutorial
+        if (currentState == TutorialState.Interaccion && !playerTakeObject(ObjectType.Arco))
+        {
+            // BLOQUEAR el slot 1 (índice 0) hasta que se recoja el Arco
+            if (slotIndex == 0 && playerTakeObject(ObjectType.Odre))
+            {
+                Debug.Log("<color=red>⚠ No puedes usar el bolsillo 1 para recoger el segundo objeto. Usa el bolsillo 2 o 3.</color>");
+                return false;
+            }
+        }
+        
+        return true;
+    }
 }

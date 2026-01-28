@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
-using UnityEditor.PackageManager;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class ClientMovement : MonoBehaviour

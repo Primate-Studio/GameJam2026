@@ -23,7 +23,7 @@ public class InventorySlot
     }
 }
 
-/// <summary>
+/// <summary>   
 /// Gestiona el inventario del jugador con 3 bolsillos
 /// Controla qué objetos tiene, cuál está seleccionado y los cambios de selección
 /// </summary>
@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     public InventorySlot[] slots = new InventorySlot[3];
     
     [Tooltip("Índice del bolsillo actualmente seleccionado (0, 1 o 2)")]
-    [SerializeField] private int currentSlotIndex = 0;
+    [SerializeField] public int currentSlotIndex = 0;
     
     [Header("Hand Display")]
     [Tooltip("Transform donde se instanciarán los objetos en la mano")]
@@ -109,19 +109,38 @@ public class InventoryManager : MonoBehaviour
     {
         if (GameManager.Instance.CurrentState == GameState.Paused)
             return;
+
         currentSlotIndex += direction;
         
-        // Wrap around (si llegas al final, vuelves al principio)
         if (currentSlotIndex > 2)
             currentSlotIndex = 0;
         else if (currentSlotIndex < 0)
             currentSlotIndex = 2;
+        
+        // NUEVA VERIFICACIÓN: Comprobar si el tutorial permite este cambio de slot
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && 
+            TutorialManager.Instance != null)
+        {
+            if (!TutorialManager.Instance.CanChangeToSlot(currentSlotIndex))
+            {
+                // Si no está permitido, revertir el cambio
+                currentSlotIndex -= direction;
                 
+                if (currentSlotIndex > 2)
+                    currentSlotIndex = 0;
+                else if (currentSlotIndex < 0)
+                    currentSlotIndex = 2;
+                    
+                return; // No actualizar la mano ni notificar el cambio
+            }
+        }
+        
         // Actualizar el objeto en la mano
         UpdateHandObject();
         
         // Disparar evento
         OnSlotChanged?.Invoke(GetCurrentSlot().objectType);
+        OnInventoryUpdated?.Invoke();
     }
     
     /// <summary>
