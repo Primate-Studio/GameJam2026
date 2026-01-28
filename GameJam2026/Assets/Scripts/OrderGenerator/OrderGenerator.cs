@@ -54,22 +54,22 @@ public class OrderGenerator : MonoBehaviour
         
         int requiredCount = Random.Range(2, 4); // 2 o 3 objetos
 
-        int activePacks, activeActivities;
-        CalculateActivities(out activePacks, out activeActivities);
+        int activePacks, activeActivities1, activeActivities2;
+        CalculateActivities(out activePacks, out activeActivities1, out activeActivities2);
         // Random Pack
         PackData selectedPack = availablePacks[activePacks > 1 ? Random.Range(0, activePacks) : 0];
 
         ActivityData selectedActivity;
         // Random Activity from Pack
-        if(activeActivities == 0 && selectedPack.name == "Pack1")
+        if(activeActivities2 == 2 && selectedPack.name == "Pack2")
         {
-            selectedActivity = selectedPack.activities[Random.Range(0, 1)];
+            selectedActivity = selectedPack.activities[Random.Range(0, activeActivities2)];
         }
-        else if(activeActivities == 0 && selectedPack.name == "Pack2")
+        else if(activeActivities2 == 3 && selectedPack.name == "Pack2")
         {
-            selectedActivity = selectedPack.activities[0];
+            selectedActivity = selectedPack.activities[Random.Range(0, activeActivities2)];
         }
-        else {selectedActivity = selectedPack.activities[Random.Range(0, activeActivities)];}
+        else {selectedActivity = selectedPack.activities[Random.Range(0, activeActivities1)];}
         
 
         // Random Combo from Activity
@@ -131,39 +131,45 @@ public class OrderGenerator : MonoBehaviour
         return order;
     }
 
-    private void CalculateActivities(out int activePacks, out int activeActivities)
+    private void CalculateActivities(out int activePacks, out int activeActivities1, out int activeActivities2)
     {
         MoneyManager.Instance.CalculateDebtLevel();
 
         if (MoneyManager.Instance.DebtLevel == DebtLevel.High)
         {
             activePacks = 1;
-            activeActivities = 2;
+            activeActivities1 = 2;
+            activeActivities2 = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Medium)
         {
-            activePacks = 2;
-            activeActivities = 0;
+            activePacks = 1;
+            activeActivities1 = 4;
+            activeActivities2 = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Low)
         {
             activePacks = 2;
-            activeActivities = 2;
+            activeActivities1 = 4;
+            activeActivities2 = 2;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.LowLow)
         {
             activePacks = 2;
-            activeActivities = 3;
+            activeActivities1 = 4;
+            activeActivities2 = 3;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.None)
         {
             activePacks = 2;
-            activeActivities = 4;
+            activeActivities1 = 4;
+            activeActivities2 = 4;
         }
         else
         {
             activePacks = 1;
-            activeActivities = 2;
+            activeActivities1 = 2;
+            activeActivities2 = 0;
         }
     }
 }

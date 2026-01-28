@@ -45,7 +45,7 @@ private void Awake()
         failedMissionsText.text = MoneyManager.Instance.deathCount.ToString() + " x " + MoneyManager.Instance.deathPenalty.ToString() + "€" + " = " + (MoneyManager.Instance.deathCount * MoneyManager.Instance.deathPenalty).ToString() + "€";
         restockInventoryText.text = (MoneyManager.Instance.InventoryCost * MoneyManager.Instance.totalItemsSold).ToString() + "€";
 
-        totalText.text = MoneyManager.Instance.currentMoney + "€";
+        totalText.text = MoneyManager.Instance.totalMoneyBeforeDebt + "€";
         if(MoneyManager.Instance.debtPaymentAmount > 0)
         debtText.text += " - " + MoneyManager.Instance.debtPaymentAmount.ToString() + "€" + " = " + MoneyManager.Instance.Debt.ToString() + "€";
     }

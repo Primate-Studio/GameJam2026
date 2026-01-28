@@ -56,7 +56,6 @@ public class Order
             {
                 scoreChange = 100f;
                 MoneyManager.Instance.AddMoney(6f);
-                MoneyManager.Instance.SubtractMoney(2f);
                 totalScore += scoreChange;
             }
             // Verificar si el objeto es Decente (Mid)
@@ -64,7 +63,6 @@ public class Order
             {
                 scoreChange = 65f;
                 MoneyManager.Instance.AddMoney(4f);
-                MoneyManager.Instance.SubtractMoney(2f);                
                 totalScore += scoreChange;
             }
             // Verificar si el objeto es Pésimo (Bad)
@@ -72,14 +70,12 @@ public class Order
             {
                 scoreChange = 0f;
                 MoneyManager.Instance.AddMoney(1f);
-                MoneyManager.Instance.SubtractMoney(2f);                
                 totalScore += scoreChange;
             }
             else
             {
                 scoreChange = 10f;
                 MoneyManager.Instance.AddMoney(2f);
-                MoneyManager.Instance.SubtractMoney(2f);
             }
 
         }

@@ -12,6 +12,7 @@ public class MoneyManager : MonoBehaviour
     public float deathPenalty = 10f;
     public float debtPaymentRate = 0.25f; 
     public float successReward = 8f;
+    public float totalMoneyBeforeDebt;
 
     [HideInInspector] public float currentMoney = 0;
     [HideInInspector] public float totalMoney = 0;
@@ -50,22 +51,17 @@ public class MoneyManager : MonoBehaviour
             return GameState.GameWin;
             
         }
-        if (totalMoney < 0)
+        else if (totalMoney < 0)
         {
             return GameState.GameOver;
         }
-        return GameState.Result;
+        else return GameState.Result;
     }
     public void AddMoney(float amount)
     {
         currentMoney += amount;
         itemsBenefits += amount;
-    }
-
-    public void SubtractMoney(float amount)
-    {
-        currentMoney -= amount;
-        totalItemsSold ++;
+        totalItemsSold++;
     }
 
     public void successMoney()
@@ -84,16 +80,18 @@ public class MoneyManager : MonoBehaviour
     {
         initialDayDebt = Debt;
         if(currentMoney <= 0) return 0f;
-        debtPaymentAmount = currentMoney * debtPaymentRate;
+        debtPaymentAmount = totalMoney * debtPaymentRate;
         Debt -= debtPaymentAmount;
         return debtPaymentAmount;
     }
     
     public void CalculateTotalMoney()
     {
-        totalMoney += currentMoney - InventoryCost*totalItemsSold;
+        float inventoryRestockCost = InventoryCost * totalItemsSold;
+        float dailyBalance = currentMoney - inventoryRestockCost;
+        totalMoney += dailyBalance;
+        totalMoneyBeforeDebt = totalMoney;
         totalMoney -= debtPayment();
-        CheckWinLoseConditions();
     }
     public void CalculateDebtLevel()
     {
@@ -130,20 +128,6 @@ public class MoneyManager : MonoBehaviour
     public float GetDebt()
     {
         return Debt;
-    }
-    private void CheckWinLoseConditions()
-    {
-        if (Debt <= 0)
-        {
-            Debt = 0;
-            GameManager.Instance.ChangeState(GameState.GameWin);
-            return;
-        }
-        if (totalMoney < 0)
-        {
-            GameManager.Instance.ChangeState(GameState.GameOver);
-        }
-        else return;
     }
 
     public void ResetDayPaycheck()
