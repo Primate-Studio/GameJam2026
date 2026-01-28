@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
-  icon: {fileID: 21300000, guid: bb204c7e9a1bf4941807c39a3a20c429, type: 3}
+  icon: {fileID: 21300000, guid: 0f65bc4ec9202704885fb5152a19634a, type: 3}
   requirementName: "Quimera Democr\xE1tica"

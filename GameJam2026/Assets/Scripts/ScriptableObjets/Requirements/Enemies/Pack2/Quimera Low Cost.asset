@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 09000000
   Bad: 08000000
   type: 0
-  icon: {fileID: 21300000, guid: 5d110a1f23196f643bb6f7ff113790d7, type: 3}
+  icon: {fileID: 21300000, guid: 6d65d655b68fc1444ac36e3fec19f97b, type: 3}
   requirementName: Quimera LowCost

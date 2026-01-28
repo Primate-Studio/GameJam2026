@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 09000000
   Bad: 07000000
   type: 0
-  icon: {fileID: 21300000, guid: 573fd6f2e608b474c9d8552c34af9e20, type: 3}
+  icon: {fileID: 21300000, guid: 6804dfa6b9ab72d4298d3f322f2048d3, type: 3}
   requirementName: Ciclope Intelectual

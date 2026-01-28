@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 02000000
   Bad: 06000000
   type: 2
-  icon: {fileID: 21300000, guid: b315517b9cc41b241ab36672503bd456, type: 3}
+  icon: {fileID: 21300000, guid: dc1783826f12e3f418bd097cc3ce12ed, type: 3}
   requirementName: Coliseo en pleno acto

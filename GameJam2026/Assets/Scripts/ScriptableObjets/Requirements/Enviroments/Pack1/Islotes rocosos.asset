@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 01000000
   Bad: 04000000
   type: 2
-  icon: {fileID: 21300000, guid: 1feb1b3afdb45b542860541439e970fa, type: 3}
+  icon: {fileID: 21300000, guid: d55d7cd3cdeed9f4c846a5b0c108c362, type: 3}
   requirementName: Islotes rocosos

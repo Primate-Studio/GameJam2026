@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0e000000
   Bad: 0d000000
   type: 1
-  icon: {fileID: 21300000, guid: 422395282702964439aa0774ea86951b, type: 3}
+  icon: {fileID: 21300000, guid: 1688f4b7702813a49b21e1b48029ae35, type: 3}
   requirementName: "Tormenta El\xE9ctrica"

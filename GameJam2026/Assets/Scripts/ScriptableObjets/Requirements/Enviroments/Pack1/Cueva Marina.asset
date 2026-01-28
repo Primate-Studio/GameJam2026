@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 06000000
   Bad: 01000000
   type: 2
-  icon: {fileID: 21300000, guid: a79aeab934a204a459804031b25a3fcb, type: 3}
+  icon: {fileID: 21300000, guid: f27bd9f1aff5e504f8175c86d229e41c, type: 3}
   requirementName: Cueva Marina

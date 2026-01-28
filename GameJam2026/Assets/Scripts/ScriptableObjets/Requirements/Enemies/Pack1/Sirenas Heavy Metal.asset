@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
-  icon: {fileID: 21300000, guid: 4371f3815bd0c7846b0ad81283351d2f, type: 3}
+  icon: {fileID: 21300000, guid: 95fbe557d69ead14d9a72af951f31884, type: 3}
   requirementName: Sirenas Heavy Metal

@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 02000000
   Bad: 04000000
   type: 2
-  icon: {fileID: 21300000, guid: b9bc10430797f4a41ae387fea7c89682, type: 3}
+  icon: {fileID: 21300000, guid: 4b770179f4df7d94e963bb8dedbe34ce, type: 3}
   requirementName: Alto de torre en Ruinas

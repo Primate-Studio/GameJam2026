@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 01000000
   Bad: 02000000
   type: 2
-  icon: {fileID: 21300000, guid: e46cc22d3ba92c848b83a0c58eb63c44, type: 3}
+  icon: {fileID: 21300000, guid: f9aa6b778dee8f445b914f98d862ee40, type: 3}
   requirementName: Nido de basura

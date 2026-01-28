@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 09000000
   Bad: 0a000000
   type: 0
-  icon: {fileID: 21300000, guid: 7d88ff4df57d6de4793594714e28e6aa, type: 3}
+  icon: {fileID: 21300000, guid: ebde2d01ab649d34eb0ae4e1e1cbe9fb, type: 3}
   requirementName: Escila Enredada

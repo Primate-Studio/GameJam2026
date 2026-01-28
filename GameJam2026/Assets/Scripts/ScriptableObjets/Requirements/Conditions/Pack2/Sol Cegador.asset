@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 0c000000
   type: 1
-  icon: {fileID: 21300000, guid: 7a139b556c1290745abb90809607f60f, type: 3}
+  icon: {fileID: 21300000, guid: 97f525d63f6181941bc834c7386ee417, type: 3}
   requirementName: Sol Cegador

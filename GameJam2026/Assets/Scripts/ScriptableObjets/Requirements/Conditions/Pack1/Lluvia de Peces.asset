@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0f000000
   Bad: 0c000000
   type: 1
-  icon: {fileID: 21300000, guid: 4cabe225a0dd4964b8b873f6ee15a055, type: 3}
+  icon: {fileID: 21300000, guid: 35f9a431990b8954b872534f7be7bec6, type: 3}
   requirementName: Lluvia de Peces

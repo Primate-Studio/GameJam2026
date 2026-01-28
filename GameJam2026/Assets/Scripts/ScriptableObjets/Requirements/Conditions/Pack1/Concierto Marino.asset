@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0e000000
   Bad: 0f000000
   type: 1
-  icon: {fileID: 21300000, guid: d368e06364966bb44b4cc6f558feae95, type: 3}
+  icon: {fileID: 21300000, guid: 3070df409b3319d4fa850a4dbfba0dec, type: 3}
   requirementName: Concierto Marino

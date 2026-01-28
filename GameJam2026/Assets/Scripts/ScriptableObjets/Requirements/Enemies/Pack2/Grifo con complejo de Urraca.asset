@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0b000000
   type: 0
-  icon: {fileID: 21300000, guid: 2d1f4d710269ce946912e2e344cc937f, type: 3}
+  icon: {fileID: 21300000, guid: 120319281a8f6034ab3b2a8d29e5c3c6, type: 3}
   requirementName: Grifo con complejo de Urraca

@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 02000000
   Bad: 04000000
   type: 2
-  icon: {fileID: 21300000, guid: 45bfd28d6af98114ca98f7a544b19b47, type: 3}
+  icon: {fileID: 21300000, guid: fd29c8127391ae3419d0703cae218dd3, type: 3}
   requirementName: Restos de un Naufrago

@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0d000000
   Bad: 0e000000
   type: 1
-  icon: {fileID: 21300000, guid: df022391d4453b44abbe7fa658e97f21, type: 3}
+  icon: {fileID: 21300000, guid: 7f977dee089310c46a8ebfc8e35cde34, type: 3}
   requirementName: Plaga de Insectos

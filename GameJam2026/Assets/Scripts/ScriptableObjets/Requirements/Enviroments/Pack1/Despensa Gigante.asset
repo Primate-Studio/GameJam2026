@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 06000000
   Bad: 02000000
   type: 2
-  icon: {fileID: 21300000, guid: 53e5b88013be2364e955f5747ac55122, type: 3}
+  icon: {fileID: 21300000, guid: 1288df5b50b6a0b4e85275517fcfe931, type: 3}
   requirementName: Despensa Gigante

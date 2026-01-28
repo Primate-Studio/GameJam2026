@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 0c000000
   type: 1
-  icon: {fileID: 21300000, guid: 4c8b997cbc9d15e4981cfbc0120c73e5, type: 3}
+  icon: {fileID: 21300000, guid: f4c7d1bb29a86504e94a95b7819f7d08, type: 3}
   requirementName: Niebla Espesa

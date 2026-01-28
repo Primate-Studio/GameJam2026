@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 11000000
   Bad: 05000000
   type: 1
-  icon: {fileID: 21300000, guid: a51ede7882a3b92428ed8e6489596ea1, type: 3}
+  icon: {fileID: 21300000, guid: b9c79579e6b2b7b4cbb45976905c9e04, type: 3}
   requirementName: Lluvia de Ceniza

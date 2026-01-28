@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 04000000
   Bad: 05000000
   type: 2
-  icon: {fileID: 21300000, guid: aa13318cd24ec954a8938fb9b5214b8e, type: 3}
+  icon: {fileID: 21300000, guid: 2ef9541fac25f3a469d37defdfde303a, type: 3}
   requirementName: "Caverna Volc\xE1nica"

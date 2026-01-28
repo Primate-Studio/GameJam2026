@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0f000000
   Bad: 0d000000
   type: 1
-  icon: {fileID: 21300000, guid: 6b65d3a631983be44a49d1b897971d3d, type: 3}
+  icon: {fileID: 21300000, guid: f211fecef11565d41a688ce8ff4ac13a, type: 3}
   requirementName: Agua electrificada

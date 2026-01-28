@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 06000000
   Bad: 02000000
   type: 2
-  icon: {fileID: 21300000, guid: a79dc353f69611c47b6701ac99f4a123, type: 3}
+  icon: {fileID: 21300000, guid: 54d4ede0a5be0de41816300ebf4e9bbf, type: 3}
   requirementName: Biblioteca desordenada

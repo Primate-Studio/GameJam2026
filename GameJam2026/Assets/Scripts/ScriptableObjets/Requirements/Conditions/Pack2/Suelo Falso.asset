@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 10000000
   Bad: 0d000000
   type: 1
-  icon: {fileID: 21300000, guid: 3446fe2b90cfe5841b5c4ff6da118643, type: 3}
+  icon: {fileID: 21300000, guid: 36ac046e3904db54abbf61f3a38df1ea, type: 3}
   requirementName: Suelo Falso

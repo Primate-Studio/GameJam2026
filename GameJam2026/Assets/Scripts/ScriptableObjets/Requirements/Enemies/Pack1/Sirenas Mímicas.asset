@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0a000000
   Bad: 08000000
   type: 0
-  icon: {fileID: 21300000, guid: 6b25f991d2084014e99b096db75051dc, type: 3}
+  icon: {fileID: 21300000, guid: 0086800346532cb479ce53dcd28074df, type: 3}
   requirementName: "Sirenas M\xEDmicas"

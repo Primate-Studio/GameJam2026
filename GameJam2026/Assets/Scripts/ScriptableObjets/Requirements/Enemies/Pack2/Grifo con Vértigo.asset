@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0b000000
   Bad: 09000000
   type: 0
-  icon: {fileID: 21300000, guid: 5ad9b4bb263bdea4fb2d094acb1dc995, type: 3}
+  icon: {fileID: 21300000, guid: 32f49b07320d8194e9e3487274a71eba, type: 3}
   requirementName: "Grifo con V\xE9rtigo"

@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
-  icon: {fileID: 21300000, guid: 7eb502e45d3e6a94c902a35cdde7a6f3, type: 3}
+  icon: {fileID: 21300000, guid: 94b0da34b7e2e45488df6bba8222dedb, type: 3}
   requirementName: Ciclope Borracho

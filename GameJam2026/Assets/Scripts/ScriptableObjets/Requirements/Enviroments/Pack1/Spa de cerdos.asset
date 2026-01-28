@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 04000000
   Bad: 0c000000
   type: 2
-  icon: {fileID: 21300000, guid: b2649fbbe9da3c34aab4e10aadfa6125, type: 3}
+  icon: {fileID: 21300000, guid: 02360bfca11f9bf4a8e6f81236b4324a, type: 3}
   requirementName: Spa de cerdos

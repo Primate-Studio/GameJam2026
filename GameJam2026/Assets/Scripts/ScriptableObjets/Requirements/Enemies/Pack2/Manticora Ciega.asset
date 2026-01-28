@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 0b000000
   Bad: 08000000
   type: 0
-  icon: {fileID: 21300000, guid: 84ed412350fc11240b6e13a0e69ddcf9, type: 3}
+  icon: {fileID: 21300000, guid: 2b7373a34b1ec89419b3ffcaff27554e, type: 3}
   requirementName: Manticora Ciega

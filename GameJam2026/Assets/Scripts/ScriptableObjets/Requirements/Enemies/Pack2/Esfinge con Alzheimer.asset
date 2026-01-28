@@ -16,5 +16,5 @@ MonoBehaviour:
   Mid: 08000000
   Bad: 0a000000
   type: 0
-  icon: {fileID: 21300000, guid: 14ec183ecdefc644782baa9e04c5e448, type: 3}
+  icon: {fileID: 21300000, guid: dcbaa5a70573ae5498e080f564e13066, type: 3}
   requirementName: Esfinge con Alzheimer
