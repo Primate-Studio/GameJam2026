@@ -48,6 +48,16 @@ private void Awake()
         totalText.text = MoneyManager.Instance.totalMoneyBeforeDebt + "€";
         if(MoneyManager.Instance.debtPaymentAmount > 0)
         debtText.text += " - " + MoneyManager.Instance.debtPaymentAmount.ToString() + "€" + " = " + MoneyManager.Instance.Debt.ToString() + "€";
+        
+        if (MoneyManager.Instance.isEternalMode)
+        {
+            float balance = MoneyManager.Instance.debtPaymentAmount; // Hem guardat el dailyBalance aquí
+            string sign = balance >= 0 ? "-" : "+";
+            debtText.text = $"{MoneyManager.Instance.initialDayDebt}€ {sign} {Mathf.Abs(balance)}€ = {MoneyManager.Instance.Debt}€";
+            
+            // Canviem el color segons si el deute ha baixat (verd) o pujat (vermell)
+            debtText.color = balance >= 0 ? Color.green : Color.red;
+        }
     }
 
     private void HandleNextDay()

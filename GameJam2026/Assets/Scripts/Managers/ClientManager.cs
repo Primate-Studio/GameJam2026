@@ -18,7 +18,7 @@ public class ClientManager : MonoBehaviour
     [Header("Configuració dels Clients")]
     public int maxClientsPerDay = 5;
     public int clientsCount = 0;
-    public float orderDuration = 60f;
+    public float orderDuration = 90f;
 
     void Awake()
     {
@@ -181,20 +181,18 @@ public class ClientManager : MonoBehaviour
         switch (MoneyManager.Instance.DebtLevel)
         {
             case DebtLevel.High:
-                orderDuration = 70f;
+                orderDuration = Random.Range(85f, 95f);
                 break;
             case DebtLevel.Medium:
-                orderDuration = 62f;
+                orderDuration = Random.Range(65f, 75f);
                 break;
             case DebtLevel.Low:
-                orderDuration = 51f;
+                orderDuration = Random.Range(55f, 65f);
                 break;
             case DebtLevel.LowLow:
-                orderDuration = 37f;
+                orderDuration = Random.Range(45f, 55f);
                 break;
-            case DebtLevel.None:
-                orderDuration = 25f;
-                break;
+
         }
     }
     

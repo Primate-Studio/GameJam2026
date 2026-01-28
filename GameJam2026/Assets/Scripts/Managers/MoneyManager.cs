@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum DebtLevel { Zero ,None, LowLow, Low, Medium, High }
+public enum DebtLevel { Zero, LowLow, Low, Medium, High }
 public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance { get; private set; }
@@ -13,6 +13,7 @@ public class MoneyManager : MonoBehaviour
     public float debtPaymentRate = 0.25f; 
     public float successReward = 8f;
     public float totalMoneyBeforeDebt;
+    public bool isEternalMode = false;
 
     [HideInInspector] public float currentMoney = 0;
     [HideInInspector] public float totalMoney = 0;
@@ -45,6 +46,8 @@ public class MoneyManager : MonoBehaviour
     {
         CalculateTotalMoney();
         
+        if (isEternalMode) return GameState.Result;
+
         if (Debt <= 0)
         {
             Debt = 0;
@@ -89,31 +92,44 @@ public class MoneyManager : MonoBehaviour
     {
         float inventoryRestockCost = InventoryCost * totalItemsSold;
         float dailyBalance = currentMoney - inventoryRestockCost;
+        if(isEternalMode)
+        {
+            // MODE ETERN: El benefici resta deute, la pèrdua suma deute
+            // Si dailyBalance és -50, Debt - (-50) farà que el deute pugi a +50
+            Debt -= dailyBalance;
+            
+            // En aquest mode, potser vols que el totalMoney (els teus estalvis) 
+            // sigui simplement el que t'ha sobrat després de pagar deute, 
+            // o pots deixar-lo a 0 i que tot vagi al deute.
+            totalMoney = Mathf.Max(0, totalMoney + dailyBalance);
+            
+            // No hi ha un "debtPaymentAmount" fix perquè tot el benefici s'ha aplicat al deute
+            debtPaymentAmount = dailyBalance;
+        }
+        else{
         totalMoney += dailyBalance;
         totalMoneyBeforeDebt = totalMoney;
         totalMoney -= debtPayment();
+        }
     }
     public void CalculateDebtLevel()
     {
-        if (Debt > 70 && Debt <= 130)
+
+        if (Debt > 0 && Debt <= 60)
         {
             debtLevel = DebtLevel.LowLow;
         }
-        else if (Debt > 130 && Debt <= 180)
+        else if (Debt > 60 && Debt <= 120)
         {
             debtLevel = DebtLevel.Low;
         }
-        else if (Debt > 180 && Debt <= 220)
+        else if (Debt > 120 && Debt <= 180)
         {
             debtLevel = DebtLevel.Medium;
         }
-        else if( Debt > 220 )
+        else if( Debt > 180 )
         {
             debtLevel = DebtLevel.High;
-        }
-        else if( Debt <= 70 && Debt > 0 )
-        {
-            debtLevel = DebtLevel.None;
         }
         else if( Debt <= 0 )
         {

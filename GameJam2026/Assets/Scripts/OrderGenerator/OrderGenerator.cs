@@ -138,28 +138,28 @@ public class OrderGenerator : MonoBehaviour
         if (MoneyManager.Instance.DebtLevel == DebtLevel.High)
         {
             activePacks = 1;
-            activeActivities1 = 2;
+            activeActivities1 = 1;
             activeActivities2 = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Medium)
         {
             activePacks = 1;
-            activeActivities1 = 4;
+            activeActivities1 = 2;
             activeActivities2 = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.Low)
         {
-            activePacks = 2;
-            activeActivities1 = 4;
-            activeActivities2 = 2;
+            activePacks = 1;
+            activeActivities1 = 3;
+            activeActivities2 = 0;
         }
         else if (MoneyManager.Instance.DebtLevel == DebtLevel.LowLow)
         {
-            activePacks = 2;
+            activePacks = 1;
             activeActivities1 = 4;
-            activeActivities2 = 3;
+            activeActivities2 = 0;
         }
-        else if (MoneyManager.Instance.DebtLevel == DebtLevel.None)
+        else if(MoneyManager.Instance.isEternalMode)
         {
             activePacks = 2;
             activeActivities1 = 4;

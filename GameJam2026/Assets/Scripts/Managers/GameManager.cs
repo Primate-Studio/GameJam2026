@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
     }
     public void StartEternalMode()
     {
+        if(MoneyManager.Instance != null) MoneyManager.Instance.isEternalMode = true;
         currentState = GameState.Playing;
         OnGameStateChanged?.Invoke(currentState);
     }

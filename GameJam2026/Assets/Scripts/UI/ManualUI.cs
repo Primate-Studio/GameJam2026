@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ManualUI : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class ManualUI : MonoBehaviour
         manualPanel.SetActive(false);
         flippingPageTransform.gameObject.SetActive(false);
         IsOpen = false;
+
         UpdateStaticPages();
     }
 
@@ -102,8 +104,15 @@ public class ManualUI : MonoBehaviour
 
     public void NextPage()
     {
-        if (currentLeftPageIndex + 2 < pageSprites.Length && !isAnimating)
+        int maxSpritesAllowed = pageSprites.Length;
+        if (MoneyManager.Instance != null && !MoneyManager.Instance.isEternalMode)
+        {
+            maxSpritesAllowed = 4; 
+        }
+        if (currentLeftPageIndex + 2 < maxSpritesAllowed && !isAnimating)
+        {
             StartCoroutine(FlipForward());
+        }
     }
 
     public void PrevPage()
