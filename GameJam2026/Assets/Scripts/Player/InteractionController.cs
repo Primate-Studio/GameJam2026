@@ -47,20 +47,32 @@ public class InteractionController : MonoBehaviour
         }
     }
     
-    // Hem d'actualitzar els mètodes per acceptar l'objecte com a paràmetre
-    private void PickUpObject(InteractableObject obj)
+    public void PickUpObject(InteractableObject interactableObject)
     {
-        if (InventoryManager.Instance.TryAddToCurrentSlot(obj))
+        // NUEVO: Verificar restricción de tipo de objeto en tutorial
+        if (TutorialManager.Instance != null && 
+            !TutorialManager.Instance.CanPickupObjectType(interactableObject.objectType))
         {
-            Debug.Log($"<color=green>✓ Objeto {obj.objectType} recogido!</color>");
+            Debug.Log($"<color=red>✗ No puedes coger {interactableObject.objectType} ahora</color>");
+            return;
         }
+
+        InventoryManager.Instance.TryAddToCurrentSlot(interactableObject);
+        Debug.Log($"<color=green>✓ Objeto {interactableObject.objectType} recogido!</color>");
     }
 
-    private void SwapObject(InteractableObject obj)
+    public void SwapObject(InteractableObject interactableObject)
     {
-        ObjectType oldType = InventoryManager.Instance.GetCurrentObjectType();
-        InventoryManager.Instance.SwapCurrentSlot(obj);
-        Debug.Log($"<color=cyan>↔ Objeto {oldType} cambiado por {obj.objectType}</color>");
+        // NUEVO: Verificar restricción de tipo de objeto en tutorial
+        if (TutorialManager.Instance != null && 
+            !TutorialManager.Instance.CanPickupObjectType(interactableObject.objectType))
+        {
+            Debug.Log($"<color=red>✗ No puedes intercambiar por {interactableObject.objectType} ahora</color>");
+            return;
+        }
+
+        InventoryManager.Instance.SwapCurrentSlot(interactableObject);
+        Debug.Log($"<color=cyan>↔ Objeto intercambiado por {interactableObject.objectType}</color>");
     }
 
     private void DeliverObject(InteractableObject obj)

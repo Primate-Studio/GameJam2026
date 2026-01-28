@@ -16,10 +16,13 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial UI")]
     public Canvas tutorialUI;
     public UnityEngine.UI.Image tutorialImage;
+    public GameObject inventoryUI;
     public TextMeshProUGUI tutorialText;
     public TextMeshProUGUI tutorialDebtText;
     public Slider timeSlider;
     public Button continueButton;
+
+    public Canvas resultCanvas;
 
     [Header("Tutorial Sprites")]
     public Sprite movementSprite;
@@ -57,6 +60,8 @@ public class TutorialManager : MonoBehaviour
     public bool isPlayerLookingAt = false;
     public bool playerHasDoneTutorial = false;
     public bool orderHasBeenShown = false;
+    public ObjectType allowedObjectType = ObjectType.Odre;  // Nuevo: tipo de objeto permitido
+    public bool isObjectTypeRestricted = false;  // Nuevo: si está restringido o no
 
     [Header("Transforms")]
 
@@ -171,7 +176,7 @@ public class TutorialManager : MonoBehaviour
         // Desactivar todos los sistemas del juego normal
         DisableNormalGameSystems();
         
-        // Activar UI del tutorial
+        // Activar UI deasdasdl tutorial
         if (tutorialUI != null)
         {
             tutorialUI.gameObject.SetActive(true);
@@ -341,31 +346,19 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.Introduction);
         
         StartTalking();
-        tutorialText.text = "¡Arriba, gandul! Bienvenido al Oasis, el imperio viral de Ulises. Anoche te bebiste hasta el agua de los floreros.";
+        tutorialText.text = "A dalt, gandul! Benvingut a l'Agència de Venda d'Odissees, l'imperi viral d'Ulisses. Anit et vas beure fins a l'aigua dels florers en l'Oasi.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Ahora mismo estas trabajando para él en su tienda de objetos para las odiseas. La Odisea de TONI, para ser exactos.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-        
-        StartTalking();
-        tutorialText.text = "Pero antes de nada, hablemos de tu deuda con Ulises...";
+        tutorialText.text = "La broma et surt per 250 monedes. Ulisses és un tiu raonable, treballa en l'Agència per a pagar-la o seràs executat en acabar el dia. Tu tries.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "La broma te sale por 250 monedas. Ulises es un tipo razonable, trabaja en la Agencia para pagarla o serás ejecutado al acabar el día. Tú eliges.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Arriba a la izquierda siempre puedes observar lo que te queda por pagar. ¡Suerte!";
+        tutorialText.text = "A dalt a l'esquerra sempre pots observar el que et queda per pagar.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -378,7 +371,7 @@ public class TutorialManager : MonoBehaviour
         
           // El perro vuela detrás del jugador
         StartTalking();
-        tutorialText.text = "No me pierdas de vista o estaremos aquí todo el día. Mueve el cuello y búscame, estoy volando detrás de ti.";
+        tutorialText.text = "Comencem pel bàsic perquè t'acostumis al lloc. Segueix-me.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         if (dogController != null && dogTransforms.Length > 0)
@@ -407,13 +400,13 @@ public class TutorialManager : MonoBehaviour
         }
         dogController.LookAt(playerPosition);
 
-        canPlayerMoveCamera = false;
-        StartTalking();
-        tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        //yield return StartCoroutine(WaitForContinueButton());
-        // Pop Up Imagen de controles de movimiento
+        // canPlayerMoveCamera = false;
+        // StartTalking();
+        // tutorialText.text = "Empecemos por lo básico para que te acostumbres al lugar. Acércate a mí.";
+        // yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
+        // StopTalking();
+        // //yield return StartCoroutine(WaitForContinueButton());
+        // // Pop Up Imagen de controles de movimiento
         if (movementSprite != null)
         {
             tutorialImage.sprite = movementSprite;
@@ -435,7 +428,7 @@ public class TutorialManager : MonoBehaviour
         
         canPlayerMoveCamera = false;
         StartTalking();
-        tutorialText.text = "Empecemos por lo básico. Acércate a ese estante y agarra el Odre.";
+        tutorialText.text = "Acosta't a aquest prestatge i agarra l'Odre.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         //yield return StartCoroutine(WaitForContinueButton());
@@ -446,6 +439,8 @@ public class TutorialManager : MonoBehaviour
             tutorialImage.sprite = interactionSprite;
             tutorialImage.gameObject.SetActive(true);
         }
+
+        SetAllowedObjectType(ObjectType.Odre, true);
         
         canPlayerMoveCamera = true;
         canPlayerMove = true;
@@ -453,17 +448,14 @@ public class TutorialManager : MonoBehaviour
         
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Odre));
         objectHint1.ShowHint(false);
+
+        RemoveObjectTypeRestriction();
+
         canPlayerInteract = false;
         tutorialImage.gameObject.SetActive(false);
         canPlayerMoveCamera = false;
         StartTalking();
-        tutorialText.text = "Bien. Escucha que esto es importante. En la Agencia vendemos imitaciones baratas de armas divinas.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Se dividen en tres tipos: Ataque para los monstruos, Adaptabilidad para las condiciones raras y Utilidad para el entorno.";
+        tutorialText.text = "Bé. Escolta que això és important. Les eines es divideixen en tres tipus";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -476,7 +468,7 @@ public class TutorialManager : MonoBehaviour
         }
         
         StartTalking();
-        tutorialText.text = "Cada uno de los tipos tiene su propio estante. Los puedes diferenciar por los Iconos.";
+        tutorialText.text = "Cadascun dels tipus té el seu propi prestatge. Els pots diferenciar per les Icones.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -490,17 +482,13 @@ public class TutorialManager : MonoBehaviour
         }
         
         StartTalking();
-        tutorialText.text = "Ahora, fíjate en la parte de abajo. Eso de ahí son tus bolsillos, cada objeto ocupa una ranura en tus bolsillos.";
+        tutorialText.text = "A baix a la dreta tens les butxaques, cada objecte ocupa una ranura. A més pots intercanviar de ranures, anem, prova-ho.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         canPlayerMove = false;
         canPlayerMoveCamera = false;
-        StartTalking();
-        tutorialText.text = "Puedes intercambiar de ranuras, vamos, pruébalo.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
         //yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerUseInventory = true;
@@ -513,7 +501,7 @@ public class TutorialManager : MonoBehaviour
         
         InstanceClient(0);
         StartTalking();
-        tutorialText.text = "¡Bien! Ahora ve a por ese otro objeto, pero asegúrate de tener seleccionado el bolsillo 2 o 3 antes de cogerlo.";
+        tutorialText.text = "Ara agafa l'Arc. Els objectes trigaran a tornar a estar disponibles una vegada agafats, tingues-ho en compte.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         objectHint2.ShowHint(true);
@@ -525,6 +513,8 @@ public class TutorialManager : MonoBehaviour
         }
         dogController.LookAt(playerPosition);
         
+        SetAllowedObjectType(ObjectType.Arco, true);
+
         //yield return StartCoroutine(WaitForContinueButton());
 
         canPlayerMoveCamera = true;
@@ -537,14 +527,10 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco) && InventoryManager.Instance.currentSlotIndex > 0);
         
         objectHint2.ShowHint(false);
+        RemoveObjectTypeRestriction();
 
         canPlayerMove = false;
         canPlayerMoveCamera = false;
-        StartTalking();
-        tutorialText.text = "Ojo, aquí las cosas parecen infinitas, pero reponerlas cuesta dinero. Ten en cuenta que una vez cojas un objeto este tardará en aparecer.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
 
     }
 
@@ -553,7 +539,7 @@ public class TutorialManager : MonoBehaviour
         SetTutorialState(TutorialState.PrimerCliente);
         // sonido de campana
         StartTalking();
-        tutorialText.text = "¿Oyes eso? Ha llegado tu primer cliente. Ve a atenderle.";
+        tutorialText.text = "Ha arribat el teu primer client. Ves a atendre-li. El client sempre et demanarà de dos a tres objectes de categories diferents.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         //yield return StartCoroutine(WaitForContinueButton());
@@ -581,30 +567,9 @@ public class TutorialManager : MonoBehaviour
 
         
         isWaitingForFirstClientOrder = false;
-
-        // Pop Up Imagen del bocadillo de pedido
-        if (orderSprite != null)
-        {
-            tutorialImage.sprite = orderSprite;
-            tutorialImage.gameObject.SetActive(true);
-        }
         
         StartTalking();
-        tutorialText.text = "No te va a decir, quiero una espada. Te dirá qué Monstruo quiere matar, qué Condición hay y dónde está. Recuerda los iconos de cada categoría.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        isWaitingContinueButton = true;
-        yield return StartCoroutine(WaitForContinueButton());
-
-        // Pop Up Imagen de la nota de pedido
-        if (orderNoteSprite != null)
-        {
-            tutorialImage.sprite = orderNoteSprite;
-            tutorialImage.gameObject.SetActive(true);
-        }
-        
-        StartTalking();
-        tutorialText.text = "Siempre que el pedido esté activo verás las condiciones específicas en una nota en la derecha.";
+        tutorialText.text = "Sempre que la comanda estigui activa veuràs les condicions específiques en una nota en la dreta.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -618,106 +583,69 @@ public class TutorialManager : MonoBehaviour
         }
         
         StartTalking();
-        tutorialText.text = "Ese reloj de colores es su nivel de desesperación. Si llega a rojo, se enfadan. Si llega a cero, se enfrentará a una muerte segura.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Eso solo significa una cosa: perder dinero. Así que date prisa en atenderles.";
+        tutorialText.text = "Aquesta roda de colors és el seu nivell de desesperació. Si arriba a vermell, s'enfaden. Si arriba a zero, es van sense cap mena d'equip.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
         tutorialImage.gameObject.SetActive(false);
 
         StartTalking();
-        tutorialText.text = "Ten en cuenta que solo puedes atender a un máximo de tres clientes a la vez.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Así que no te emociones que no eres un pulpo.";
+        tutorialText.text = "Tingues en compte que només pots atendre un màxim de tres clients alhora.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
     }
 
-    public IEnumerator SixthTutorialPass()
+        public IEnumerator SixthTutorialPass()
     {
         SetTutorialState(TutorialState.Manual);
         
         StartTalking();
-        tutorialText.text = "No te asustes todavía, para poder saber qué es lo mejor para cada situación tienes el manual. Abrelo.";
+        tutorialText.text = "Per a poder saber què és el millor per a cada situació tens el manual. Obre-ho.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        //yield return StartCoroutine(WaitForContinueButton());
+        
+        canPlayerOpenManual = true;  
         isWaitingForManualOpen = true;
         yield return new WaitUntil(() => playerOpenManual() == true);
 
         isWaitingForManualOpen = false;
         canPlayerInteract = false;
-        canPlayerCloseManual = true;
-        isWaitingForManualClose = true;
+        canPlayerCloseManual = false;  
         
         StartTalking();
-        tutorialText.text = "Ten en cuenta que mientras tengas el manual abierto el tiempo seguirá corriendo igual, por lo que cuando antes te acostumbre mejor.";
+        tutorialText.text = "Cada entrada del manual està dedicada a una activitat, amb les seves tres categories. Pots diferenciar les activitats ràpidament pel Monstre a derrotar.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Cada entrada del manual está dividida por la categoría que te he explicado antes.";
+        tutorialText.text = "Aquí veuràs que objectes són exactament els necessaris per a les condicions que et demana el client.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Prueba a pasar de página y verlo por ti mismo.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        //yield return StartCoroutine(WaitForContinueButton());
         
         canPlayerChangePage = true;
         yield return new WaitUntil(() => manualPageChanged());
 
         StartTalking();
-        tutorialText.text = "Aquí verás que items son exactamente los necesarios para las condiciones específicas de la aventura que te está pidiendo el cliente.";
+        tutorialText.text = "Per a cada situació específica et sortiran tres objectes amb la seva utilitat a la dreta.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Si te fijas la nota sigue activa incluso con el manual abierto.";
+        tutorialText.text = "Depenent quin triïs el client tindrà més o menys probabilitats de sortir victoriós.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton()); 
 
         StartTalking();
-        tutorialText.text = "Para cada situación específica te saldrán tres objetos debajo con su utilidad a la derecha.";
+        tutorialText.text = "Casualment, els objectes de les teves butxaques són just el que el client vol. Tanca el manual.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Dependiendo cual elijas el cliente tendrá más o menos probabilidades de salir victorioso.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-        StartTalking();
-        tutorialText.text = "Recuerda que los objetos no son eternos. Si cojes uno tardará en aparecer otro igual.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-        canPlayerChangePage = true;
-        canPlayerCloseManual= true;
-
-        StartTalking();
-        tutorialText.text = "Cuando termines cierra el manual.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
+        
+        canPlayerCloseManual = true; 
         isWaitingForManualClose = true;
         yield return new WaitUntil(() => playerCloseManual() == true);
         isWaitingForManualClose = false;
@@ -725,19 +653,13 @@ public class TutorialManager : MonoBehaviour
         canPlayerMove = true;
         canPlayerInteract = true;
         canPlayerMoveCamera = true;
-        StartTalking();
-        tutorialText.text = "Casualmente los objetos de tus bolsillos son justo lo que el cliente quiere. Ve a entregárselos.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
     }
 
     public IEnumerator SeventhTutorialPass()
     {
         SetTutorialState(TutorialState.EntregaPedido);
         StartTalking();
-        tutorialText.text = "Bien, fijate que el cliente cuando ha hecho el pedido ha dejado una mochila. Es en esa mochila donde pondremos los objetos.";
+        tutorialText.text = "El client ha deixat una motxilla.En aquesta motxilla on posaràs els objectes.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         isPlayerLookingAt = false;
@@ -745,7 +667,7 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitUntil(() => isPlayerLooking(bag) == true);
 
         StartTalking();
-        tutorialText.text = "Coge uno de los objetos de tus bolsillos y colócalo dentro. Ten en cuenta que una vez colocado el objeto no hay vuelta atrás.";
+        tutorialText.text = "Agafa un dels objectes de les teves butxaques i col·loca-ho dins. Tingues en compte que una vegada col·locat l'objecte no hi ha marxa enrere.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         canPlayerInteract = true;
@@ -758,21 +680,11 @@ public class TutorialManager : MonoBehaviour
         canPlayerMove = false;
 
         StartTalking();
-        tutorialText.text = "Para que el pedido sea completado tienes que colocar los mismos objetos que especificaciones te pida el cliente.";
+        tutorialText.text = "Perquè la comanda sigui completada has de col·locar els mateixos objectes que especificacions et demani el client.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
-        
-        StartTalking();
-        tutorialText.text = "En este caso eran dos así que con dos objetos basta. Ten en cuenta que te pueden venir pedidos de tres especificaciones también.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-        
-        StartTalking();
-        tutorialText.text = "¡Perfecto! Ahora entrega el segundo objeto así acabamos.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
+
         canPlayerInteract = true;
         canPlayerMoveCamera = true;
         canPlayerMove = true;
@@ -791,19 +703,13 @@ public class TutorialManager : MonoBehaviour
     public IEnumerator EighthTutorialPass()
 {
     SetTutorialState(TutorialState.SegundoCliente);
-    
-    StartTalking();
-    tutorialText.text = "Ahora que ya sabes como va el tema, atiende a tu segundo cliente que ya está llegando.";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
 
     // Instanciar el segundo cliente en el slot 1
     InstanceClient(1);
     
     // ESPERAR A QUE EL CLIENTE ESTÉ EN SU POSICIÓN
     StartTalking();
-    tutorialText.text = "Espera un momento mientras el cliente llega a su posición...";
+    tutorialText.text = "Espera un moment! Ja que ve un altre client aprofita per practicar";
     yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
     StopTalking();
     yield return new WaitUntil(() => IsClientInPosition(1));
@@ -814,7 +720,7 @@ public class TutorialManager : MonoBehaviour
     canPlayerChangePage = true;
 
     StartTalking();
-    tutorialText.text = "Acércate al cliente para ver su pedido.";
+    tutorialText.text = "Apropat per rebre la comanda";
     yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
     StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
@@ -834,19 +740,8 @@ public class TutorialManager : MonoBehaviour
     
     // Esperar a que el pedido se haya creado y mostrado completamente
     yield return new WaitUntil(() => orderHasBeenShown);
-    yield return new WaitForSeconds(1f);
+    yield return new WaitForSeconds(3f);
 
-    StartTalking();
-    tutorialText.text = "Este pedido tiene tres especificaciones. Necesitarás entregar tres objetos diferentes.";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    yield return StartCoroutine(WaitForContinueButton());
-    
-    StartTalking();
-    tutorialText.text = "Consulta el manual, encuentra los objetos correctos y completa este pedido por tu cuenta.";
-    yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-    StopTalking();
-    //yield return StartCoroutine(WaitForContinueButton());
     
     isWaitingForSecondClientOrder = false;
     
@@ -868,13 +763,13 @@ public class TutorialManager : MonoBehaviour
     canPlayerInteract = false;
 
     StartTalking();
-    tutorialText.text = "Bien hecho, has sido capaz de completar el pedido por tu cuenta.";
+    tutorialText.text = "Ben fet, has estat capaç de completar la comanda pel teu compte.";
     yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
     StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
 
     StartTalking();
-    tutorialText.text = "Ten en cuenta que el día se dará por terminado si te quedas sin clientes o si se acaba el día. Puedes ver cuánto queda debajo de la deuda a la izquierda.";
+    tutorialText.text = "El dia es donarà per acabat si et quedes sense clients o si s'acaba el dia. Pots veure quant queda sota el deute a l'esquerra.";
     yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
     StopTalking();
     yield return StartCoroutine(WaitForContinueButton());
@@ -884,90 +779,61 @@ public class TutorialManager : MonoBehaviour
 
 
 
-/// <summary>
-/// Verifica si un cliente está en su posición asignada en un slot específico
-/// </summary>
-public bool IsClientInPosition(int slotIndex)
-{
-    GameObject client = ClientManager.Instance.GetClientInSlot(slotIndex);
-    
-    if (client == null)
-    {
-        Debug.LogWarning($"<color=yellow>Cliente en slot {slotIndex} no existe aún</color>");
-        return false;
-    }
-    
-    // Obtener la posición objetivo del slot desde el ClientManager
-    Transform targetPosition = ClientManager.Instance.GetClientSlotPosition(slotIndex);
-    
-    if (targetPosition == null)
-    {
-        Debug.LogError($"<color=red>No se pudo obtener la posición del slot {slotIndex}</color>");
-        return false;
-    }
-    
-    // Verificar si el cliente está cerca de su posición objetivo
-    float distance = Vector3.Distance(client.transform.position, targetPosition.position);
-    bool isInPosition = distance < 3f; // Ajusta este valor según el tamaño de tus slots
-    
-    if (isInPosition)
-    {
-        Debug.Log($"<color=green>✓ Cliente en slot {slotIndex} ha llegado a su posición</color>");
-    }
-    
-    return isInPosition;
-}
+
 
     public IEnumerator NinthTutorialPass()
     {
         SetTutorialState(TutorialState.FacturaDiaria);
         
         StartTalking();
-        tutorialText.text = "¡Felicidades! Has completado tu primer día en la Agencia. Ahora veamos cómo te ha ido.";
+        tutorialText.text = "Felicitats! Has completat el teu primer día en la Agencia. A ver com t'ha anat.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
-
 
         //Enseñamos imagen de la factura diaria
-        tutorialImage.sprite = resultSceneSprite;
+        tutorialDebtText.gameObject.SetActive(false);
+        tutorialImage.gameObject.SetActive(false);
+        timeSlider.gameObject.SetActive(false);
+        inventoryUI.gameObject.SetActive(false);  
+        resultCanvas.gameObject.SetActive(true);
+        
         StartTalking();
-        tutorialText.text = "Esto de aquí es la factura del día. Aquí podrás ver los frutos de tu rendimiento durante el día. ";
+        tutorialText.text = "Això d'aquí és la factura del dia. Aquí podràs veure els fruits del teu rendiment durant el dia.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "En la columna izquierda tienes los ingresos. Aquí afectará cuantos objetos hayas vendido a los clientes. Y cuántos de esos clientes han tenido éxito.";
+        tutorialText.text = "En la columna esquerra tens els ingressos. Aquí afectarà quants objectes hagis venut als clients. I quants d'aquests clients han tingut èxit.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Ten en cuenta que cuanto mejores sean los objetos para la misión del cliente más te pagarán por ellos.";
+        tutorialText.text = "Tingues en compte que quant millors siguin els objectes per a la missió del client més et pagaran per ells.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "En la columna del medio tienes los gastos. Aquí se tienen en cuenta cuántos clientes han fallado su misión y el coste por reponer cada objeto vendido.";
-        yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
-        StopTalking();
-        yield return StartCoroutine(WaitForContinueButton());
-
-
-        StartTalking();
-        tutorialText.text = "Por último en la Columna de la derecha tienes el total. Siempre que el total sea positivo una parte de él irá a pagar tu deuda. ";
+        tutorialText.text = "En la columna del mitjà tens les despeses. Aquí es tenen en compte quants clients han fallat la seva missió i el cost per reposar cada objecte venut.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Recuerda que si al final del día no has pagado toda tu deuda... bueno, digamos que Ulises no es muy tolerante con los impagos.";
+        tutorialText.text = "Finalment en la Columna de la dreta tens el total. Sempre que el total sigui positiu una part d'ell anirà a pagar el teu deute. En cas que sigui negatiu, bo, ja saps el que passarà.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
+        resultCanvas.gameObject.SetActive(false);
+        tutorialDebtText.gameObject.SetActive(true);
+        tutorialImage.gameObject.SetActive(true);
+        timeSlider.gameObject.SetActive(true);
+        inventoryUI.gameObject.SetActive(true); 
+        canPlayerMoveCamera = true;
     }
 
     public IEnumerator TenthTutorialPass()
@@ -975,7 +841,7 @@ public bool IsClientInPosition(int slotIndex)
         SetTutorialState(TutorialState.FinTutorial);
         
         StartTalking();
-        tutorialText.text = "En fin, este es todo mi trabajo por hoy, que Ulises no paga a las niñeros.";
+        tutorialText.text = "En fi, aquest és tot el meu treball per avui, que Ulisses no paga a les mainaders.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -985,13 +851,13 @@ public bool IsClientInPosition(int slotIndex)
         dogController.LookAt(playerPosition);
 
         StartTalking();
-        tutorialText.text = "Si me ves por aquí será en mi caseta que está en la pared del fondo. Aunque más te vale no verme porque si aparezco será para avisarte de que uno de los clientes ha muerto.";
+        tutorialText.text = "Si em veus per aquí serà en la meva caseta que està en la paret del fons. Encara que més et val no veure'm perquè si aparec serà per a avisar-te que un dels clients ha mort.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
 
         StartTalking();
-        tutorialText.text = "Para pasar al siguiente día dale al botón de abajo que pone ir al siguiente día.";
+        tutorialText.text = "Per a passar al següent dia dona-li al botó de baix que posa anar al següent dia.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
@@ -1066,6 +932,39 @@ public bool IsClientInPosition(int slotIndex)
         return true;
     }
 
+    /// <summary>
+    /// Verifica si un cliente está en su posición asignada en un slot específico
+    /// </summary>
+    public bool IsClientInPosition(int slotIndex)
+    {
+        GameObject client = ClientManager.Instance.GetClientInSlot(slotIndex);
+        
+        if (client == null)
+        {
+            Debug.LogWarning($"<color=yellow>Cliente en slot {slotIndex} no existe aún</color>");
+            return false;
+        }
+        
+        // Obtener la posición objetivo del slot desde el ClientManager
+        Transform targetPosition = ClientManager.Instance.GetClientSlotPosition(slotIndex);
+        
+        if (targetPosition == null)
+        {
+            Debug.LogError($"<color=red>No se pudo obtener la posición del slot {slotIndex}</color>");
+            return false;
+        }
+        
+        // Verificar si el cliente está cerca de su posición objetivo
+        float distance = Vector3.Distance(client.transform.position, targetPosition.position);
+        bool isInPosition = distance < 3f; // Ajusta este valor según el tamaño de tus slots
+        
+        if (isInPosition)
+        {
+            Debug.Log($"<color=green>✓ Cliente en slot {slotIndex} ha llegado a su posición</color>");
+        }
+        
+        return isInPosition;
+    }
     public bool playerOpenManual()
     {
         // Detecta si el manual está abierto
@@ -1078,6 +977,10 @@ public bool IsClientInPosition(int slotIndex)
 
     public bool playerCloseManual()
     {
+        if (!canPlayerCloseManual)
+        {
+            return false;
+        }
         // Detecta si el manual está cerrado
         if (manualUI != null && !manualUI.manualPanel.activeSelf)
         {
@@ -1110,7 +1013,40 @@ public bool IsClientInPosition(int slotIndex)
         }
     }
 
-    
+    public void SetAllowedObjectType(ObjectType objectType, bool restricted = true)
+    {
+        allowedObjectType = objectType;
+        isObjectTypeRestricted = restricted;
+        Debug.Log($"<color=yellow>📌 Solo se permite coger: {objectType}</color>");
+    }
+
+    /// <summary>
+    /// Quita la restricción de tipo de objeto
+    /// </summary>
+    public void RemoveObjectTypeRestriction()
+    {
+        isObjectTypeRestricted = false;
+        Debug.Log("<color=green>✓ Restricción de objeto removida</color>");
+    }
+
+    /// <summary>
+    /// Verifica si el jugador puede coger un objeto específico
+    /// </summary>
+    public bool CanPickupObjectType(ObjectType objectType)
+    {
+        if (!isObjectTypeRestricted)
+        {
+            return true; // Si no hay restricción, puede coger cualquiera
+        }
+
+        if (objectType == allowedObjectType)
+        {
+            return true; // Es el tipo permitido
+        }
+
+        Debug.Log($"<color=red>✗ No puedes coger {objectType}. Solo puedes coger: {allowedObjectType}</color>");
+        return false;
+    }
     
     private IEnumerator WaitForOrderToShow()
     {
@@ -1146,6 +1082,29 @@ public bool IsClientInPosition(int slotIndex)
 
         return false;
     }
+
+    public bool CanChangeToSlot(int slotIndex)
+    {
+        // Si no estamos en tutorial, permitir cambio normal
+        if (GameManager.Instance.CurrentState != GameState.Tutorial)
+        {
+            return true;
+        }
+        
+        // Si estamos en el paso del segundo objeto del tutorial
+        if (currentState == TutorialState.Interaccion && !playerTakeObject(ObjectType.Arco))
+        {
+            // BLOQUEAR el slot 1 (índice 0) hasta que se recoja el Arco
+            if (slotIndex == 0 && playerTakeObject(ObjectType.Odre))
+            {
+                Debug.Log("<color=red>⚠ No puedes usar el bolsillo 1 para recoger el segundo objeto. Usa el bolsillo 2 o 3.</color>");
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public bool isDoginPlace(Transform dogTransform)
     {
         float distance = Vector3.Distance(tutorialDog.transform.position, dogTransform.position);
@@ -1170,71 +1129,5 @@ public bool IsClientInPosition(int slotIndex)
         ClientManager.Instance.SpawnClientInSlot(slotIndex);
     }
     
-    /// <summary>
-    /// Pausa el tiempo del juego (útil para mostrar animaciones o bocadillos)
-    /// </summary>
-    public void PauseGameTime()
-    {
-        Time.timeScale = 0f;
-        Debug.Log("<color=yellow>⏸ Tiempo del juego pausado</color>");
-    }
-    
-    /// <summary>
-    /// Reanuda el tiempo del juego
-    /// </summary>
-    public void ResumeGameTime()
-    {
-        Time.timeScale = 1f;
-        Debug.Log("<color=green>▶ Tiempo del juego reanudado</color>");
-    }
 
-    /// <summary>
-    /// Verifica si el jugador puede interactuar con un objeto durante el tutorial
-    /// </summary>
-    public bool CanInteractWithObject(ObjectType objectType)
-    {
-        // Si no estamos en tutorial, permitir interacción normal
-        if (GameManager.Instance.CurrentState != GameState.Tutorial)
-        {
-            return true;
-        }
-        
-        // Si es el segundo objeto del tutorial (Arco) y estamos en el ThirdTutorialPass
-        if (objectType == ObjectType.Arco && currentState == TutorialState.Interaccion)
-        {
-            // Solo permitir cogerlo si NO está en el slot 1 (índice 0)
-            if (InventoryManager.Instance.GetCurrentSlotIndex() == 0)
-            {
-                Debug.Log("<color=yellow>⚠ No puedes coger este objeto con el bolsillo 1 seleccionado. Cambia al bolsillo 2 o 3.</color>");
-                return false;
-            }
-        }
-        
-        // Para cualquier otro caso, permitir la interacción normal
-        return canPlayerInteract;
-    }
-    /// <summary>
-    /// Verifica si el jugador puede cambiar al slot especificado durante el tutorial
-    /// </summary>
-    public bool CanChangeToSlot(int slotIndex)
-    {
-        // Si no estamos en tutorial, permitir cambio normal
-        if (GameManager.Instance.CurrentState != GameState.Tutorial)
-        {
-            return true;
-        }
-        
-        // Si estamos en el paso del segundo objeto del tutorial
-        if (currentState == TutorialState.Interaccion && !playerTakeObject(ObjectType.Arco))
-        {
-            // BLOQUEAR el slot 1 (índice 0) hasta que se recoja el Arco
-            if (slotIndex == 0 && playerTakeObject(ObjectType.Odre))
-            {
-                Debug.Log("<color=red>⚠ No puedes usar el bolsillo 1 para recoger el segundo objeto. Usa el bolsillo 2 o 3.</color>");
-                return false;
-            }
-        }
-        
-        return true;
-    }
 }
