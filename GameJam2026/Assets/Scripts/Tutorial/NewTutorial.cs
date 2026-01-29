@@ -334,9 +334,28 @@ public class NewTutorial : MonoBehaviour
 
         dialogueSystem.HideDialogue();
         
+        Debug.Log("<color=yellow>===== MOSTRANDO HINTS DE CLIENTES =====</color>");
+        
         // Mostrar hints de clientes DESPUÉS de ocultar el diálogo
-        if (client1Hint != null) client1Hint.ShowHint();
-        if (client2Hint != null) client2Hint.ShowHint();
+        if (client1Hint != null)
+        {
+            client1Hint.ShowHint();
+            Debug.Log("<color=green>✓ Client1 Hint mostrado</color>");
+        }
+        else
+        {
+            Debug.LogError("<color=red>✗ client1Hint es NULL!</color>");
+        }
+        
+        if (client2Hint != null)
+        {
+            client2Hint.ShowHint();
+            Debug.Log("<color=green>✓ Client2 Hint mostrado</color>");
+        }
+        else
+        {
+            Debug.LogError("<color=red>✗ client2Hint es NULL!</color>");
+        }
 
         // Mover al perro a una posición neutral
         if (dogController != null && dogPositions.Length > 0)
@@ -354,6 +373,7 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForClientChoice()
     {
+        Debug.Log("<color=cyan>===== ESPERANDO ELECCIÓN DE CLIENTE =====</color>");
         isCheckingConditions = true;
 
         while (true)
@@ -430,6 +450,8 @@ public class NewTutorial : MonoBehaviour
         // Marcar cliente como completado
         stateManager.CompleteClient(activeClient);
         activeClient.CompleteOrder();
+        
+        Debug.Log("<color=green>✓✓✓ PRIMER CLIENTE COMPLETADO - Pasando a BetweenClientsPhase ✓✓✓</color>");
     }
 
     /// <summary>
@@ -460,8 +482,8 @@ public class NewTutorial : MonoBehaviour
             tutorialDog.transform
         ));
 
-        playerRestrictions.EnableAll();
         dialogueSystem.HideDialogue();
+        playerRestrictions.EnableAll();
 
         stateManager.SetPhase(TutorialStateManager.TutorialPhase.SecondClient);
     }
@@ -746,7 +768,7 @@ public class NewTutorial : MonoBehaviour
         {
             foreach (TutorialHint hint in hints)
             {
-                if (hint != null && IsPlayerNearTransform(hint.transform, 1f))
+                if (hint != null && IsPlayerNearTransform(hint.transform, 1.8f))
                 {
                     isNearAnyItem = true;
                     break;
