@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd9d4abe4207c5e46a60e913adc3c91a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClientMovement
-  ClientAnimationController: {fileID: 0}
+  ClientAnimationController: {fileID: -8692734030143322416}
 --- !u!114 &-7970074662294738034
 MonoBehaviour:
   m_ObjectHideFlags: 0
