@@ -1692,6 +1692,7 @@ MonoBehaviour:
   manualUI: {fileID: 2138768116}
   inventoryUI: {fileID: 227829951}
   inventorySprite: {fileID: 21300000, guid: 4c87c46dae2360440a28344e9861a46c, type: 3}
+  resultPanel: {fileID: 1337092593}
   client1Requirement1: {fileID: 11400000, guid: 2dfa5fc124b5804419b4e94a42f506e6, type: 2}
   client1Requirement2: {fileID: 11400000, guid: 06ee4a860c84f194e8a6c5dab816298a, type: 2}
   client2Requirement1: {fileID: 11400000, guid: d3033394608c4aa4d801b6b722ab66e6, type: 2}
@@ -7904,9 +7905,9 @@ RectTransform:
   m_Children:
   - {fileID: 793766309}
   - {fileID: 645054614}
-  - {fileID: 897232067}
   - {fileID: 810987163}
   - {fileID: 1337092594}
+  - {fileID: 897232067}
   - {fileID: 1158659043}
   - {fileID: 2007723538}
   - {fileID: 1652517583}
@@ -13456,15 +13457,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 658665206559351540, guid: 414a2a377323d684cb43fae2da3d7808, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 658665206559351540, guid: 414a2a377323d684cb43fae2da3d7808, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 658665206559351540, guid: 414a2a377323d684cb43fae2da3d7808, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 658665206559351540, guid: 414a2a377323d684cb43fae2da3d7808, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -13492,7 +13493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8693119906968064179, guid: 414a2a377323d684cb43fae2da3d7808, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14682,7 +14683,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -401.7, y: -5.5}
-  m_SizeDelta: {x: 175, y: 175}
+  m_SizeDelta: {x: 220, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &974973398
 MonoBehaviour:
@@ -14904,8 +14905,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294965741
+  m_fontColor: {r: 0.9292453, g: 0.97720957, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -17310,7 +17311,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Continua
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19420,7 +19421,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -403, y: -6}
-  m_SizeDelta: {x: 175, y: 175}
+  m_SizeDelta: {x: 220, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1290376396
 MonoBehaviour:
@@ -24078,8 +24079,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 104373e4b907f1e4aa2e49fd31e50f04, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -26118,7 +26119,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.5896226, g: 0.76743996, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -31495,8 +31496,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294965741
+  m_fontColor: {r: 0.9292453, g: 0.97720957, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
