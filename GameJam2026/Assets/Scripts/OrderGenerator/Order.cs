@@ -74,8 +74,9 @@ public class Order
             }
             else
             {
-                scoreChange = 10f;
-                MoneyManager.Instance.AddMoney(2f);
+                scoreChange = 0f;
+                MoneyManager.Instance.AddMoney(1f);
+                totalScore += scoreChange;
             }
 
         }
