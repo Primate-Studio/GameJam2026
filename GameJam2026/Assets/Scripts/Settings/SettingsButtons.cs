@@ -7,7 +7,6 @@ public class SettingsButtons : MonoBehaviour
     [Header("GeneralSettings References")]
     [SerializeField] private Button BackButton;
     [SerializeField] private Button HomeButton;
-    [SerializeField] private GameObject SettingsPanel;
     [SerializeField] private GameObject GeneralSettingsCanvas;
 
     [Header("Audio Settings References")]      
@@ -57,7 +56,6 @@ public class SettingsButtons : MonoBehaviour
     //--------BUTTON METHODS-----------
     public void OnHomeButton()
     {
-        SettingsPanel.SetActive(false);
         GeneralSettingsCanvas.SetActive(false);
         InputManager.Instance.SetPauseState(false);
         GameManager.Instance.ChangeState(GameState.MainMenu);

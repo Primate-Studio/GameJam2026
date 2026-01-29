@@ -15,6 +15,14 @@ public class MainMenuUI : MonoBehaviour
         settingsButtons = FindAnyObjectByType<SettingsButtons>();
         continueGameButton.interactable = PlayerPrefs.HasKey("CurrentDay");
     }
+    void OnEnable()
+    {
+        if (newGameButton) newGameButton.onClick.AddListener(OnNewGamePressed);
+        if (tutorialButton) tutorialButton.onClick.AddListener(OnTutorialPressed);
+        if (settingsButton) settingsButton.onClick.AddListener(OnSettingsPressed);
+        if (continueGameButton) continueGameButton.onClick.AddListener(OnContinueGamePressed);
+        if (exitButton) exitButton.onClick.AddListener(OnExitPressed);
+    }
     public void OnNewGamePressed()
     {
         GameManager.Instance.StartNewGame();
