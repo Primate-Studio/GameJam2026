@@ -150,9 +150,9 @@ public class ClientTimer : MonoBehaviour
         canvasGO.AddComponent<GraphicRaycaster>();
         canvasGO.transform.SetParent(this.transform);
         canvasGO.GetComponent<RectTransform>().sizeDelta = new Vector2(1, 1);
-        canvasGO.transform.localPosition = new Vector3(0, 2f, 0);
+        canvasGO.transform.localPosition = new Vector3(0, 2.7f, 0);
         canvasGO.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        canvasGO.transform.localScale = Vector3.one * 0.5f;
+        canvasGO.transform.localScale = Vector3.one * 0.7f;
         GameObject imageGO = new GameObject("TimerFillImage");
         imageGO.transform.SetParent(canvasGO.transform);
         imageGO.transform.localRotation = Quaternion.Euler(0, 0, 0);
