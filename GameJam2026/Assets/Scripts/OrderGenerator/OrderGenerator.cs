@@ -172,4 +172,22 @@ public class OrderGenerator : MonoBehaviour
             activeActivities2 = 0;
         }
     }
+    
+    /// <summary>
+    /// Devuelve el número total de actividades desbloqueadas actualmente
+    /// </summary>
+    public int GetUnlockedActivitiesCount()
+    {
+        int activePacks, activeActivities1, activeActivities2;
+        CalculateActivities(out activePacks, out activeActivities1, out activeActivities2);
+        
+        // Sumar todas las actividades de todos los packs activos
+        int totalActivities = activeActivities1;
+        if (activePacks > 1)
+        {
+            totalActivities += activeActivities2;
+        }
+        
+        return totalActivities;
+    }
 }
