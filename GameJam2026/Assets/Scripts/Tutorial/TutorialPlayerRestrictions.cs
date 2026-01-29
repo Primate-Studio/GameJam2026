@@ -24,6 +24,10 @@ public class TutorialPlayerRestrictions : MonoBehaviour
     [Header("References")]
     private Transform cameraTransform;
     private Transform playerTransform;
+    
+    // Guardar rotación original para restaurar suavemente
+    private Quaternion savedCameraRotation;
+    private bool hasSavedRotation = false;
 
     private void Awake()
     {
@@ -185,6 +189,14 @@ public class TutorialPlayerRestrictions : MonoBehaviour
     {
         if (cameraTransform == null || target == null) return;
 
+        // Guardar la rotación actual antes de forzar el LookAt
+        if (!hasSavedRotation)
+        {
+            savedCameraRotation = cameraTransform.rotation;
+            hasSavedRotation = true;
+            Debug.Log($"<color=cyan>Rotación guardada: {savedCameraRotation.eulerAngles}</color>");
+        }
+
         StartCoroutine(LookAtTargetCoroutine(target));
     }
 
@@ -219,6 +231,42 @@ public class TutorialPlayerRestrictions : MonoBehaviour
         // NOTA: NO sincronizamos la rotación al final para evitar "teleports"
         // La cámara se queda donde el jugador la dejó durante la conversación
         Debug.Log($"<color=green>✓ LookAt completado - Cámara libre</color>");
+    }
+
+    /// <summary>
+    /// Restaura suavemente la rotación de la cámara a su estado original
+    /// </summary>
+    public void RestoreCameraRotation()
+    {
+        if (hasSavedRotation && cameraTransform != null)
+        {
+            StartCoroutine(RestoreCameraRotationCoroutine());
+        }
+    }
+
+    private System.Collections.IEnumerator RestoreCameraRotationCoroutine()
+    {
+        if (cameraTransform == null) yield break;
+
+        float duration = 0.8f;
+        float elapsed = 0f;
+
+        Quaternion startRotation = cameraTransform.rotation;
+        Quaternion targetRotation = savedCameraRotation;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+
+            cameraTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            yield return null;
+        }
+
+        cameraTransform.rotation = targetRotation;
+        hasSavedRotation = false;
+        Debug.Log($"<color=green>✓ Rotación de cámara restaurada suavemente</color>");
     }
 
     /// <summary>

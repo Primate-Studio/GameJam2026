@@ -251,6 +251,12 @@ public class TutorialDialogueSystem : MonoBehaviour
             tutorialImage.gameObject.SetActive(false);
         }
 
+        // Restaurar suavemente la rotación de la cámara
+        if (TutorialPlayerRestrictions.Instance != null)
+        {
+            TutorialPlayerRestrictions.Instance.RestoreCameraRotation();
+        }
+
         // Desactivar restricciones del jugador
         if (TutorialPlayerRestrictions.Instance != null)
         {

@@ -25,14 +25,14 @@ public class NewTutorial : MonoBehaviour
     public TutorialHint client1Hint; // Hint que ilumina al cliente 1
     public TutorialHint client2Hint; // Hint que ilumina al cliente 2
     
-    [Header("Item Triggers - Cliente 1 (2 items)")]
-    public Transform itemTrigger1_Client1;
-    public Transform itemTrigger2_Client1;
+    [Header("Item Hints - Cliente 1 (2 items)")]
+    public TutorialHint itemHint1_Client1;
+    public TutorialHint itemHint2_Client1;
     
-    [Header("Item Triggers - Cliente 2 (3 items)")]
-    public Transform itemTrigger1_Client2;
-    public Transform itemTrigger2_Client2;
-    public Transform itemTrigger3_Client2;
+    [Header("Item Hints - Cliente 2 (3 items)")]
+    public TutorialHint itemHint1_Client2;
+    public TutorialHint itemHint2_Client2;
+    public TutorialHint itemHint3_Client2;
 
     [Header("Tutorial Systems")]
     public TutorialDialogueSystem dialogueSystem;
@@ -332,7 +332,9 @@ public class NewTutorial : MonoBehaviour
             tutorialDog.transform
         ));
 
-        // Mostrar hints de clientes para que el jugador los vea iluminados
+        dialogueSystem.HideDialogue();
+        
+        // Mostrar hints de clientes DESPUÉS de ocultar el diálogo
         if (client1Hint != null) client1Hint.ShowHint();
         if (client2Hint != null) client2Hint.ShowHint();
 
@@ -342,7 +344,6 @@ public class NewTutorial : MonoBehaviour
             dogController.MoveTo(dogPositions[0]);
         }
 
-        dialogueSystem.HideDialogue();
         yield return new WaitForSeconds(0.5f);
         
         playerRestrictions.EnableAll();
@@ -738,14 +739,14 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForPlayerNearItems(TutorialClient client)
     {
-        Transform[] triggers = GetItemTriggersForClient(client);
+        TutorialHint[] hints = GetItemHintsForClient(client);
         bool isNearAnyItem = false;
         
         while (!isNearAnyItem)
         {
-            foreach (Transform trigger in triggers)
+            foreach (TutorialHint hint in hints)
             {
-                if (trigger != null && IsPlayerNearTransform(trigger, 1f))
+                if (hint != null && IsPlayerNearTransform(hint.transform, 1f))
                 {
                     isNearAnyItem = true;
                     break;
@@ -756,17 +757,17 @@ public class NewTutorial : MonoBehaviour
     }
     
     /// <summary>
-    /// Devuelve los triggers de items según el cliente activo
+    /// Devuelve los hints de items según el cliente activo
     /// </summary>
-    private Transform[] GetItemTriggersForClient(TutorialClient client)
+    private TutorialHint[] GetItemHintsForClient(TutorialClient client)
     {
         if (client.clientID == 1)
         {
-            return new Transform[] { itemTrigger1_Client1, itemTrigger2_Client1 };
+            return new TutorialHint[] { itemHint1_Client1, itemHint2_Client1 };
         }
         else
         {
-            return new Transform[] { itemTrigger1_Client2, itemTrigger2_Client2, itemTrigger3_Client2 };
+            return new TutorialHint[] { itemHint1_Client2, itemHint2_Client2, itemHint3_Client2 };
         }
     }
     
