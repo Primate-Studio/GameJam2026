@@ -120,6 +120,10 @@ public class OrderSystem : MonoBehaviour
         
         // Instanciar la caja de entrega
         GameObject box = Instantiate(deliveryBoxPrefab, spawnPos.position, spawnPos.rotation);
+        
+        // IMPORTANTE: Asegurarse de que está activa (algunos prefabs pueden estar desactivados)
+        box.SetActive(true);
+        
         DeliveryBox deliveryBox = box.GetComponent<DeliveryBox>();
         
         if (deliveryBox != null)
@@ -212,19 +216,35 @@ public class OrderSystem : MonoBehaviour
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
         
+        Debug.Log($"<color=cyan>GetSpawnPositionForSlot({slotIndex}) = {(spawnPos != null ? spawnPos.name + " en " + spawnPos.position : "NULL")}</color>");
+        
         if (spawnPos == null)
         {
-            Debug.LogError($"No hay posición de spawn para el slot {slotIndex}!");
+            Debug.LogError($"<color=red>✗✗✗ CRITICAL: No hay posición de spawn para el slot {slotIndex}!</color>");
+            Debug.LogError($"<color=red>SOLUCIÓN: Ve al GameObject OrderSystem en el Inspector y asigna el campo 'Spawn Box {slotIndex + 1}'!</color>");
             return;
         }
         
+        Debug.Log($"<color=cyan>Instanciando DeliveryBox en {spawnPos.name} ({spawnPos.position})...</color>");
+        
         // Instanciar la caja de entrega
         GameObject box = Instantiate(deliveryBoxPrefab, spawnPos.position, spawnPos.rotation);
+        
+        // IMPORTANTE: Asegurarse de que está activa (algunos prefabs pueden estar desactivados)
+        box.SetActive(true);
+        
+        Debug.Log($"<color=green>✓ DeliveryBox instanciada: {box.name} en {box.transform.position}, activa={box.activeSelf}</color>");
+        
         DeliveryBox deliveryBox = box.GetComponent<DeliveryBox>();
         
         if (deliveryBox != null)
         {
             deliveryBox.AssignOrder(newOrder);
+            Debug.Log($"<color=green>✓ Pedido asignado a la DeliveryBox</color>");
+        }
+        else
+        {
+            Debug.LogError($"<color=red>✗ El prefab deliveryBoxPrefab no tiene componente DeliveryBox!</color>");
         }
         
         // Obtener o crear el ClientTimer
@@ -498,5 +518,13 @@ public class OrderSystem : MonoBehaviour
     public List<ClientOrderData> GetActiveClientOrders()
     {
         return activeClientOrders;
+    }
+    
+    /// <summary>
+    /// Obtiene el número de pedidos activos
+    /// </summary>
+    public int GetActiveOrdersCount()
+    {
+        return activeClientOrders.Count;
     }
 }

@@ -43,7 +43,7 @@ public class GameSceneManager : MonoBehaviour
                 break;
             case GameState.Tutorial:
                 // Si TutorialScene no está en Build Settings, usar GameScene
-                string tutorialSceneName = "TutorialScene";
+                string tutorialSceneName = "nEWTutorialScene";
                 
                 // Verificar si la escena existe en Build Settings
                 bool sceneExists = false;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TutorialHint : MonoBehaviour
+public class TutorialHintOld : MonoBehaviour
 {
     private Transform camTransform;
     

@@ -6,15 +6,18 @@ using System.Collections;
 /// </summary>
 public class TutorialDog : MonoBehaviour
 {
+    [Header("Waypoints")]
+    public Transform[] waypoints; // Posiciones predefinidas para el perro durante el tutorial
+
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float rotationSpeed = 5f;
-    [SerializeField] private float hoverHeight = 1.5f;
-    [SerializeField] private float hoverSpeed = 2f;
-    [SerializeField] private float hoverAmplitude = 0.2f;
+    public float moveSpeed = 3f;
+    public float rotationSpeed = 5f;
+    public float hoverHeight = 1.5f;
+    public float hoverSpeed = 2f;
+    public float hoverAmplitude = 0.2f;
 
     [Header("Animation")]
-    [SerializeField] private Animator dogAnimator;
+    public Animator dogAnimator;
     
     private Vector3 targetPosition;
     private bool isMoving = false;
@@ -61,6 +64,17 @@ public class TutorialDog : MonoBehaviour
         // {
         //     dogAnimator.SetBool("IsFlying", true);
         // }
+    }
+
+    /// <summary>
+    /// Hace que el perro se mueva a un Transform específico
+    /// </summary>
+    public void MoveTo(Transform targetTransform)
+    {
+        if (targetTransform != null)
+        {
+            MoveTo(targetTransform.position);
+        }
     }
 
     /// <summary>

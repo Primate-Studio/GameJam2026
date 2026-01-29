@@ -110,8 +110,8 @@ public class PlayerMovement : MonoBehaviour
         
         // En tutorial, solo permitir mover cámara si está habilitado
         if (GameManager.Instance.CurrentState == GameState.Tutorial && 
-            TutorialManager.Instance != null && 
-            !TutorialManager.Instance.canPlayerMoveCamera)
+            TutorialPlayerRestrictions.Instance != null && 
+            !TutorialPlayerRestrictions.Instance.canMoveCamera)
         {
             return;
         }
@@ -166,8 +166,8 @@ public class PlayerMovement : MonoBehaviour
         
         // En tutorial, solo permitir movimiento si está habilitado
         if (GameManager.Instance.CurrentState == GameState.Tutorial && 
-            TutorialManager.Instance != null && 
-            !TutorialManager.Instance.canPlayerMove)
+            TutorialPlayerRestrictions.Instance != null && 
+            !TutorialPlayerRestrictions.Instance.canMove)
         {
             moveDirection = Vector3.zero;
             return;

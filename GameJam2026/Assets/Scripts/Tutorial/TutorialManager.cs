@@ -27,17 +27,10 @@ public class TutorialManager : MonoBehaviour
     [Header("Tutorial Sprites")]
     public Sprite movementSprite;
     public Sprite cameraSprite;
-    public Sprite interactionSprite;
+    public Sprite interactionSprite; 
+    public Sprite manualSprite; 
     public Sprite inventorySprite;
-    public Sprite orderSprite;
-    public Sprite orderNoteSprite;
     public Sprite desperationSprite;
-    public Sprite manualSprite;
-    public Sprite manualPageSprite;
-    public Sprite objectTypeSprite;
-    public Sprite qualityObjectSprite;
-    public Sprite debtSprite;
-    public Sprite resultSceneSprite;
 
 
     [Header("Tutorial Conditions")]
@@ -427,14 +420,21 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Interaccion);
         
+        if (interactionSprite != null)
+        {
+            tutorialImage.sprite = interactionSprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
+
         canPlayerMoveCamera = false;
         StartTalking();
         tutorialText.text = "Acosta't a aquest prestatge i agarra l'Odre.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
+        tutorialImage.gameObject.SetActive(false);
         //yield return StartCoroutine(WaitForContinueButton());
         // Pop Up Imagen de interacción
-        objectHint1.ShowHint(true);
+        objectHint1.ShowHint();
         if (interactionSprite != null)
         {
             tutorialImage.sprite = interactionSprite;
@@ -446,9 +446,12 @@ public class TutorialManager : MonoBehaviour
         canPlayerMoveCamera = true;
         canPlayerMove = true;
         canPlayerInteract = true;
+
+
         
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Odre));
-        objectHint1.ShowHint(false);
+        objectHint1.HideHint();
+        tutorialImage.gameObject.SetActive(false);
 
         RemoveObjectTypeRestriction();
 
@@ -460,14 +463,7 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
-        
-        // Pop Up Imagen de tipos de objetos
-        if (objectTypeSprite != null)
-        {
-            tutorialImage.sprite = objectTypeSprite;
-            tutorialImage.gameObject.SetActive(true);
-        }
-        
+
         StartTalking();
         tutorialText.text = "Cadascun dels tipus té el seu propi prestatge. Els pots diferenciar per les Icones.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -487,7 +483,7 @@ public class TutorialManager : MonoBehaviour
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton());
-
+        tutorialImage.gameObject.SetActive(false);
         canPlayerMove = false;
         canPlayerMoveCamera = false;
         //yield return StartCoroutine(WaitForContinueButton());
@@ -500,12 +496,21 @@ public class TutorialManager : MonoBehaviour
         canPlayerMove = false;
         canPlayerMoveCamera = false;
         
+        if (interactionSprite != null)
+        {
+            tutorialImage.sprite = interactionSprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
+        
         InstanceClient(0);
         StartTalking();
         tutorialText.text = "Ara agafa l'Arc. Els objectes trigaran a tornar a estar disponibles una vegada agafats, tingues-ho en compte.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
         StopTalking();
-        objectHint2.ShowHint(true);
+
+
+        objectHint2.ShowHint();
+        
         // El perro se mueve al segundo objeto
         if (dogController != null && dogTransforms.Length > 2)
         {
@@ -515,7 +520,7 @@ public class TutorialManager : MonoBehaviour
         dogController.LookAt(playerPosition);
         
         SetAllowedObjectTypes(new ObjectType[] { ObjectType.Arco }, true);
-
+                tutorialImage.gameObject.SetActive(false);
         //yield return StartCoroutine(WaitForContinueButton());
 
         canPlayerMoveCamera = true;
@@ -527,7 +532,7 @@ public class TutorialManager : MonoBehaviour
         // NUEVA CONDICIÓN: Solo permitir coger el objeto si NO está en el slot 1 (índice 0)
         yield return new WaitUntil(() => playerTakeObject(ObjectType.Arco) && InventoryManager.Instance.currentSlotIndex > 0);
         
-        objectHint2.ShowHint(false);
+        objectHint2.HideHint();
         RemoveObjectTypeRestriction();
 
         canPlayerMove = false;
@@ -603,6 +608,12 @@ public class TutorialManager : MonoBehaviour
     {
         SetTutorialState(TutorialState.Manual);
         
+        if(manualSprite != null)
+        {
+            tutorialImage.sprite = manualSprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
+
         canPlayerInteract = false;
         StartTalking();
         tutorialText.text = "Per a poder saber què és el millor per a cada situació tens el manual. Obre-ho.";
@@ -613,6 +624,7 @@ public class TutorialManager : MonoBehaviour
         isWaitingForManualOpen = true;
         yield return new WaitUntil(() => playerOpenManual() == true);
 
+        tutorialImage.gameObject.SetActive(false);
         isWaitingForManualOpen = false;
         canPlayerCloseManual = false;  
         
@@ -641,6 +653,12 @@ public class TutorialManager : MonoBehaviour
         StopTalking();
         yield return StartCoroutine(WaitForContinueButton()); 
 
+        if(manualSprite != null)
+        {
+            tutorialImage.sprite = manualSprite;
+            tutorialImage.gameObject.SetActive(true);
+        }
+
         StartTalking();
         tutorialText.text = "Casualment, els objectes de les teves butxaques són just el que el client vol. Tanca el manual.";
         yield return StartCoroutine(TypeWritterEffect.TypeText(tutorialText, tutorialText.text, 0.05f));
@@ -649,6 +667,7 @@ public class TutorialManager : MonoBehaviour
         canPlayerCloseManual = true; 
         isWaitingForManualClose = true;
         yield return new WaitUntil(() => playerCloseManual() == true);
+        tutorialImage.gameObject.SetActive(false);
         isWaitingForManualClose = false;
 
         canPlayerMove = true;
@@ -754,6 +773,10 @@ public class TutorialManager : MonoBehaviour
         isWaitingForSecondClientOrder = false;
         
         canPlayerMove = true;
+
+
+
+
         canPlayerMoveCamera = true;
         canPlayerInteract = true;
         canPlayerChangePage = true;

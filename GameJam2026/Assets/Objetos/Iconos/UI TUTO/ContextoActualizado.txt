@@ -1,0 +1,64 @@
+Contexto
+	Posa't dret gandul! Benvingut a l'Àgencia de Venda d'Oidssees, l'imperi viral d'Ulisses. Anit et vas beure fins a l'aigua dels florers en l'Oasi i ara tens un deute a pagar.
+	Ten dues opcions, treballa o ser executat a l'acabar el dia. Tu tries.
+Movimiento
+	Primer de tot, aprèn a moure't amb WASD.
+Camara 
+	Molt bé! Prova a moure la càmera amb el ratolí.
+Manual
+	Perfecte! Ara, obre el manual amb TAB. El necessitaràs per atendre els clients. Ara tanca el manual amb TAB de nou.
+
+Inventario
+	A l'esquerra tens l'inventari, prova de canviar les posicions amb la roda del ratolí.
+
+MENSAJE FINAL
+	Ten clientes esperant, tria a quin vols atendre primer.
+
+Explicar los pedidos
+	Cada client et donarà una comanda amb dues o tres condicions. Per a cada condició hauràs d'entregar un objecte.
+
+Explicar el Manual
+	Per saber quins objectes són els millors, consulta el manual.
+	Les pàgines estan separades per activitats. Cada fila representa una condició diferent i estan ubicades en prestatgeries diferents.
+
+Envía al jugador a los items para que los vea (primera vez - solo explicación)
+	Fixat en els objectes que estan ressaltats. Consulta el manual per saber quins objectes són els millors per cada situació.
+
+Vuelve al cliente y genera el pedido oficial
+ 	Ara torna amb el client per rebre la comanda oficial.
+
+Esperar a que vuelva con el cliente
+	Ara et donaré la meva comanda. Mira la nota que apareix a la dreta.
+
+Vuelve al cliente para entregar el pedido
+	Perfecte! Ara porta els objectes a la motxilla del taulell per lliurar la comanda.
+
+Explica los objetos, su calidad, dinero y tiempo de reaparición
+	Aquests objectes estan ressaltats perquè són els que necessites. Agafa'ls!
+	Cada objecte té un temps de reaparició. Tria sàviament!
+
+Entrega el pedido al cliente
+	Torna amb el client per finalitzar la comanda.
+
+Mostrar pedido en la UI de la derecha y mochila
+	El client ha deixat la seva bossa, posa els objectes dins. 
+
+Espera a que se complete un pedido
+	Comanda finalitzada, molt bona feina.
+
+Completar tutorial
+	Enhorabona! Has completat el tutorial. Ara estàs preparat per gestionar la botiga sense ayuda.
+
+Pantalla Factura
+	Aquesta és la factura del dia. Aquí podràs saber si continues viu un dia més o si...
+
+Frases Perro
+	Tatatal ha fracassat estrepitosament a la seva missió.
+	Ves amb compte, Tatal ha mort per culpa teva.
+	Posat les piles Tatatal acaba de morir.
+	Tatatal o a intentar hi ha mort.
+
+
+
+
+

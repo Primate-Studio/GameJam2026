@@ -65,14 +65,10 @@ public class InputManager : MonoBehaviour
         {
             // En tutorial, verificar si puede abrir el manual
             if (GameManager.Instance.CurrentState == GameState.Tutorial && 
-                TutorialManager.Instance != null)
+                TutorialPlayerRestrictions.Instance != null && 
+                !TutorialPlayerRestrictions.Instance.canOpenManual)
             {
-                // Solo permitir abrir manual si está esperando que lo abra
-                if (!TutorialManager.Instance.isWaitingForManualOpen && 
-                    !TutorialManager.Instance.isWaitingForManualClose)
-                {
-                    return;
-                }
+                return;
             }
 
             ManualUI manualUI = FindFirstObjectByType<ManualUI>();

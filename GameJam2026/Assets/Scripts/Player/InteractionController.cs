@@ -50,11 +50,14 @@ public class InteractionController : MonoBehaviour
     public void PickUpObject(InteractableObject interactableObject)
     {
         // NUEVO: Verificar restricción de tipo de objeto en tutorial
-        if (TutorialManager.Instance != null && 
-            !TutorialManager.Instance.CanPickupObjectType(interactableObject.objectType))
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Tutorial)
         {
-            Debug.Log($"<color=red>✗ No puedes coger {interactableObject.objectType} ahora</color>");
-            return;
+            TutorialPlayerRestrictions restrictions = FindAnyObjectByType<TutorialPlayerRestrictions>();
+            if (restrictions != null && !restrictions.IsObjectAllowed(interactableObject.objectType))
+            {
+                Debug.Log($"<color=red>✗ No puedes coger {interactableObject.objectType} ahora (RestriccionTutorial)</color>");
+                return;
+            }
         }
 
         InventoryManager.Instance.TryAddToCurrentSlot(interactableObject);
@@ -64,11 +67,14 @@ public class InteractionController : MonoBehaviour
     public void SwapObject(InteractableObject interactableObject)
     {
         // NUEVO: Verificar restricción de tipo de objeto en tutorial
-        if (TutorialManager.Instance != null && 
-            !TutorialManager.Instance.CanPickupObjectType(interactableObject.objectType))
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.Tutorial)
         {
-            Debug.Log($"<color=red>✗ No puedes intercambiar por {interactableObject.objectType} ahora</color>");
-            return;
+            TutorialPlayerRestrictions restrictions = FindAnyObjectByType<TutorialPlayerRestrictions>();
+            if (restrictions != null && !restrictions.IsObjectAllowed(interactableObject.objectType))
+            {
+                Debug.Log($"<color=red>✗ No puedes intercambiar por {interactableObject.objectType} ahora (RestriccionTutorial)</color>");
+                return;
+            }
         }
 
         InventoryManager.Instance.SwapCurrentSlot(interactableObject);
