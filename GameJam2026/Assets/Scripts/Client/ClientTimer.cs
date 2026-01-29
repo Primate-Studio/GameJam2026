@@ -14,6 +14,7 @@ public class ClientTimer : MonoBehaviour
     public float timeRemaining;  // Público para que OrderSystem pueda acceder
     private bool isOrderActive = false;
     private bool timerUICreated = false;
+    private bool isAudioPlayed = false;
     public DebtLevel DebtLevel;
     private ClientAnimationController clientAnimationController;
 
@@ -88,12 +89,7 @@ public class ClientTimer : MonoBehaviour
         {
             desperationLevel = DesperationLevel.High;
             clientAnimationController.SetAngry(true);
-            AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.ClientAngry);
-            if (clip != null)            {
-                AngryAudioSource.clip = clip;
-                AngryAudioSource.loop = true; // Volem que sigui un so constant
-                AngryAudioSource.Play();
-            }
+            PlayAngrySound();
         }
         else if (percentage <= 0f)
         {
@@ -103,10 +99,24 @@ public class ClientTimer : MonoBehaviour
             AngryAudioSource.Stop();
             AngryAudioSource.loop = false;
             desperationLevel = DesperationLevel.Abandon;
+            isAudioPlayed = false;
 
         }
     }
-    
+    private void PlayAngrySound()
+    {
+        if (!isAudioPlayed)
+        {
+            AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.ClientAngry);
+            if (clip != null)
+            {
+                AngryAudioSource.clip = clip;
+                AngryAudioSource.loop = true; // Volem que sigui un so constant
+                AngryAudioSource.Play();
+                isAudioPlayed = true;
+            }
+        }
+    }
     /// <summary>
     /// Obtiene el nivel de desesperación actual
     /// </summary>

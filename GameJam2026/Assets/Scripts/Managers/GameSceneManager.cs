@@ -25,21 +25,26 @@ public class GameSceneManager : MonoBehaviour
         {
             case GameState.MainMenu:
                 LoadScene("MainMenu");
+                AudioManager.Instance.PlayMusic(MusicType.MainMenu);
                 break;
 
             case GameState.Playing:
                 LoadScene("GameScene");
+                AudioManager.Instance.PlayMusic(MusicType.Gameplay);
                 break;
 
             case GameState.GameOver:
                 LoadScene("ResultSceneLOSE");
+                AudioManager.Instance.PlayMusic(MusicType.Lose);
                 break;
 
             case GameState.GameWin:
                 LoadScene("ResultSceneWIN");
+                AudioManager.Instance.PlayMusic(MusicType.Win);
                 break;
             case GameState.Result:
                 LoadScene("ResultScene");
+                AudioManager.Instance.PlayMusic(MusicType.Gameplay);
                 break;
             case GameState.Tutorial:
                 // Si TutorialScene no está en Build Settings, usar GameScene

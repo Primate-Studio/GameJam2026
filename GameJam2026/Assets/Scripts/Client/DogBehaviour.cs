@@ -24,6 +24,7 @@ public class DogBehaviour : MonoBehaviour
 
     [Header("3D Audio")]
     [SerializeField] private AudioSource idleAudioSource;
+    [SerializeField] private AudioSource talkAudioSource;
     
     private string[] deathMessages = new string[]
     {
@@ -159,6 +160,7 @@ public class DogBehaviour : MonoBehaviour
         isTalking = true;
         if (animator != null)
         {
+            PlayDogSound(talkAudioSource);
             animator.SetBool("isTalking", true);
         }
     }
@@ -233,6 +235,7 @@ public class DogBehaviour : MonoBehaviour
         isTalking = true;
         if (animator != null)
         {
+            PlayDogSound(talkAudioSource);
             animator.SetBool("isTalking", true);
         }
     }
@@ -273,7 +276,7 @@ public class DogBehaviour : MonoBehaviour
     private IEnumerator MoveAlongWaypoints(Transform[] waypoints)
     {
         isMoving = true;
-        PlayDogSound();
+        PlayDogSound(idleAudioSource);
         if (animator != null)
         {
             animator.SetBool("isFlying", true);
@@ -334,7 +337,7 @@ public class DogBehaviour : MonoBehaviour
         }
 
         isMoving = false;
-        StopDogSound();
+        StopDogSound(idleAudioSource);
         if (animator != null)
         {
             animator.SetBool("isFlying", false);
@@ -344,34 +347,36 @@ public class DogBehaviour : MonoBehaviour
     #endregion
 
     #region Sound Setup
-    public void PlayDogSound()
+    public void PlayDogSound(AudioSource source)
     {
-        if (idleAudioSource == null) idleAudioSource = GetComponent<AudioSource>();
+        if (source == null) source = GetComponent<AudioSource>();
 
         // Si ja està sonant, no fem res
-        if (idleAudioSource.isPlaying) return;
+        if (source.isPlaying) return;
 
         if (AudioManager.Instance != null)
         {
             // Agafem el clip de la llista centralitzada
-            AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.DogIdle);
+            AudioClip clip = null;
+            if(source == idleAudioSource) {clip = AudioManager.Instance.GetSFXClip(SFXType.DogIdle);}
+            else {clip = AudioManager.Instance.GetSFXClip(SFXType.DogTalk);}
             
             if (clip != null)
             {
-                idleAudioSource.clip = clip;
-                idleAudioSource.loop = true;
-                idleAudioSource.Play();
+                source.clip = clip;
+                source.loop = true;
+                source.Play();
             }
         }
     }
 
     // Mètode per aturar el so manualment
-    public void StopDogSound()
+    public void StopDogSound(AudioSource source)
     {
-        if (idleAudioSource != null && idleAudioSource.isPlaying)
+        if (source != null && source.isPlaying)
         {
-            idleAudioSource.Stop();
-            idleAudioSource.loop = false;
+            source.Stop();
+            source.loop = false;
         }
     }
     #endregion
@@ -381,6 +386,7 @@ public class DogBehaviour : MonoBehaviour
             dialogueText.gameObject.SetActive(false);
         
         isTalking = false;
+        StopDogSound(talkAudioSource);
         if (animator != null)
         {
             animator.SetBool("isTalking", false);

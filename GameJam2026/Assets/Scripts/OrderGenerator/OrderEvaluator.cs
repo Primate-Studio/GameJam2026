@@ -101,9 +101,15 @@ public class OrderEvaluator : MonoBehaviour
         if (order != null && order.animationController != null)
         {
             if (isGood)
+            {
                 order.animationController.TriggerGood();
+                AudioManager.Instance.PlaySFX(SFXType.ClientGood, false);
+            }
             else
+            {
                 order.animationController.TriggerBad();
+                AudioManager.Instance.PlaySFX(SFXType.ClientBad, false);
+            }
         }
         // Mapear nivel a penalización
         return level switch

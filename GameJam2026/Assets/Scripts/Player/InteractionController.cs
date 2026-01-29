@@ -43,6 +43,7 @@ public class InteractionController : MonoBehaviour
         }
         else if (hasObject && isNearObject && objectInRange.isDeliveryZone)
         {
+            AudioManager.Instance.PlaySFX(SFXType.ItemDrop, false);
             DeliverObject(objectInRange);
         }
     }

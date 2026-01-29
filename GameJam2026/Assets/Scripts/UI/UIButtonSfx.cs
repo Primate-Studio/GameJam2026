@@ -2,14 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIButtonSfx : MonoBehaviour, IPointerEnterHandler
+public class UIButtonSfx : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Button button;
+    private Vector3 originalScale;
 
     void Start()
     {
         button = GetComponent<Button>();
-        // Afegim el so del clic automàticament
+        originalScale = button.transform.localScale;
+
         if (button != null)
         {
             button.onClick.AddListener(() => {
@@ -18,12 +20,36 @@ public class UIButtonSfx : MonoBehaviour, IPointerEnterHandler
         }
     }
 
-    // Opcional: So quan el ratolí passa per sobre (Hover)
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (button != null && button.interactable)
         {
             AudioManager.Instance.PlayUI(UIType.Hover);
+            button.transform.localScale = originalScale * 1.1f;
         }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (button != null)
+            button.transform.localScale = originalScale;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (button != null)
+            button.transform.localScale = originalScale;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (button != null)
+            button.transform.localScale = originalScale;
+    }
+
+    void OnDisable()
+    {
+        if (button != null)
+            button.transform.localScale = originalScale;
     }
 }

@@ -53,6 +53,7 @@ public class AudioManager : MonoBehaviour
         sfxSource = GetOrCreateSource("SFXSource", "SFX");
         uiSource = GetOrCreateSource("UISource", "UI");
         ambientSource = GetOrCreateSource("AmbientSource", "Ambient");
+        PlayMusic(MusicType.MainMenu);
     }
     private AudioSource GetOrCreateSource(string name, string group)
     {
@@ -119,9 +120,27 @@ public class AudioManager : MonoBehaviour
     public void PlayMusic(MusicType type)
     {
         int index = (int)type;
+        
+        // 1. Validació de seguretat
         if (index >= musicList.Length || musicList[index].clips.Length == 0) return;
         
-        musicSource.clip = musicList[index].clips[0];
+        AudioClip clipAPosar = musicList[index].clips[0];
+
+        // 2. Si ja està sonant aquest mateix clip, no fem res
+        if (musicSource.clip == clipAPosar && musicSource.isPlaying)
+        {
+            return; 
+        }
+
+        // 3. Si el clip és el que toca però està pausat o aturat, el reactivem
+        if (musicSource.clip == clipAPosar && !musicSource.isPlaying)
+        {
+            musicSource.Play();
+            return;
+        }
+
+        // 4. Si és un clip nou (o el primer de tots), el configurem i l'engeguem
+        musicSource.clip = clipAPosar;
         musicSource.volume = musicList[index].volume;
         musicSource.loop = true;
         musicSource.Play();

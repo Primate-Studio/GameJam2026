@@ -80,11 +80,25 @@ public class SettingsButtons : MonoBehaviour
 
     public void onFullscreenToggleChanged(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
+        #if UNITY_STANDALONE_WIN
+        if (isFullscreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow; // borderless
+            Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, true);
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+            Screen.SetResolution(1280, 720, false); // elige tamaño de ventana
+        }
+        #else
+            Screen.fullScreen = isFullscreen;
+        #endif
     }
     public void SetVSync(bool isTarget)
     {
         QualitySettings.vSyncCount = isTarget ? 1 : 0;
+        Application.targetFrameRate = isTarget ? -1 : 60; 
     }
     
     public void SetSettingsUI()
