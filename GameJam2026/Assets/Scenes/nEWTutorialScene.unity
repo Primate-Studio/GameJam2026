@@ -7070,7 +7070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2e1d99aab8e264b8c9c68e49d059aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRaycast
-  rayDistance: 1.5
+  rayDistance: 1.7
   interactableLayer:
     serializedVersion: 2
     m_Bits: 8
