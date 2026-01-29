@@ -136,18 +136,21 @@ public class AudioManager : MonoBehaviour
         AudioClip clip = category.clips[UnityEngine.Random.Range(0, category.clips.Length)];
 
         // Apliquem pitch aleatori per donar varietat (com en el pas de pàgina)
-        source.pitch = useRandomPitch ? UnityEngine.Random.Range(minPitch, maxPitch) : 1f;
+        //source.pitch = useRandomPitch ? UnityEngine.Random.Range(minPitch, maxPitch) : 1f;
         source.PlayOneShot(clip, category.volume);
     }
 
     public AudioClip GetSFXClip(SFXType type)
     {
-        int index = (int)type;
-        if (index >= sfxList.Length || sfxList[index].clips.Length == 0) return null;
+        if (sfxList == null) return null;
 
-        // Retorna un clip a l'atzar de la categoria (per si en tens diversos d'idle)
-        var category = sfxList[index];
-        return category.clips[UnityEngine.Random.Range(0, category.clips.Length)];
+        int index = (int)type;
+        if (index < 0 || index >= sfxList.Length) return null;
+
+        var clips = sfxList[index].clips;
+        if (clips == null || clips.Length == 0) return null;
+
+        return clips[UnityEngine.Random.Range(0, clips.Length)];
     }
     //--------------------------------------------------------------------------------
     // Lògica de l'Editor (Auto-nomena les llistes segons l'Enum)

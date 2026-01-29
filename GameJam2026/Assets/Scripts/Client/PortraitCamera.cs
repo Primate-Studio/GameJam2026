@@ -8,56 +8,76 @@ public class PortraitCamera : MonoBehaviour
     [Header("Configuració")]
     [SerializeField] private Camera portraitCam;
     [SerializeField] private Transform spawnPoint;
-    
-    // CANVI: Usem un int per al número de la capa o el busquem per nom
     [SerializeField] private string portraitLayerName = "Portrait"; 
 
-    void Awake() => Instance = this;
+    private int portraitLayer = -1;
 
-    public Sprite TakePortrait(GameObject originalClient)
+    void Awake()
     {
-        if (spawnPoint == null) return null;
-
-        // --- TRUC PER EVITAR L'ERROR DEL NAVMESH ---
-        // Busquem l'agent al client original
-        NavMeshAgent agent = originalClient.GetComponent<NavMeshAgent>();
-        bool agentWasEnabled = false;
+        Instance = this;
+        portraitLayer = LayerMask.NameToLayer(portraitLayerName);
         
-        if (agent != null) 
+        if (portraitCam != null)
         {
-            agentWasEnabled = agent.enabled;
-            agent.enabled = false; // Desactivem l'agent de l'original un segon
+            portraitCam.cullingMask = 1 << portraitLayer;
+            portraitCam.clearFlags = CameraClearFlags.SolidColor;
+            portraitCam.backgroundColor = new Color(0, 0, 0, 0);
+            portraitCam.enabled = false; 
         }
+    }
 
-        // Fem la còpia (el clone naixerà amb l'agent desactivat i no donarà error)
-        GameObject clone = Instantiate(originalClient, spawnPoint.position, spawnPoint.rotation);
-        clone.GetComponentInChildren<OrderUIItem>()?.gameObject.SetActive(false); // Assegurem que la UI del client no es vegi al retrat
+    public Sprite TakePortrait(GameObject client)
+    {
+        if (spawnPoint == null || portraitCam == null) return null;
+
+        // 1. GUARDEM L'ESTAT ORIGINAL DEL CLIENT
+        Vector3 originalPosition = client.transform.position;
+        Quaternion originalRotation = client.transform.rotation;
+        Transform originalParent = client.transform.parent;
+        int originalLayer = client.layer;
+
+        // Desactivem el NavMeshAgent temporalment per poder-lo moure lliurement
+        NavMeshAgent agent = client.GetComponent<NavMeshAgent>();
+        bool agentWasEnabled = agent != null && agent.enabled;
+        if (agent != null) agent.enabled = false;
+
+        // 2. MOVEM EL CLIENT A LA ZONA DE FOTOS
+        client.transform.position = spawnPoint.position;
+        client.transform.rotation = spawnPoint.rotation;
         
-        // Tornem a activar l'agent de l'original perquè pugui seguir la seva vida a la botiga
-        if (agent != null) agent.enabled = agentWasEnabled;
-        // -------------------------------------------
+        // Li canviem la capa a ell i a tots els seus fills
+        SetLayerRecursive(client, portraitLayer);
 
-        // Assegurem que el clone no tingui scripts de moviment actius
-        if (clone.TryGetComponent(out ClientMovement mover)) mover.enabled = false;
-
-        int layerIndex = LayerMask.NameToLayer(portraitLayerName);
-        SetLayerRecursive(clone, layerIndex);
-
+        // 3. CAPTUREM LA FOTO
+        RenderTexture rt = portraitCam.targetTexture;
+        RenderTexture prev = RenderTexture.active;
+        RenderTexture.active = rt;
+        
+        // Netegem el fons abans de disparar
+        GL.Clear(true, true, Color.clear);
         portraitCam.Render();
 
-        RenderTexture currentRT = portraitCam.targetTexture;
-        RenderTexture.active = currentRT;
-        Texture2D texture = new Texture2D(currentRT.width, currentRT.height, TextureFormat.RGBA32, false);
-        texture.ReadPixels(new Rect(0, 0, currentRT.width, currentRT.height), 0, 0);
+        Texture2D texture = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+        texture.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
         texture.Apply();
 
-        Destroy(clone);
+        // 4. RESTAUREM EL CLIENT AL SEU ESTAT ORIGINAL
+        client.transform.position = originalPosition;
+        client.transform.rotation = originalRotation;
+        client.transform.SetParent(originalParent);
+        SetLayerRecursive(client, originalLayer);
+
+        if (agent != null) agent.enabled = agentWasEnabled;
+        RenderTexture.active = prev;
+
+        // Retornem el Sprite
         return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
     }
 
     private void SetLayerRecursive(GameObject obj, int layer)
     {
         obj.layer = layer;
-        foreach (Transform child in obj.transform) SetLayerRecursive(child.gameObject, layer);
+        foreach (Transform child in obj.transform)
+            SetLayerRecursive(child.gameObject, layer);
     }
 }
