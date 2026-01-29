@@ -38,7 +38,7 @@ public class DogBehaviour : MonoBehaviour
 
     private string[] newActivitiesMessages = new string[]
     {
-        "¡Escolta! Hi ha noves activitats disponibles. Revisa el manual abans que arribin els clients.",
+        "Escolta! Hi ha noves activitats disponibles. Revisa el manual abans que arribin els clients.",
     };
 
     [Header("Death System")]
