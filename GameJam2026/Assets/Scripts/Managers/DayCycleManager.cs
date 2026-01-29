@@ -91,7 +91,7 @@ public class DayCycleManager : MonoBehaviour
         OnDayStart?.Invoke();
         ClientManager.Instance.CalculateTimer();
         ClientManager.Instance.clientsCount = 0;
-        ClientManager.Instance.maxClientsPerDay += 3;
+        ClientManager.Instance.maxClientsPerDay += 2;
 
         GameManager.Instance.ChangeState(GameState.Playing);
     }

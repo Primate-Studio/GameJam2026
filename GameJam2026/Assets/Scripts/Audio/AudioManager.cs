@@ -43,7 +43,10 @@ public class AudioManager : MonoBehaviour
         }
         SetupSources();
     }
-
+    void Start()
+    {
+        PlayMusic(MusicType.MainMenu);
+    }
     private void SetupSources()
     {
         // Netegem fills antics si n'hi hagués (útil en l'editor)
@@ -53,7 +56,6 @@ public class AudioManager : MonoBehaviour
         sfxSource = GetOrCreateSource("SFXSource", "SFX");
         uiSource = GetOrCreateSource("UISource", "UI");
         ambientSource = GetOrCreateSource("AmbientSource", "Ambient");
-        PlayMusic(MusicType.MainMenu);
     }
     private AudioSource GetOrCreateSource(string name, string group)
     {
