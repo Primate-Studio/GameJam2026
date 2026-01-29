@@ -30,7 +30,7 @@ public class ClientManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // <--- AFEGEIX AIXÒ
         activeClients = new GameObject[targetPoints.Length];
-        spawnTimer = 20f;
+        spawnTimer = 12;
     }
 
     void Start()
