@@ -174,7 +174,14 @@ public class NewTutorial : MonoBehaviour
         yield return new WaitForSeconds(1f); // Pausa inicial
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Posa't dret gandul! Benvingut a l'Àgencia de Venda d'Oidssees, l'imperi viral d'Ulisses. Anit et vas beure fins a l'aigua dels florers en l'Oasi i ara tens un deute a pagar.",
+            "Posa't dret gandul! Benvingut a l'Agència de Venda d'Odissea, l'imperi viral d'Ulisses.",
+            dialogueSystem.dogSprite,
+            null,
+            true,
+            tutorialDog.transform
+        ));
+        yield return StartCoroutine(dialogueSystem.ShowDialogue(
+            "Anit et vas beure fins a l'aigua dels florers en l'Oasi i ara tens un deute a pagar.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -182,7 +189,7 @@ public class NewTutorial : MonoBehaviour
         ));
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Ten dues opcions, treballa o ser executat a l'acabar el dia. Tu tries.",
+            "Ten dues opcions, treballa o ser executat en acabar el dia. Tu tries.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -217,7 +224,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Molt bé! Prova a moure la càmera amb el ratolí.",
+            "Molt bé! Prova de moure la càmera amb el ratolí.",
             dialogueSystem.dogSprite,
             dialogueSystem.mouseSprite,
             false, // No esperar botón - texto permanece hasta que mueva la cámara
@@ -325,7 +332,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Ten clientes esperant, tria a quin vols atendre primer.",
+            "Tens clientes esperant, tria a quin vols atendre primer.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -374,6 +381,7 @@ public class NewTutorial : MonoBehaviour
     private IEnumerator WaitForClientChoice()
     {
         Debug.Log("<color=cyan>===== ESPERANDO ELECCIÓN DE CLIENTE =====</color>");
+        playerRestrictions.DisableInteraction();
         isCheckingConditions = true;
 
         while (true)
@@ -400,6 +408,7 @@ public class NewTutorial : MonoBehaviour
 
             yield return null;
         }
+        
     }
 
     /// <summary>
@@ -450,7 +459,7 @@ public class NewTutorial : MonoBehaviour
         // Marcar cliente como completado
         stateManager.CompleteClient(activeClient);
         activeClient.CompleteOrder();
-        
+        playerRestrictions.EnableInteraction();
         Debug.Log("<color=green>✓✓✓ PRIMER CLIENTE COMPLETADO - Pasando a BetweenClientsPhase ✓✓✓</color>");
     }
 
@@ -656,6 +665,7 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator ExplainOrders(TutorialClient client)
     {
+        playerRestrictions.DisableInteraction();
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Cada client et donarà una comanda amb dues o tres condicions. Per a cada condició hauràs d'entregar un objecte.",
             dialogueSystem.dogSprite,
@@ -668,7 +678,7 @@ public class NewTutorial : MonoBehaviour
         dialogueSystem.HideDialogue();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Si son dos situacions has de trobar els dos millors objectes per aquestes.",
+            "Si són dues situacions has de trobar els dos millors objectes per aquestes.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -677,6 +687,7 @@ public class NewTutorial : MonoBehaviour
 
         stateManager.hasLearnedOrders = true;
         dialogueSystem.HideDialogue();
+        playerRestrictions.EnableInteraction();
     }
 
 
@@ -686,6 +697,7 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator ExplainManual(TutorialClient client)
     {
+        playerRestrictions.DisableInteraction();
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Per saber quins objectes són els millors, consulta el manual",
             dialogueSystem.dogSprite,
@@ -705,6 +717,7 @@ public class NewTutorial : MonoBehaviour
         stateManager.hasSeenManualExplanation = true;
         stateManager.hasLearnedManual = true;
         dialogueSystem.HideDialogue();
+        playerRestrictions.EnableInteraction();
     }
 
     /// <summary>
@@ -718,7 +731,7 @@ public class NewTutorial : MonoBehaviour
         client.ShowObjectHints();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Fixat en els objectes que estan ressaltats. Consulta el manual per saber quins objectes són els millors per cada situació.",
+            "Fixa't en els objectes que estan ressaltats. Consulta el manual per saber quins objectes són els millors per cada situació.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -1049,7 +1062,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Perfecte! Ara porta els objectes a la motxilla del mostrador per lliurar la comanda.",
+            "Perfecte! Ara porta els objectes a la motxilla del taulell per lliurar la comanda.",
             dialogueSystem.dogSprite,
             null,
             true,
