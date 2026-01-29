@@ -893,6 +893,10 @@ public class NewTutorial : MonoBehaviour
             
             Debug.Log($"<color=cyan>✓ Pedido generado para cliente {client.clientID} en slot {slotIndex}</color>");
             Debug.Log($"<color=cyan>  La mochila (DeliveryBox) se ha instanciado en el mostrador automáticamente</color>");
+            
+            // Verificar que se añadió correctamente
+            int orderCount = OrderSystem.Instance.GetActiveOrdersCount();
+            Debug.Log($"<color=magenta>📊 Pedidos activos después de generar: {orderCount}</color>");
         }
         else
         {
@@ -1099,11 +1103,37 @@ public class NewTutorial : MonoBehaviour
             initialCount = OrderSystem.Instance.GetActiveOrdersCount();
         }
         
+        Debug.Log($"<color=yellow>⏳ WaitForOrderCompletion: Conteo inicial = {initialCount}</color>");
+        
+        // Timeout de seguridad: si pasan 60 segundos, salir
+        float timeoutDuration = 60f;
+        float elapsedTime = 0f;
+        
         // Esperar hasta que disminuya el número de pedidos (se completó uno)
         while (OrderSystem.Instance != null && OrderSystem.Instance.GetActiveOrdersCount() >= initialCount)
         {
+            elapsedTime += Time.deltaTime;
+            
+            // Log cada 5 segundos para debugging
+            if (Mathf.FloorToInt(elapsedTime) % 5 == 0 && elapsedTime > 0.1f)
+            {
+                int currentCount = OrderSystem.Instance.GetActiveOrdersCount();
+                Debug.Log($"<color=cyan>⏳ Esperando completación... ({elapsedTime:F0}s) - Pedidos: {currentCount}/{initialCount}</color>");
+            }
+            
+            // Timeout de seguridad
+            if (elapsedTime >= timeoutDuration)
+            {
+                Debug.LogError($"<color=red>⚠️ TIMEOUT: WaitForOrderCompletion esperó {timeoutDuration}s sin cambios!</color>");
+                Debug.LogError($"<color=red>Pedidos iniciales: {initialCount}, Pedidos actuales: {OrderSystem.Instance.GetActiveOrdersCount()}</color>");
+                break;
+            }
+            
             yield return null;
         }
+        
+        int finalCount = OrderSystem.Instance != null ? OrderSystem.Instance.GetActiveOrdersCount() : 0;
+        Debug.Log($"<color=green>✓ WaitForOrderCompletion: Pedido completado! ({initialCount} → {finalCount}) en {elapsedTime:F1}s</color>");
         
         // Esperar un momento adicional para que termine las animaciones
         yield return new WaitForSeconds(0.5f);

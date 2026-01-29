@@ -273,7 +273,10 @@ public class OrderSystem : MonoBehaviour
             slotIndex = slotIndex,
             uiElement = uiObj,
         };
+        
+        Debug.Log($"<color=magenta>📦 Añadiendo pedido a activeClientOrders: Count antes={activeClientOrders.Count}</color>");
         activeClientOrders.Add(clientOrderData);
+        Debug.Log($"<color=magenta>📦 Pedido añadido: Count después={activeClientOrders.Count}</color>");
         
         Debug.Log($"<color=green>✓ Pedido de tutorial #{newOrder.orderID} generado!</color>");
         
@@ -375,11 +378,15 @@ public class OrderSystem : MonoBehaviour
         // Si el pedido está completo, procesarlo
         if (order.IsComplete())
         {
+            Debug.Log($"<color=yellow>🎯 Pedido #{order.orderID} COMPLETADO! Buscando ClientOrderData...</color>");
+            
             // Encontrar el ClientOrderData correspondiente
             ClientOrderData clientOrderData = activeClientOrders.Find(cod => cod.order == order);
             
             if (clientOrderData != null)
             {
+                Debug.Log($"<color=green>✓ ClientOrderData encontrado, procesando con OrderEvaluator...</color>");
+                
                 if (OrderEvaluator.Instance != null)
                 {
                     AudioManager.Instance.PlaySFX(SFXType.ClientGood, false);
@@ -393,6 +400,7 @@ public class OrderSystem : MonoBehaviour
             else
             {
                 Debug.LogError($"<color=red>No se encontró ClientOrderData para el pedido #{order.orderID}</color>");
+                Debug.LogError($"<color=red>activeClientOrders tiene {activeClientOrders.Count} elementos</color>");
             }
         }
         
@@ -443,6 +451,9 @@ public class OrderSystem : MonoBehaviour
     private void RemoveOrder(ClientOrderData clientOrderData)
     {
         if (clientOrderData == null) return;
+        
+        Debug.Log($"<color=orange>🗑️ RemoveOrder llamado para pedido #{clientOrderData.order?.orderID} - Count antes: {activeClientOrders.Count}</color>");
+        
         if (clientOrderData.order?.animationController != null)
         {
             clientOrderData.order.animationController.SetTalking(false);
@@ -463,11 +474,21 @@ public class OrderSystem : MonoBehaviour
         // Despedir al cliente
         if (ClientManager.Instance != null)
         {
-            ClientManager.Instance.DismissClientInSlot(clientOrderData.slotIndex);
+            // En tutorial, los clientes no se despiden
+            if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameState.Tutorial)
+            {
+                ClientManager.Instance.DismissClientInSlot(clientOrderData.slotIndex);
+            }
+            else
+            {
+                Debug.Log($"<color=cyan>🎓 Modo Tutorial: El cliente del slot {clientOrderData.slotIndex} NO se despide</color>");
+            }
         }
         
         // Remover de la lista activa
         activeClientOrders.Remove(clientOrderData);
+        
+        Debug.Log($"<color=orange>🗑️ Pedido removido - Count después: {activeClientOrders.Count}</color>");
     }
     
     /// <summary>

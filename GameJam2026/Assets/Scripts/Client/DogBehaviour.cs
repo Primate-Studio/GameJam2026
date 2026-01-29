@@ -19,6 +19,8 @@ public class DogBehaviour : MonoBehaviour
 
     [Header("UI References")]
     public GameObject dialoguePanel; // Panel que contiene el texto
+    public UnityEngine.UI.Image characterImageObject; // Imagen del personaje en el panel
+    public Sprite characterImage; // Sprite del perro
     public TextMeshProUGUI dialogueText;
     public float dialogueDuration = 5f;
 
@@ -28,21 +30,15 @@ public class DogBehaviour : MonoBehaviour
     
     private string[] deathMessages = new string[]
     {
-        "¡Uyuyuy! Se te han muerto {0} clientes. ¡Tienes que mejorar!",
-        "¡Vaya desastre! {0} clientes no sobrevivieron. ¡Concéntrate más!",
-        "¡Esto es inaceptable! {0} muertes en tu turno. ¡Hazlo mejor!",
-        "¡Qué tragedia! Perdiste {0} clientes. ¡Más cuidado la próxima vez!",
-        "¡Ay no! {0} clientes fallecieron. ¡Necesitas ser más rápido!",
-        "¡Houston, tenemos un problema! {0} bajas. ¡Mejora tu técnica!",
-        "¡Catástrofe! {0} clientes no lo lograron. ¡Pon más atención!"
+        "{0} client/s ha fracassat estrepitosament a la seva missió.",
+        "Ves amb compte, {0} client/s ha/han mort per culpa teva.",
+        "Posat les piles {0} client/s acaba/n de morir.",
+        "{0} o a intentar hi ha mort.",
     };
 
     private string[] newActivitiesMessages = new string[]
     {
-        "¡Oye! Hay nuevas actividades disponibles en el manual. ¡Revísalo antes de que vengan los clientes!",
-        "¡Atención! Se desbloquearon nuevas actividades. ¡Consulta el manual ahora!",
-        "¡Novedad! Nuevas actividades en el manual. ¡Échale un vistazo rápido!",
-        "¡Hey! El manual tiene nuevas actividades. ¡Míralo antes de empezar!"
+        "¡Escolta! Hi ha noves activitats disponibles. Revisa el manual abans que arribin els clients.",
     };
 
     [Header("Death System")]
@@ -125,12 +121,6 @@ public class DogBehaviour : MonoBehaviour
             
             Debug.Log($"🐕 Reportando {deathsToReport} muerte(s)");
             
-            // ACTIVAR el panel antes de moverse
-            if (dialoguePanel != null)
-            {
-                dialoguePanel.SetActive(true);
-            }
-            
             // Mover en L usando waypoints hacia talkingPosition
             if (deathWaypoints != null && deathWaypoints.Length > 0)
             {
@@ -141,12 +131,14 @@ public class DogBehaviour : MonoBehaviour
                 yield return StartCoroutine(MoveToPosition(talkingPosition.position));
             }
 
-            // Iniciar LookAt de la cámara hacia el perro
+            // Iniciar LookAt de la cámara hacia el perro (durará todo el tiempo que esté hablando)
             StartCameraLookAt();
 
             // Mostrar mensaje
             ShowDeathMessage(deathsToReport);
             yield return new WaitForSeconds(dialogueDuration);
+            
+            // Ocultar diálogo (esto detiene el LookAt porque isTalking = false)
             HideDialogue();
             
             // Restaurar cámara suavemente
@@ -180,6 +172,19 @@ public class DogBehaviour : MonoBehaviour
         string randomMessage = deathMessages[Random.Range(0, deathMessages.Length)];
         string finalMessage = string.Format(randomMessage, deathCount);
 
+        // ACTIVAR el panel cuando se va a mostrar el mensaje
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(true);
+        }
+
+        // Activar y asignar sprite del personaje
+        if (characterImageObject != null && characterImage != null)
+        {
+            characterImageObject.sprite = characterImage;
+            characterImageObject.gameObject.SetActive(true);
+        }
+
         dialogueText.text = finalMessage;
         dialogueText.gameObject.SetActive(true);
         
@@ -206,12 +211,6 @@ public class DogBehaviour : MonoBehaviour
 
         if (currentActivityCount > lastKnownActivityCount && lastKnownActivityCount > 0)
         {
-            // ACTIVAR el panel antes de moverse
-            if (dialoguePanel != null)
-            {
-                dialoguePanel.SetActive(true);
-            }
-            
             // Mover en L usando waypoints hacia newActivitiesPosition
             if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
             {
@@ -224,11 +223,13 @@ public class DogBehaviour : MonoBehaviour
                 yield return StartCoroutine(MoveToPosition(newActivitiesPosition.position));
             }
 
-            // Iniciar LookAt de la cámara hacia el perro
+            // Iniciar LookAt de la cámara hacia el perro (durará todo el tiempo que esté hablando)
             StartCameraLookAt();
 
             ShowNewActivitiesMessage();
             yield return new WaitForSeconds(dialogueDuration);
+            
+            // Ocultar diálogo (esto detiene el LookAt porque isTalking = false)
             HideDialogue();
             
             // Restaurar cámara suavemente
@@ -260,6 +261,19 @@ public class DogBehaviour : MonoBehaviour
         if (dialogueText == null) return;
 
         string randomMessage = newActivitiesMessages[Random.Range(0, newActivitiesMessages.Length)];
+        
+        // ACTIVAR el panel cuando se va a mostrar el mensaje
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(true);
+        }
+        
+        // Activar y asignar sprite del personaje
+        if (characterImageObject != null && characterImage != null)
+        {
+            characterImageObject.sprite = characterImage;
+            characterImageObject.gameObject.SetActive(true);
+        }
         
         dialogueText.text = randomMessage;
         dialogueText.gameObject.SetActive(true);
@@ -433,25 +447,33 @@ public class DogBehaviour : MonoBehaviour
     {
         if (cameraTransform == null) yield break;
 
-        float duration = 1.5f;
+        float transitionDuration = 1.5f;
         float elapsed = 0f;
 
-        Vector3 direction = transform.position - cameraTransform.position;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
         Quaternion startRotation = cameraTransform.rotation;
 
-        while (elapsed < duration)
+        // Fase 1: Transición suave inicial hacia el perro
+        while (elapsed < transitionDuration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / transitionDuration);
 
+            Vector3 direction = transform.position - cameraTransform.position;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
             cameraTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             yield return null;
         }
 
-        cameraTransform.rotation = targetRotation;
-        yield return null;
+        // Fase 2: Mantener el LookAt activo durante todo el tiempo que esté hablando
+        while (isTalking)
+        {
+            Vector3 direction = transform.position - cameraTransform.position;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            cameraTransform.rotation = Quaternion.Slerp(cameraTransform.rotation, targetRotation, Time.deltaTime * 5f);
+
+            yield return null;
+        }
     }
 
     private System.Collections.IEnumerator RestoreCameraRotation()
@@ -484,6 +506,10 @@ public class DogBehaviour : MonoBehaviour
     {
         if (dialogueText != null)
             dialogueText.gameObject.SetActive(false);
+        
+        // Desactivar imagen del personaje
+        if (characterImageObject != null)
+            characterImageObject.gameObject.SetActive(false);
         
         isTalking = false;
         StopDogSound(talkAudioSource);

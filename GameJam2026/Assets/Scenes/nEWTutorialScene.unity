@@ -1928,7 +1928,7 @@ MonoBehaviour:
   dogSprite: {fileID: 21300000, guid: 2cd06dda9bac7d9439432deb1349f57e, type: 3}
   clientSprite: {fileID: 21300000, guid: 8446c23f8e32bb04a9f6c2e7f6300d7c, type: 3}
   wasdSprite: {fileID: 21300000, guid: 43b0026d1573d90478654fe640ffb4a2, type: 3}
-  mouseSprite: {fileID: 21300000, guid: df9fbfa675413514ab0424294c7bb644, type: 3}
+  mouseSprite: {fileID: 21300000, guid: 41fd9e79ed89b3548929bc4221e0572c, type: 3}
   tabSprite: {fileID: 21300000, guid: 522379f24792daf4d972e40e7d0c1e21, type: 3}
   manualSprite: {fileID: 21300000, guid: d0eda93c5e3530447a7eae487f594444, type: 3}
   desperationSprite: {fileID: 21300000, guid: 6e049e7c260dfa644865a1993d6aab55, type: 3}
@@ -2491,6 +2491,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  dayProgressUI: {fileID: 0}
+  dayCounterText: {fileID: 0}
 --- !u!1001 &157956934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3113,13 +3115,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192094239}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.84089005, y: 0.84089005, z: 0.84089005}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1677228366}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -27523,15 +27525,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1a3eebe3327608146be490250e670601, type: 2}
-  m_sharedMaterial: {fileID: 6795210062758661249, guid: 1a3eebe3327608146be490250e670601, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2a6fdf7f474a2f34a8077d173161dc40, type: 2}
+  m_sharedMaterial: {fileID: 3988224481630408346, guid: 2a6fdf7f474a2f34a8077d173161dc40, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0.5896226, g: 0.76743996, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -28935,13 +28937,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800512465}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.84089005, y: 0.84089005, z: 0.84089005}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1686915705}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -30486,7 +30488,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0c9ca9dd9db624a93596cc953e20c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectDatabase
-  objectIcons: []
+  objectIcons:
+  - objectType: 1
+    icon: {fileID: 21300000, guid: 0c839dc8fc2d8ac4490d237b241f5363, type: 3}
+  - objectType: 2
+    icon: {fileID: 21300000, guid: f7a90c598002c2840849f56508a77c17, type: 3}
+  - objectType: 3
+    icon: {fileID: 21300000, guid: 4a7dddaee21442847b0fb46d9cb16778, type: 3}
+  - objectType: 4
+    icon: {fileID: 21300000, guid: bd5334cbbf614ed4a86bb78cc9eb8128, type: 3}
+  - objectType: 5
+    icon: {fileID: 21300000, guid: 097331e614a7b1d47895424cc2ab80d3, type: 3}
+  - objectType: 6
+    icon: {fileID: 21300000, guid: c36f5bedee5641c4fab3f9148567da7b, type: 3}
+  - objectType: 7
+    icon: {fileID: 21300000, guid: 0e1f5c1c7b9f12e4db729f93da05967d, type: 3}
+  - objectType: 8
+    icon: {fileID: 21300000, guid: f56aa78520e541b4a9eda622ff370b6c, type: 3}
+  - objectType: 9
+    icon: {fileID: 21300000, guid: 838150bc7f6ef4c4db0c7b1513ef299c, type: 3}
+  - objectType: 10
+    icon: {fileID: 21300000, guid: 60335f4b9a3af4f4eb4a8a9cd78db51c, type: 3}
+  - objectType: 11
+    icon: {fileID: 21300000, guid: c1f3f48cbbc2c8c4b82a4087983cbd31, type: 3}
+  - objectType: 12
+    icon: {fileID: 21300000, guid: 4da571f23b84085458a001df3d176e31, type: 3}
+  - objectType: 13
+    icon: {fileID: 21300000, guid: 3b54b3b73859f54438c2dbb79dfc97c8, type: 3}
+  - objectType: 15
+    icon: {fileID: 21300000, guid: 529eb7d9a4609fe4ebfdb1416fea3911, type: 3}
+  - objectType: 14
+    icon: {fileID: 21300000, guid: 56cb4a18d03aafb43a8ef4171899176c, type: 3}
+  - objectType: 17
+    icon: {fileID: 21300000, guid: 8d487dd9f8a0f1a4787bd8604edfc5a8, type: 3}
+  - objectType: 16
+    icon: {fileID: 21300000, guid: df30010bbce7b224189ca913c80c9b0c, type: 3}
 --- !u!1 &1918426337
 GameObject:
   m_ObjectHideFlags: 0
@@ -31894,13 +31930,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1995308334}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.84089005, y: 0.84089005, z: 0.84089005}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1451212976}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}

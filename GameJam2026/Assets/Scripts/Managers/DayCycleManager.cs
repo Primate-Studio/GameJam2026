@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using TMPro;
 
 public class DayCycleManager : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class DayCycleManager : MonoBehaviour
     [SerializeField] private Gradient skyboxTint;
     [SerializeField] private AnimationCurve skyboxExposure;
 
+    public UnityEngine.UI.Image dayProgressUI;
+    public TextMeshProUGUI dayCounterText;
+
     public static event Action OnDayStart;
     public static event Action OnDayEnd;
 
@@ -34,7 +38,15 @@ public class DayCycleManager : MonoBehaviour
     {
         StartDay(); // En una versión final, esto se llamaría desde un botón "Abrir Tienda"
         
+        if(GameManager.Instance != null && 
+           GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            currentDay = 0;
+            return;
+        }
+        
         currentDay = PlayerPrefs.GetInt("CurrentDay", 1);
+        dayCounterText.text = $"Dia {currentDay}";
     }
 
     private void Update()
@@ -101,7 +113,7 @@ public class DayCycleManager : MonoBehaviour
         ClientManager.Instance.CalculateTimer();
         ClientManager.Instance.clientsCount = 0;
         ClientManager.Instance.maxClientsPerDay += 2;
-
+        dayCounterText.text = $"Dia {currentDay}";
         GameManager.Instance.ChangeState(GameState.Playing);
     }
 
