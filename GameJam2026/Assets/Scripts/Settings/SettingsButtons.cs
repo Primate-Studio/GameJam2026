@@ -6,6 +6,7 @@ public class SettingsButtons : MonoBehaviour
     public static SettingsButtons Instance { get; private set; }
     [Header("GeneralSettings References")]
     [SerializeField] private Button BackButton;
+    [SerializeField] private Button HomeButton;
     [SerializeField] private GameObject SettingsPanel;
     [SerializeField] private GameObject GeneralSettingsCanvas;
 
@@ -42,15 +43,25 @@ public class SettingsButtons : MonoBehaviour
     {
         if (BackButton != null)
             BackButton.onClick.AddListener(OnBackButton);
+        if (HomeButton != null)
+            HomeButton.onClick.AddListener(OnHomeButton);
     }
 
     private void OnDisable()
     {
         if (BackButton != null)
             BackButton.onClick.RemoveListener(OnBackButton);
+        if (HomeButton != null)
+            HomeButton.onClick.RemoveListener(OnHomeButton);
     }
-
     //--------BUTTON METHODS-----------
+    public void OnHomeButton()
+    {
+        SettingsPanel.SetActive(false);
+        GeneralSettingsCanvas.SetActive(false);
+        InputManager.Instance.SetPauseState(false);
+        GameManager.Instance.ChangeState(GameState.MainMenu);
+    }
     public void OnPause(bool isPaused)
     {
         GeneralSettingsCanvas.SetActive(isPaused);
