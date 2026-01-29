@@ -55,6 +55,12 @@ public class DogBehaviour : MonoBehaviour
     public float dayStartCheckDelay = 2f;
     private int lastKnownActivityCount = 0;
 
+    [Header("Camera LookAt")]
+    public bool useCameraLookAt = true;
+    private Transform cameraTransform;
+    private Quaternion savedCameraRotation;
+    private bool hasSavedCameraRotation = false;
+
     private bool isMoving = false;
     private bool isTalking = false;
 
@@ -74,6 +80,20 @@ public class DogBehaviour : MonoBehaviour
         if (offScreenPosition != null)
         {
             transform.position = offScreenPosition.position;
+        }
+
+        // Obtener referencia a la cámara
+        Camera mainCam = Camera.main;
+        if (mainCam != null)
+        {
+            cameraTransform = mainCam.transform;
+        }
+
+        // Inicializar lastKnownActivityCount con el conteo actual
+        if (OrderGenerator.Instance != null)
+        {
+            lastKnownActivityCount = OrderGenerator.Instance.GetUnlockedActivitiesCount();
+            Debug.Log($"🐶 DogBehaviour: Inicializado con {lastKnownActivityCount} actividades conocidas");
         }
     }
 
@@ -121,10 +141,16 @@ public class DogBehaviour : MonoBehaviour
                 yield return StartCoroutine(MoveToPosition(talkingPosition.position));
             }
 
+            // Iniciar LookAt de la cámara hacia el perro
+            StartCameraLookAt();
+
             // Mostrar mensaje
             ShowDeathMessage(deathsToReport);
             yield return new WaitForSeconds(dialogueDuration);
             HideDialogue();
+            
+            // Restaurar cámara suavemente
+            yield return StartCoroutine(RestoreCameraRotation());
 
             // Volver a offScreen usando los waypoints en reversa
             if (deathWaypoints != null && deathWaypoints.Length > 0)
@@ -198,9 +224,15 @@ public class DogBehaviour : MonoBehaviour
                 yield return StartCoroutine(MoveToPosition(newActivitiesPosition.position));
             }
 
+            // Iniciar LookAt de la cámara hacia el perro
+            StartCameraLookAt();
+
             ShowNewActivitiesMessage();
             yield return new WaitForSeconds(dialogueDuration);
             HideDialogue();
+            
+            // Restaurar cámara suavemente
+            yield return StartCoroutine(RestoreCameraRotation());
             
 
             // Volver a offScreen usando los waypoints en reversa
@@ -380,6 +412,74 @@ public class DogBehaviour : MonoBehaviour
         }
     }
     #endregion
+    
+    #region Camera LookAt
+    
+    private void StartCameraLookAt()
+    {
+        if (!useCameraLookAt || cameraTransform == null) return;
+
+        // Guardar la rotación actual de la cámara
+        if (!hasSavedCameraRotation)
+        {
+            savedCameraRotation = cameraTransform.rotation;
+            hasSavedCameraRotation = true;
+        }
+
+        StartCoroutine(LookAtDogCoroutine());
+    }
+
+    private System.Collections.IEnumerator LookAtDogCoroutine()
+    {
+        if (cameraTransform == null) yield break;
+
+        float duration = 1.5f;
+        float elapsed = 0f;
+
+        Vector3 direction = transform.position - cameraTransform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Quaternion startRotation = cameraTransform.rotation;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+
+            cameraTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            yield return null;
+        }
+
+        cameraTransform.rotation = targetRotation;
+        yield return null;
+    }
+
+    private System.Collections.IEnumerator RestoreCameraRotation()
+    {
+        if (!hasSavedCameraRotation || cameraTransform == null) yield break;
+
+        float duration = 0.8f;
+        float elapsed = 0f;
+
+        Quaternion startRotation = cameraTransform.rotation;
+        Quaternion targetRotation = savedCameraRotation;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+
+            cameraTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            yield return null;
+        }
+
+        cameraTransform.rotation = targetRotation;
+        hasSavedCameraRotation = false;
+    }
+    
+    #endregion
+    
     private void HideDialogue()
     {
         if (dialogueText != null)

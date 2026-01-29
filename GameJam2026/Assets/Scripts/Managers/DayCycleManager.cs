@@ -73,6 +73,15 @@ public class DayCycleManager : MonoBehaviour
         ClientManager.Instance.clientsCount = 0;
         Debug.Log("<color=yellow>☀ La botiga ha obert!</color>");
         
+        // Notificar al perro para que revise nuevas actividades
+        DogBehaviour dog = FindFirstObjectByType<DogBehaviour>();
+        if (dog != null && OrderGenerator.Instance != null)
+        {
+            int currentActivityCount = OrderGenerator.Instance.GetUnlockedActivitiesCount();
+            dog.CheckNewActivitiesOnDayStart(currentActivityCount);
+            Debug.Log($"<color=cyan>🐶 Notificando al perro: {currentActivityCount} actividades</color>");
+        }
+        
         // NO cambiar el estado si estamos en tutorial
         if (GameManager.Instance.CurrentState != GameState.Tutorial)
         {

@@ -9664,11 +9664,11 @@ PrefabInstance:
     - target: {fileID: 566554898778645165, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
       propertyPath: dialogueText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 46968562}
     - target: {fileID: 566554898778645165, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
       propertyPath: dialoguePanel
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 448741038}
     - target: {fileID: 566554898778645165, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
       propertyPath: idleAudioSource
       value: 
@@ -28195,7 +28195,7 @@ PrefabInstance:
       objectReference: {fileID: 312479662}
     - target: {fileID: 4671349402637720920, guid: 795a32332910a5a469669f7fd6e8c0cc, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4671349402637720920, guid: 795a32332910a5a469669f7fd6e8c0cc, type: 3}
       propertyPath: respawnParticlePrefab
@@ -28356,7 +28356,7 @@ PrefabInstance:
       objectReference: {fileID: 573175007}
     - target: {fileID: 6457293947300737846, guid: f8ec0f565d30d5b48b0690d443585c7c, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6457293947300737846, guid: f8ec0f565d30d5b48b0690d443585c7c, type: 3}
       propertyPath: respawnParticlePrefab
@@ -28679,7 +28679,7 @@ PrefabInstance:
       objectReference: {fileID: 672840598}
     - target: {fileID: 888484787614566158, guid: 0f7cc241b913bc54bb3817c97076c856, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 888484787614566158, guid: 0f7cc241b913bc54bb3817c97076c856, type: 3}
       propertyPath: respawnParticlePrefab
@@ -28868,7 +28868,7 @@ PrefabInstance:
       objectReference: {fileID: 536174934}
     - target: {fileID: 38640575706511367, guid: 279aa21de6d59c84bac79ce75c1d264f, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 38640575706511367, guid: 279aa21de6d59c84bac79ce75c1d264f, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29059,7 +29059,7 @@ PrefabInstance:
       objectReference: {fileID: 1851398081}
     - target: {fileID: 2251692720270176499, guid: 2e224238b975b0049ba2306fc75784f9, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2251692720270176499, guid: 2e224238b975b0049ba2306fc75784f9, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29294,7 +29294,7 @@ PrefabInstance:
       objectReference: {fileID: 1718982860}
     - target: {fileID: 5315556773866822778, guid: 911091b3297649b4091bf11226d48d95, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5315556773866822778, guid: 911091b3297649b4091bf11226d48d95, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29423,7 +29423,7 @@ PrefabInstance:
       objectReference: {fileID: 1816450039}
     - target: {fileID: 6824166174615505251, guid: c984dcff7cf38b0488f4b96618f6c624, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6824166174615505251, guid: c984dcff7cf38b0488f4b96618f6c624, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29492,7 +29492,7 @@ PrefabInstance:
       objectReference: {fileID: 1809766742}
     - target: {fileID: 2203212358179391776, guid: e58e5afc723d2c94196a50d71fdff491, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2203212358179391776, guid: e58e5afc723d2c94196a50d71fdff491, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29710,7 +29710,7 @@ PrefabInstance:
       objectReference: {fileID: 311482803}
     - target: {fileID: 4913672976401044198, guid: 36f7fbe5cdb8d35429dc44f3d6bea09a, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4913672976401044198, guid: 36f7fbe5cdb8d35429dc44f3d6bea09a, type: 3}
       propertyPath: respawnParticlePrefab
@@ -29905,7 +29905,7 @@ PrefabInstance:
       objectReference: {fileID: 1906387938}
     - target: {fileID: 775329106779701955, guid: 4fad2ccfd12f6d24fae2888967f08101, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 775329106779701955, guid: 4fad2ccfd12f6d24fae2888967f08101, type: 3}
       propertyPath: respawnParticlePrefab
@@ -30103,7 +30103,7 @@ PrefabInstance:
       objectReference: {fileID: 1614973565}
     - target: {fileID: 3171516826835371822, guid: f9d61552723f2a047b4c478b9e0d3929, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 3171516826835371822, guid: f9d61552723f2a047b4c478b9e0d3929, type: 3}
       propertyPath: respawnParticlePrefab
@@ -30349,7 +30349,7 @@ PrefabInstance:
       objectReference: {fileID: 1938783499}
     - target: {fileID: 8292446529905033187, guid: c67b3711d8debfd488bca457c4c666fb, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8292446529905033187, guid: c67b3711d8debfd488bca457c4c666fb, type: 3}
       propertyPath: respawnParticlePrefab
@@ -30533,7 +30533,7 @@ PrefabInstance:
       objectReference: {fileID: 7385923378669218131, guid: 510d7fc4ab0726b468ad7ed12c198fd9, type: 3}
     - target: {fileID: 7471487660650982894, guid: fc4a6029fcee9fc4c9e4be032b1afa32, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 7471487660650982894, guid: fc4a6029fcee9fc4c9e4be032b1afa32, type: 3}
       propertyPath: respawnParticlePrefab
@@ -30699,7 +30699,7 @@ PrefabInstance:
       objectReference: {fileID: 1715512414}
     - target: {fileID: 5479433925859149911, guid: 7507c45987a6745448e7bd3996582085, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5479433925859149911, guid: 7507c45987a6745448e7bd3996582085, type: 3}
       propertyPath: respawnParticlePrefab
@@ -30839,7 +30839,7 @@ PrefabInstance:
       objectReference: {fileID: 2549313293486262893}
     - target: {fileID: 3602412544353553314, guid: 3a983df404f2f814db68582e0cdf253a, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 3602412544353553314, guid: 3a983df404f2f814db68582e0cdf253a, type: 3}
       propertyPath: respawnParticlePrefab
@@ -31057,7 +31057,7 @@ PrefabInstance:
       objectReference: {fileID: 7606214617516844932, guid: fa023ab62ac103a41b9df539eca9f970, type: 3}
     - target: {fileID: 5409699288510334742, guid: cb9c7e30c0265f1489e12c241e7d4993, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5409699288510334742, guid: cb9c7e30c0265f1489e12c241e7d4993, type: 3}
       propertyPath: respawnParticlePrefab
@@ -31173,7 +31173,7 @@ PrefabInstance:
       objectReference: {fileID: 8889101744336031723, guid: 0380dd98ff725e449a828520e75ddeaa, type: 3}
     - target: {fileID: 295585156170484491, guid: 3b0210f548e63b247b5b4b33c7435ed7, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 295585156170484491, guid: 3b0210f548e63b247b5b4b33c7435ed7, type: 3}
       propertyPath: respawnParticlePrefab
