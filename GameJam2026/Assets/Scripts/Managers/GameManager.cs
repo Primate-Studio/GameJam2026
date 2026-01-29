@@ -11,7 +11,9 @@ public enum GameState
     GameOver,
     GameWin,
     Tutorial,
-    Result
+    Result,
+    Win,
+    Lose
 }
 
 public class GameManager : MonoBehaviour
