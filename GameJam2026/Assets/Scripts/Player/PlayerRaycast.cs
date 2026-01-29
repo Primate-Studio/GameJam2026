@@ -52,7 +52,7 @@ public class PlayerRaycast : MonoBehaviour
                     lastHighlighted.layer = LayerMask.NameToLayer("Highlighted");
                     foreach (Transform child in lastHighlighted.transform)
                     {
-                        child.gameObject.layer = LayerMask.NameToLayer("Highlighted");
+                        if(child.gameObject.layer != LayerMask.NameToLayer("IgnoreOutline")) child.gameObject.layer = LayerMask.NameToLayer("Highlighted");
                     }
                 }
             }
@@ -75,7 +75,7 @@ public class PlayerRaycast : MonoBehaviour
             lastHighlighted.layer = LayerMask.NameToLayer("Items");
             foreach (Transform child in lastHighlighted.transform)
             {
-                child.gameObject.layer = LayerMask.NameToLayer("Items");
+                if(child.gameObject.layer != LayerMask.NameToLayer("IgnoreOutline")) child.gameObject.layer = LayerMask.NameToLayer("Items");
             }
             lastHighlighted = null;
         }

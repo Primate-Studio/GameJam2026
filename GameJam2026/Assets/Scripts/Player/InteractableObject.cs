@@ -27,10 +27,11 @@ public class InteractableObject : MonoBehaviour
     
     [Header("Respawn Settings")]
     [Tooltip("Tiempo en segundos antes de que el objeto reaparezca después de ser recogido")]
-    public float respawnTime = 2f;
+    public float respawnTime = 12f;
     
     [Tooltip("Si es verdadero, el objeto se regenerará infinitamente")]
     public bool infiniteRespawn = true;
+    public ItemIconController myIcon;
     
     // Referencia al Rigidbody si tiene física
     private Rigidbody rb;
@@ -56,7 +57,13 @@ public class InteractableObject : MonoBehaviour
         initialPosition = transform.position;
         initialRotation = transform.rotation;
     }
-    
+    void Start()
+    {
+        if(myIcon != null)
+        {
+            myIcon.SetupIcon(this);
+        }
+    }
     /// <summary>
     /// Desactiva el objeto del mundo (cuando se recoge)
     /// </summary>
@@ -67,6 +74,7 @@ public class InteractableObject : MonoBehaviour
         {
             // Sistema de respawn infinito - deshabilitar componentes pero mantener GameObject activo
             Debug.Log($"<color=yellow>Iniciando respawn de {objectType} en {respawnTime} segundos...</color>");
+            if(myIcon != null) myIcon.StartTimer(respawnTime);
             StartCoroutine(RespawnAfterDelay());
         }
         else
