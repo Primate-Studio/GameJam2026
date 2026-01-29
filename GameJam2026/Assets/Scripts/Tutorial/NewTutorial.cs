@@ -49,6 +49,9 @@ public class NewTutorial : MonoBehaviour
     public GameObject inventoryUI;
     public Sprite inventorySprite;
 
+    [Header("Result Panel")]
+    public GameObject resultPanel;
+
     [Header("Requirement Data - Cliente 1")]
     public RequirementData client1Requirement1;
     public RequirementData client1Requirement2;
@@ -527,10 +530,10 @@ public class NewTutorial : MonoBehaviour
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Ara que ja saps com funciona tot, et donaré la meva comanda. Mira les notes a la dreta!",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            remainingClient.clientTransform
+            tutorialDog.transform
         ));
         
         dialogueSystem.HideDialogue();
@@ -545,10 +548,10 @@ public class NewTutorial : MonoBehaviour
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Ves a buscar els objectes que compleixin les condicions!",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            remainingClient.clientTransform
+            tutorialDog.transform
         ));
         
         dialogueSystem.HideDialogue();
@@ -581,8 +584,30 @@ public class NewTutorial : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
+        // PASO NUEVO: Mostrar panel de resultados
+        if (resultPanel != null)
+        {
+            resultPanel.SetActive(true);
+        }
+
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Enhorabona! Has completat el tutorial. Ara estàs preparat per gestionar la botiga!",
+            "Aquesta és la factura del dia. Aquí podràs saber si continues viu un dia més o si...",
+            dialogueSystem.dogSprite,
+            null,
+            true,
+            tutorialDog.transform
+        ));
+
+        dialogueSystem.HideDialogue();
+
+        // Ocultar panel de resultados
+        if (resultPanel != null)
+        {
+            resultPanel.SetActive(false);
+        }
+
+        yield return StartCoroutine(dialogueSystem.ShowDialogue(
+            "Enhorabona! Has completat el tutorial. Ara estàs preparat per gestionar la botiga sense ajuda.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -610,10 +635,10 @@ public class NewTutorial : MonoBehaviour
     {
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Cada client et donarà una comanda amb dues o tres condicions. Per a cada condició hauràs d'entregar un objecte.",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            client.clientTransform
+            tutorialDog.transform
         ));
 
         stateManager.hasLearnedOrders = true;
@@ -621,10 +646,10 @@ public class NewTutorial : MonoBehaviour
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Si son dos situacions has de trobar els dos millors objectes per aquestes.",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            client.clientTransform
+            tutorialDog.transform
         ));
 
         stateManager.hasLearnedOrders = true;
@@ -643,7 +668,7 @@ public class NewTutorial : MonoBehaviour
             dialogueSystem.dogSprite,
             dialogueSystem.tabSprite,
             true,
-            client.clientTransform
+            tutorialDog.transform
         ));
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
@@ -782,10 +807,10 @@ public class NewTutorial : MonoBehaviour
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Ara et donaré la meva comanda. Mira la nota que apareix a la dreta.",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            client.clientTransform
+            tutorialDog.transform
         ));
         
         dialogueSystem.HideDialogue();
@@ -808,10 +833,10 @@ public class NewTutorial : MonoBehaviour
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Perfecte! Ara porta els objectes a la motxilla del taulell per lliurar la comanda.",
-            dialogueSystem.clientSprite,
+            dialogueSystem.dogSprite,
             null,
             true,
-            client.clientTransform
+            tutorialDog.transform
         ));
         
         dialogueSystem.HideDialogue();
@@ -1070,7 +1095,7 @@ public class NewTutorial : MonoBehaviour
         client.ShowObjectHints();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Aquests objectes estan ressaltats perquè són els que necessites. Ves a agafar-los!",
+            "Aquests objectes estan ressaltats perquè són els que necessites. Agafa'ls!",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -1088,7 +1113,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Cada objecte té una qualitat, un preu i un temps de reaparició. Tria saviament!",
+            "Cada objecte té un temps de reaparició. Tria sàviament!",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -1121,7 +1146,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Ara torna amb el client per entregar el pedido!",
+            "Torna amb el client per finalitzar la comanda.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -1145,7 +1170,7 @@ public class NewTutorial : MonoBehaviour
         client.ShowBackpack();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "El client ha deixat una motxilla. Posa els objectes dins. Recorda que no hi ha marxa enrere!",
+            "El client ha deixat la seva bossa, posa els objectes dins.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -1171,7 +1196,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Molt bé! Pedido completat!",
+            "Comanda finalitzada, molt bona feina.",
             dialogueSystem.dogSprite,
             null,
             true,
