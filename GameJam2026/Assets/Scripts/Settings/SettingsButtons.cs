@@ -82,31 +82,7 @@ public class SettingsButtons : MonoBehaviour
     public void OnMusicVolumeChanged(float value)
     {
         settingsmanager.SetVolume("MusicVolume", value);
-    }
-
-    public void onFullscreenToggleChanged(bool isFullscreen)
-    {
-        #if UNITY_STANDALONE_WIN
-        if (isFullscreen)
-        {
-            Screen.fullScreenMode = FullScreenMode.FullScreenWindow; // borderless
-            Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, true);
-        }
-        else
-        {
-            Screen.fullScreenMode = FullScreenMode.Windowed;
-            Screen.SetResolution(1280, 720, false); // elige tamaño de ventana
-        }
-        #else
-            Screen.fullScreen = isFullscreen;
-        #endif
-    }
-    public void SetVSync(bool isTarget)
-    {
-        QualitySettings.vSyncCount = isTarget ? 1 : 0;
-        Application.targetFrameRate = isTarget ? -1 : 60; 
-    }
-    
+    }    
     public void SetSettingsUI()
     {
         GeneralVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
