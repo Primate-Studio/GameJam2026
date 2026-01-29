@@ -8523,6 +8523,14 @@ PrefabInstance:
       propertyPath: MinDistance
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8950096641976527737, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8950096641976527737, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 7259554523986317356, guid: e69dfe03a43d0ac4a8b48ef38e658d5a, type: 2}
     - target: {fileID: 566554898778645165, guid: 610410efdb5fdad44be8eca9cf2ad7d5, type: 3}
       propertyPath: dialogueText
       value: 

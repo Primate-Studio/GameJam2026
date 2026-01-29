@@ -187,7 +187,7 @@ public class DogBehaviour : MonoBehaviour
             // Mover en L usando waypoints hacia newActivitiesPosition
             if (activitiesWaypoints != null && activitiesWaypoints.Length > 0)
             {
-                PlayDogSound();
+                
 
                 yield return StartCoroutine(MoveAlongWaypoints(activitiesWaypoints));
             }
@@ -212,7 +212,6 @@ public class DogBehaviour : MonoBehaviour
             }
             
             // DESACTIVAR el panel después de volver
-            StopDogSound();
             if (dialoguePanel != null)
             {
                 dialoguePanel.SetActive(false);
@@ -274,6 +273,7 @@ public class DogBehaviour : MonoBehaviour
     private IEnumerator MoveAlongWaypoints(Transform[] waypoints)
     {
         isMoving = true;
+        PlayDogSound();
         if (animator != null)
         {
             animator.SetBool("isFlying", true);
@@ -334,6 +334,7 @@ public class DogBehaviour : MonoBehaviour
         }
 
         isMoving = false;
+        StopDogSound();
         if (animator != null)
         {
             animator.SetBool("isFlying", false);
@@ -370,6 +371,7 @@ public class DogBehaviour : MonoBehaviour
         if (idleAudioSource != null && idleAudioSource.isPlaying)
         {
             idleAudioSource.Stop();
+            idleAudioSource.loop = false;
         }
     }
     #endregion

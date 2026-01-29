@@ -4,6 +4,7 @@ using System.Collections;
 
 public class ClientAnimationController : MonoBehaviour
 {
+    [SerializeField] private AudioSource talkingAudioSource;
     private Animator anim;
     private NavMeshAgent agent;
     public bool isTalking = false;
@@ -12,6 +13,7 @@ public class ClientAnimationController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+
     }
 
     void Update()
@@ -26,9 +28,27 @@ public class ClientAnimationController : MonoBehaviour
     public IEnumerator SetTalking(bool state, float duration = 2.0f)
     {
         isTalking = state;
+        AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.ClientTalk);
+        if (talkingAudioSource != null && clip != null)
+        {
+            if (state)
+            {
+                talkingAudioSource.clip = clip;
+                talkingAudioSource.loop = true;
+                talkingAudioSource.Play();
+            }
+            else
+            {
+                talkingAudioSource.Stop();
+                talkingAudioSource.loop = false;
+            }
+        }
         anim.SetBool("isTalking", state);
         yield return new WaitForSeconds(duration);
         anim.SetBool("isTalking", false);
+        talkingAudioSource.Stop();
+        talkingAudioSource.loop = false;
+        isTalking = false;
     }
 
     public void SetAngry(bool state) => anim.SetBool("isAngry", state);

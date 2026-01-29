@@ -97,6 +97,24 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(SFXType type, bool randomPitch = true) => PlayRandom(type, sfxList, sfxSource, randomPitch);
     public void PlayUI(UIType type, bool randomPitch = false) => PlayRandom(type, uiList, uiSource, randomPitch);
+    public void PlayAmbient(AmbientType type)
+    {
+        int index = (int)type;
+        if (index >= ambientList.Length || ambientList[index].clips.Length == 0) return;
+        
+        ambientSource.clip = ambientList[index].clips[0];
+        ambientSource.volume = ambientList[index].volume;
+        ambientSource.loop = true;
+        ambientSource.Play();
+    }
+
+    public void StopAmbient()
+{
+    if (ambientSource != null && ambientSource.isPlaying)
+    {
+        ambientSource.Stop();
+    }
+}
 
     public void PlayMusic(MusicType type)
     {

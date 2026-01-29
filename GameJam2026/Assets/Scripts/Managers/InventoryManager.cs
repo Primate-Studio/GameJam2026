@@ -109,7 +109,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (GameManager.Instance.CurrentState == GameState.Paused)
             return;
-
+        AudioManager.Instance.PlaySFX(SFXType.InventoryChange);
         currentSlotIndex += direction;
         
         if (currentSlotIndex > 2)

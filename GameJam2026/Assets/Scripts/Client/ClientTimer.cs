@@ -1,10 +1,12 @@
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ClientTimer : MonoBehaviour
 {
     [SerializeField] private AudioSource TimerAudioSource;
+    [SerializeField] private AudioSource AngryAudioSource;
     private Image TimerFillImage;
     public Sprite spriteTimerFill;
     private DesperationLevel desperationLevel;
@@ -22,7 +24,6 @@ public class ClientTimer : MonoBehaviour
     void Start()
     {
         clientAnimationController = GetComponent<ClientAnimationController>();
-        TimerAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -57,6 +58,7 @@ public class ClientTimer : MonoBehaviour
         else if (TimerAudioSource.isPlaying)
         {
             TimerAudioSource.Stop();
+            TimerAudioSource.loop = false;
         }
     }
     
@@ -86,11 +88,22 @@ public class ClientTimer : MonoBehaviour
         {
             desperationLevel = DesperationLevel.High;
             clientAnimationController.SetAngry(true);
+            AudioClip clip = AudioManager.Instance.GetSFXClip(SFXType.ClientAngry);
+            if (clip != null)            {
+                AngryAudioSource.clip = clip;
+                AngryAudioSource.loop = true; // Volem que sigui un so constant
+                AngryAudioSource.Play();
+            }
         }
         else if (percentage <= 0f)
         {
             TimerAudioSource.Stop();
+            TimerAudioSource.loop = false;
+
+            AngryAudioSource.Stop();
+            AngryAudioSource.loop = false;
             desperationLevel = DesperationLevel.Abandon;
+
         }
     }
     

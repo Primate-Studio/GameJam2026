@@ -77,6 +77,7 @@ public class DayCycleManager : MonoBehaviour
         if (GameManager.Instance.CurrentState != GameState.Tutorial)
         {
             GameManager.Instance.ChangeState(GameState.Playing);
+            AudioManager.Instance.PlayAmbient(AmbientType.ShopAmbient);
         }
     }
 
@@ -101,6 +102,7 @@ public class DayCycleManager : MonoBehaviour
         OnDayEnd?.Invoke();
         Debug.Log("<color=red>🌙 La botiga ha tancat!</color>");
         GameState nextState = MoneyManager.Instance.GetNextStateAfterDay();
+        AudioManager.Instance.StopAmbient();
         GameManager.Instance.ChangeState(nextState);
     }
     public float GetProgress()
