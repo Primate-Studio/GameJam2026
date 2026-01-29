@@ -85,6 +85,7 @@ public class MoneyManager : MonoBehaviour
         if(currentMoney <= 0) return 0f;
         debtPaymentAmount = totalMoney * debtPaymentRate;
         Debt -= debtPaymentAmount;
+        PlayerPrefs.SetFloat("Debt", Debt);
         return debtPaymentAmount;
     }
     
