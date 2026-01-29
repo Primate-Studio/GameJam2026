@@ -28,6 +28,10 @@ public class InteractableObject : MonoBehaviour
     [Header("Respawn Settings")]
     [Tooltip("Tiempo en segundos antes de que el objeto reaparezca después de ser recogido")]
     public float respawnTime = 12f;
+
+    [Header("Effects")]
+    [Tooltip("Prefab de partícules que apareixerà en fer respawn")]
+    [SerializeField] private GameObject respawnParticlePrefab;
     
     [Tooltip("Si es verdadero, el objeto se regenerará infinitamente")]
     public bool infiniteRespawn = true;
@@ -125,7 +129,21 @@ public class InteractableObject : MonoBehaviour
         foreach (var c in childColliders) c.enabled = true;
         foreach (var r in childRenderers) r.enabled = true;
 
-        Debug.Log($"<color=cyan>✨ {objectType} regenerado!</color>");
+        if (respawnParticlePrefab != null)
+        {
+            Vector3 spawnPosition = initialPosition;
+            RaycastHit hit;
+
+            // Disparem un raig des de la posició de l'objecte cap avall (màxim 2 unitats)
+            // Posem initialPosition + Vector3.up * 0.1f per evitar que el raig comenci "dins" del terra
+            if (Physics.Raycast(initialPosition + Vector3.up * 0.1f, Vector3.down, out hit, 2.0f))
+            {
+                // Si trobem una superfície (terra, taula o prestatgeria), posem les partícules allà
+                spawnPosition = hit.point;
+            }
+
+            Instantiate(respawnParticlePrefab, spawnPosition, Quaternion.identity);
+        }
     }
     
     /// <summary>

@@ -285,12 +285,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f858cbad17f2b064ab8c112678e0b7b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResultSceneManager
-  exitMissionText: {fileID: 0}
-  soldItemsText: {fileID: 0}
-  failedMissionsText: {fileID: 0}
-  restockInventoryText: {fileID: 0}
-  totalText: {fileID: 0}
-  debtText: {fileID: 0}
+  exitMissionText: {fileID: 1576208505}
+  soldItemsText: {fileID: 480756540}
+  failedMissionsText: {fileID: 889306890}
+  restockInventoryText: {fileID: 480756540}
+  totalText: {fileID: 165563798}
+  debtText: {fileID: 1920590607}
   nextDayButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
 --- !u!4 &45641764
@@ -320,8 +320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff1446a660024f4489a5e6f624c5b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOver
-  mainMenuButton: {fileID: 0}
-  retryButton: {fileID: 0}
+  mainMenuButton: {fileID: 1243533230}
+  retryButton: {fileID: 479191496}
 --- !u!1 &56401945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,7 +1742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -329.06244, y: 130.78127}
+  m_AnchoredPosition: {x: -329.06244, y: 130.78125}
   m_SizeDelta: {x: 235, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1243533229

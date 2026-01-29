@@ -100,6 +100,7 @@ public class InventoryUI : MonoBehaviour
             // Slot con objeto - mostrar el icono
             slotUIs[slotIndex].iconImage.enabled = true;
             slotUIs[slotIndex].iconImage.sprite = GetSpriteForObjectType(slot.objectType);
+            slotUIs[slotIndex].iconImage.color = Color.black;
         }
     }
     
