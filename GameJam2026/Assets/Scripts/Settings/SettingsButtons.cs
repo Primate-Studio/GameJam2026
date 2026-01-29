@@ -15,9 +15,6 @@ public class SettingsButtons : MonoBehaviour
     [SerializeField] private Slider AmbientVolumeSlider;
     [SerializeField] private Slider MusicVolumeSlider;
 
-    [Header("Video Settings References")]
-    [SerializeField] private Toggle FullscreenToggle;
-    [SerializeField] private Toggle VSyncToggle;
     SettingsManager settingsmanager;
     private void Awake()
     {
@@ -116,8 +113,6 @@ public class SettingsButtons : MonoBehaviour
         MusicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
         SFXVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
         AmbientVolumeSlider.value = PlayerPrefs.GetFloat("AmbientVolume", 0.75f);
-        FullscreenToggle.isOn = Screen.fullScreen;
-        VSyncToggle.isOn = QualitySettings.vSyncCount == 1 ? true : false;
     }
 }
 

@@ -8,8 +8,6 @@ public class PlayerRaycast : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private Camera playerCamera; // Referència a la càmera
-    
-    private Outline currentOutline;
     private GameObject lastHighlighted;
     public InteractableObject CurrentTarget { get; private set; }
 
@@ -78,23 +76,6 @@ public class PlayerRaycast : MonoBehaviour
                 if(child.gameObject.layer != LayerMask.NameToLayer("IgnoreOutline")) child.gameObject.layer = LayerMask.NameToLayer("Items");
             }
             lastHighlighted = null;
-        }
-    }
-
-
-    private void SetOutlineState(Outline outline, bool state)
-    {
-        outline.enabled = state; 
-        
-        if (state) outline.EnableOutline(); else outline.DisableOutline();
-    }
-
-    private void ClearCurrentOutline()
-    {
-        if (currentOutline != null)
-        {
-            SetOutlineState(currentOutline, false);
-            currentOutline = null;
         }
     }
 }
