@@ -20,7 +20,7 @@ public class OrderSystem : MonoBehaviour
         public ClientTimer clientTimer;
         public int slotIndex;
         public GameObject uiElement;
-        public GameObject bubbleElement;
+
     }
     
     [Header("Spawn Positions")]
@@ -108,11 +108,6 @@ public class OrderSystem : MonoBehaviour
             newOrder.animationController = animationController;
             StartCoroutine(animationController.SetTalking(true));
         }
-        GameObject bubbleObj = Instantiate(orderBubblePrefab, client.transform.position + bubbleOffset, Quaternion.identity, client.transform);
-        bubbleObj.SetActive(false);
-        bubbleObj.GetComponent<OrderUIItem>().Setup(newOrder, null);
-        bubbleObj.SetActive(true);
-        StartCoroutine(DisableBubbleAfter(bubbleObj, 10f));
         
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
@@ -147,6 +142,7 @@ public class OrderSystem : MonoBehaviour
         // 2. Instanciem l'element de la UI al teu contenidor del Canvas
         // Necessites tenir 'public GameObject orderUIPrefab' i 'public Transform uiContainer' a l'OrderSystem
         GameObject uiObj = Instantiate(orderUIPrefab, uiContainer);
+        AudioManager.Instance.PlaySFX(SFXType.NotificationIn, true);
         uiObj.GetComponent<OrderUIItem>().Setup(newOrder, clientPhoto);
 
         UIOrderSlide slideEffect = uiObj.GetComponentInChildren<UIOrderSlide>();
@@ -161,8 +157,6 @@ public class OrderSystem : MonoBehaviour
             clientTimer = clientTimer,
             slotIndex = slotIndex,
             uiElement = uiObj, 
-            bubbleElement = bubbleObj
-
         };
         activeClientOrders.Add(clientOrderData);
         
@@ -215,12 +209,6 @@ public class OrderSystem : MonoBehaviour
             StartCoroutine(animationController.SetTalking(true));
         }
         
-        GameObject bubbleObj = Instantiate(orderBubblePrefab, client.transform.position + bubbleOffset, Quaternion.identity, client.transform);
-        bubbleObj.SetActive(false);
-        bubbleObj.GetComponent<OrderUIItem>().Setup(newOrder, null);
-        bubbleObj.SetActive(true);
-        StartCoroutine(DisableBubbleAfter(bubbleObj, 2f));
-        
         // Usar el slotIndex proporcionado para determinar qué posición de spawn usar
         Transform spawnPos = GetSpawnPositionForSlot(slotIndex);
         
@@ -264,7 +252,6 @@ public class OrderSystem : MonoBehaviour
             clientTimer = clientTimer,
             slotIndex = slotIndex,
             uiElement = uiObj,
-            bubbleElement = bubbleObj
         };
         activeClientOrders.Add(clientOrderData);
         
@@ -443,12 +430,8 @@ public class OrderSystem : MonoBehaviour
 
         if (clientOrderData.uiElement != null)
         {
+            AudioManager.Instance.PlaySFX(SFXType.NotificationOut, true);
             Destroy(clientOrderData.uiElement);
-        }
-                
-        if (clientOrderData.bubbleElement != null)
-        {
-            Destroy(clientOrderData.bubbleElement);
         }
 
         // Destruir la caja
