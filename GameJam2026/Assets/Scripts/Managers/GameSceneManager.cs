@@ -46,6 +46,14 @@ public class GameSceneManager : MonoBehaviour
                 LoadScene("ResultScene");
                 AudioManager.Instance.PlayMusic(MusicType.Gameplay);
                 break;
+            case GameState.Win:
+            LoadScene("GameWinScene");
+                AudioManager.Instance.PlayMusic(MusicType.Win);
+                break;
+            case GameState.Lose:
+                LoadScene("GameOverScene");
+                AudioManager.Instance.PlayMusic(MusicType.Lose);
+                break;
             case GameState.Tutorial:
                 // Si TutorialScene no está en Build Settings, usar GameScene
                 string tutorialSceneName = "nEWTutorialScene";
