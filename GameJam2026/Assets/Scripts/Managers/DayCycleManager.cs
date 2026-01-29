@@ -46,6 +46,7 @@ public class DayCycleManager : MonoBehaviour
         }
         
         currentDay = PlayerPrefs.GetInt("CurrentDay", 1);
+        ClientManager.Instance.maxClientsPerDay = 5 + (currentDay - 1) * 2;
         dayCounterText.text = $"Dia {currentDay}";
     }
 
