@@ -29787,6 +29787,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1534731058}
     - target: {fileID: 7471487660650982894, guid: fc4a6029fcee9fc4c9e4be032b1afa32, type: 3}
+      propertyPath: handPrefab
+      value: 
+      objectReference: {fileID: 7385923378669218131, guid: 510d7fc4ab0726b468ad7ed12c198fd9, type: 3}
+    - target: {fileID: 7471487660650982894, guid: fc4a6029fcee9fc4c9e4be032b1afa32, type: 3}
       propertyPath: respawnTime
       value: 12
       objectReference: {fileID: 0}
@@ -30307,6 +30311,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1487703126}
     - target: {fileID: 5409699288510334742, guid: cb9c7e30c0265f1489e12c241e7d4993, type: 3}
+      propertyPath: handPrefab
+      value: 
+      objectReference: {fileID: 7606214617516844932, guid: fa023ab62ac103a41b9df539eca9f970, type: 3}
+    - target: {fileID: 5409699288510334742, guid: cb9c7e30c0265f1489e12c241e7d4993, type: 3}
       propertyPath: respawnTime
       value: 12
       objectReference: {fileID: 0}
@@ -30418,6 +30426,10 @@ PrefabInstance:
       propertyPath: myIcon
       value: 
       objectReference: {fileID: 693699304}
+    - target: {fileID: 295585156170484491, guid: 3b0210f548e63b247b5b4b33c7435ed7, type: 3}
+      propertyPath: handPrefab
+      value: 
+      objectReference: {fileID: 8889101744336031723, guid: 0380dd98ff725e449a828520e75ddeaa, type: 3}
     - target: {fileID: 295585156170484491, guid: 3b0210f548e63b247b5b4b33c7435ed7, type: 3}
       propertyPath: respawnTime
       value: 12
