@@ -181,7 +181,7 @@ public class NewTutorial : MonoBehaviour
             tutorialDog.transform
         ));
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Anit et vas beure fins a l'aigua dels florers en l'Oasi i ara tens un deute a pagar.",
+            "Ahir vas beure més que una esponja a l'Oasi, i ara tens un deute a pagar.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -189,7 +189,7 @@ public class NewTutorial : MonoBehaviour
         ));
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Ten dues opcions, treballa o ser executat en acabar el dia. Tu tries.",
+            "Tens dues opcions: treballar o ser executat en acabar el dia. Tu tries.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -201,7 +201,7 @@ public class NewTutorial : MonoBehaviour
             "Primer de tot, aprèn a moure't amb WASD.",
             dialogueSystem.dogSprite,
             dialogueSystem.wasdSprite,
-            false, 
+            false,
             tutorialDog.transform
         ));
         
@@ -227,7 +227,7 @@ public class NewTutorial : MonoBehaviour
             "Molt bé! Prova de moure la càmera amb el ratolí.",
             dialogueSystem.dogSprite,
             dialogueSystem.mouseSprite,
-            false, // No esperar botón - texto permanece hasta que mueva la cámara
+            false,
             tutorialDog.transform
         ));
         
@@ -253,32 +253,28 @@ public class NewTutorial : MonoBehaviour
             "Perfecte! Ara, obre el manual amb TAB. El necessitaràs per atendre els clients.",
             dialogueSystem.dogSprite,
             dialogueSystem.tabSprite,
-            false, // No esperar botón - texto permanece hasta que abra el manual
+            false,
             tutorialDog.transform
         ));
         
         yield return new WaitForSeconds(0.3f);
         
-        // Permitir SOLO abrir manual
         playerRestrictions.DisableAll();
         playerRestrictions.EnableManual();
         
-        // ESPERAR a que abra el manual
         yield return StartCoroutine(WaitForManualOpen());
         
-        // AHORA sí ocultar el diálogo
         dialogueSystem.HideDialogue();
         
         yield return new WaitForSeconds(0.5f);
         
-        // Mensaje para cerrar el manual
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Ara tanca el manual amb TAB de nou.",
             dialogueSystem.dogSprite,
             dialogueSystem.tabSprite,
-            false, // No esperar botón - texto permanece hasta que cierre el manual
+            false,
             tutorialDog.transform
         ));
         
@@ -309,7 +305,7 @@ public class NewTutorial : MonoBehaviour
             "A l'esquerra tens l'inventari, prova de canviar les posicions amb la roda del ratolí.",
             dialogueSystem.dogSprite,
             inventorySprite,
-            false, // No esperar botón - texto permanece hasta que use el inventario
+            false,
             tutorialDog.transform
         ));
         
@@ -332,7 +328,7 @@ public class NewTutorial : MonoBehaviour
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Tens clientes esperant, tria a quin vols atendre primer.",
+            "Tens clients esperant, tria quin vols atendre primer.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -340,29 +336,12 @@ public class NewTutorial : MonoBehaviour
         ));
 
         dialogueSystem.HideDialogue();
-        
-        Debug.Log("<color=yellow>===== MOSTRANDO HINTS DE CLIENTES =====</color>");
-        
-        // Mostrar hints de clientes DESPUÉS de ocultar el diálogo
-        if (client1Hint != null)
-        {
-            client1Hint.ShowHint();
-            Debug.Log("<color=green>✓ Client1 Hint mostrado</color>");
-        }
-        else
-        {
-            Debug.LogError("<color=red>✗ client1Hint es NULL!</color>");
-        }
-        
-        if (client2Hint != null)
-        {
-            client2Hint.ShowHint();
-            Debug.Log("<color=green>✓ Client2 Hint mostrado</color>");
-        }
-        else
-        {
-            Debug.LogError("<color=red>✗ client2Hint es NULL!</color>");
-        }
+
+        if (client1Hint != null) client1Hint.ShowHint();
+        else Debug.LogError("<color=red>client1Hint es NULL!</color>");
+
+        if (client2Hint != null) client2Hint.ShowHint();
+        else Debug.LogError("<color=red>client2Hint es NULL!</color>");
 
         // Mover al perro a una posición neutral
         if (dogController != null && dogPositions.Length > 0)
@@ -380,35 +359,33 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForClientChoice()
     {
-        Debug.Log("<color=cyan>===== ESPERANDO ELECCIÓN DE CLIENTE =====</color>");
         playerRestrictions.DisableInteraction();
         isCheckingConditions = true;
 
         while (true)
         {
-            // Verificar si se acerca al cliente 1
             if (client1 != null && client1.IsPlayerInZone() && !stateManager.hasApproachedClient1)
             {
                 stateManager.hasApproachedClient1 = true;
                 stateManager.SetActiveClient(client1);
-                if (client1Hint != null) client1Hint.HideHint(); // Ocultar hint del cliente 1
+                if (client1Hint != null) client1Hint.HideHint();
+                if (client2Hint != null) client2Hint.HideHint();
                 isCheckingConditions = false;
                 yield break;
             }
 
-            // Verificar si se acerca al cliente 2
             if (client2 != null && client2.IsPlayerInZone() && !stateManager.hasApproachedClient2)
             {
                 stateManager.hasApproachedClient2 = true;
                 stateManager.SetActiveClient(client2);
-                if (client2Hint != null) client2Hint.HideHint(); // Ocultar hint del cliente 2
+                if (client2Hint != null) client2Hint.HideHint();
+                if (client1Hint != null) client1Hint.HideHint();
                 isCheckingConditions = false;
                 yield break;
             }
 
             yield return null;
         }
-        
     }
 
     /// <summary>
@@ -460,7 +437,6 @@ public class NewTutorial : MonoBehaviour
         stateManager.CompleteClient(activeClient);
         activeClient.CompleteOrder();
         playerRestrictions.EnableInteraction();
-        Debug.Log("<color=green>✓✓✓ PRIMER CLIENTE COMPLETADO - Pasando a BetweenClientsPhase ✓✓✓</color>");
     }
 
     /// <summary>
@@ -474,13 +450,12 @@ public class NewTutorial : MonoBehaviour
         // Mover al perro cerca del jugador
         if (dogController != null && dogPositions.Length > 1)
         {
-            Debug.Log($"<color=cyan>Moviendo perro a dogPositions[1]: {dogPositions[1].position}</color>");
             dogController.MoveTo(dogPositions[1]);
             yield return new WaitForSeconds(1f);
         }
         else
         {
-            Debug.LogWarning("<color=orange>dogPositions[1] no está asignado! Asigna un Transform en el Inspector</color>");
+            Debug.LogWarning("dogPositions[1] no está asignado en el Inspector.");
         }
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
@@ -516,12 +491,10 @@ public class NewTutorial : MonoBehaviour
 
         if (remainingClient == null)
         {
-            Debug.LogWarning("<color=orange>No hay cliente restante para el segundo pedido</color>");
+            Debug.LogWarning("No hay cliente restante para el segundo pedido.");
             yield break;
         }
-        
-        Debug.Log($"<color=cyan>===== SEGUNDO CLIENTE: Cliente {remainingClient.clientID} =====</color>");
-        
+
         // Mostrar hint del cliente restante
         if (remainingClient.clientID == 1 && client1Hint != null)
         {
@@ -532,18 +505,13 @@ public class NewTutorial : MonoBehaviour
             client2Hint.ShowHint();
         }
 
-        // PASO 1: Esperar a que se acerque al cliente restante
         isCheckingConditions = true;
-        Debug.Log($"<color=yellow>Esperando a que el jugador se acerque al cliente {remainingClient.clientID}...</color>");
-        
         while (!remainingClient.IsPlayerInZone())
         {
             yield return null;
         }
-        
         isCheckingConditions = false;
-        Debug.Log($"<color=green>✓ Jugador cerca del cliente {remainingClient.clientID}</color>");
-        
+
         // Ocultar hint del cliente
         if (remainingClient.clientID == 1 && client1Hint != null)
         {
@@ -575,6 +543,13 @@ public class NewTutorial : MonoBehaviour
         
         yield return new WaitForSeconds(1.5f);
         
+        // Mostrar hints de items del cliente restante
+        TutorialHint[] remainingItemHints = GetItemHintsForClient(remainingClient);
+        foreach (TutorialHint hint in remainingItemHints)
+        {
+            if (hint != null) hint.ShowHint();
+        }
+        
         // Mostrar hints de objetos
         remainingClient.ShowObjectHints();
         
@@ -597,8 +572,6 @@ public class NewTutorial : MonoBehaviour
 
         stateManager.CompleteClient(remainingClient);
         remainingClient.CompleteOrder();
-        
-        Debug.Log($"<color=green>✓✓✓ SEGUNDO CLIENTE COMPLETADO ✓✓✓</color>");
     }
 
     /// <summary>
@@ -667,7 +640,7 @@ public class NewTutorial : MonoBehaviour
     {
         playerRestrictions.DisableInteraction();
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Cada client et donarà una comanda amb dues o tres condicions. Per a cada condició hauràs d'entregar un objecte.",
+            "Cada client et donarà una comanda amb dues o tres condicions. Per a cada condició hauràs de lliurar un objecte.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -678,7 +651,7 @@ public class NewTutorial : MonoBehaviour
         dialogueSystem.HideDialogue();
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Si són dues situacions has de trobar els dos millors objectes per aquestes.",
+            "Si hi ha dues situacions, has de trobar els dos millors objectes per a cada una.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -699,7 +672,7 @@ public class NewTutorial : MonoBehaviour
     {
         playerRestrictions.DisableInteraction();
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Per saber quins objectes són els millors, consulta el manual",
+            "Per saber quins objectes són els millors, consulta el manual.",
             dialogueSystem.dogSprite,
             dialogueSystem.tabSprite,
             true,
@@ -707,7 +680,7 @@ public class NewTutorial : MonoBehaviour
         ));
 
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Les pàgines estan separades per activitats. Cada fila representa una condició diferent i estan ubicades en prestatgeries diferents.",
+            "Les pàgines estan separades per activitats. Cada fila representa una condició diferent i es troben en prestatgeries diferents.",
             dialogueSystem.dogSprite,
             dialogueSystem.manualSprite,
             true,
@@ -726,12 +699,10 @@ public class NewTutorial : MonoBehaviour
     private IEnumerator GoToItemsFirstTime(TutorialClient client)
     {
         playerRestrictions.DisableAll();
-        
-        // Iluminar los objetos
         client.ShowObjectHints();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Fixa't en els objectes que estan ressaltats. Consulta el manual per saber quins objectes són els millors per cada situació.",
+            "Gira't i mira els objectes que estan ressaltats. El manual et dirà quins són els millors per cada situació.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -740,13 +711,17 @@ public class NewTutorial : MonoBehaviour
         
         dialogueSystem.HideDialogue();
         playerRestrictions.EnableAll();
-        
-        // Esperar a que llegue a los items
+
+        foreach (TutorialHint hint in GetItemHintsForClient(client))
+            if (hint != null) hint.ShowHint();
+
         yield return StartCoroutine(WaitForPlayerNearItems(client));
-        
-        // Explicar los items
+
+        foreach (TutorialHint hint in GetItemHintsForClient(client))
+            if (hint != null) hint.HideHint();
+
         playerRestrictions.DisableAll();
-        
+
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Aquests són els objectes. Cada objecte té una qualitat, un preu i un temps de reaparició.",
             dialogueSystem.dogSprite,
@@ -754,18 +729,8 @@ public class NewTutorial : MonoBehaviour
             true,
             tutorialDog.transform
         ));
-        
-        // yield return StartCoroutine(dialogueSystem.ShowDialogue(
-        //     "Consulta el manual per saber quins objectes són els millors per cada situació.",
-        //     dialogueSystem.dogSprite,
-        //     dialogueSystem.tabSprite,
-        //     true,
-        //     tutorialDog.transform
-        // ));
-        
+
         dialogueSystem.HideDialogue();
-        
-        // Ocultar hints temporalmente
         client.HideObjectHints();
     }
     
@@ -784,6 +749,7 @@ public class NewTutorial : MonoBehaviour
                 if (hint != null && IsPlayerNearTransform(hint.transform, 1.8f))
                 {
                     isNearAnyItem = true;
+
                     break;
                 }
             }
@@ -833,16 +799,32 @@ public class NewTutorial : MonoBehaviour
         dialogueSystem.HideDialogue();
         playerRestrictions.EnableAll();
         
+        // Mostrar hint del cliente activo, ocultar el otro
+        if (client.clientID == 1)
+        {
+            if (client1Hint != null) client1Hint.ShowHint();
+            if (client2Hint != null) client2Hint.HideHint();
+        }
+        else
+        {
+            if (client2Hint != null) client2Hint.ShowHint();
+            if (client1Hint != null) client1Hint.HideHint();
+        }
+        
         // Esperar a que vuelva con el cliente
         while (!client.IsPlayerInZone())
         {
             yield return null;
         }
         
+        // Ocultar hint del cliente al llegar
+        if (client.clientID == 1) { if (client1Hint != null) client1Hint.HideHint(); }
+        else { if (client2Hint != null) client2Hint.HideHint(); }
+        
         playerRestrictions.DisableAll();
         
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Ara et donaré la meva comanda. Mira la nota que apareix a la dreta.",
+            "Ara et donarà la seva comanda. Mira la nota que apareix a la dreta.",
             dialogueSystem.dogSprite,
             null,
             true,
@@ -850,19 +832,12 @@ public class NewTutorial : MonoBehaviour
         ));
         
         dialogueSystem.HideDialogue();
-        
-        // GENERAR EL PEDIDO REAL (mostrar en UI)
+
         GenerateTutorialOrder(client);
-        
-        // Verificar que la mochila se creó
-        yield return new WaitForSeconds(0.5f);
-        DeliveryBox[] deliveryBoxes = FindObjectsByType<DeliveryBox>(FindObjectsSortMode.None);
-        Debug.Log($"<color=yellow>DeliveryBoxes encontradas en la escena: {deliveryBoxes.Length}</color>");
-        foreach (var box in deliveryBoxes)
-        {
-            Debug.Log($"<color=yellow>  - DeliveryBox en posición: {box.transform.position}</color>");
-        }
-        
+
+        foreach (TutorialHint hint in GetItemHintsForClient(client))
+            if (hint != null) hint.ShowHint();
+
         yield return new WaitForSeconds(1.5f);
         
         playerRestrictions.DisableAll();
@@ -884,39 +859,23 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private void GenerateTutorialOrder(TutorialClient client)
     {
-        // Obtener el GameObject del cliente
-        GameObject clientObj = client.gameObject;
-        
-        // IMPORTANTE: OrderSystem usa índices 0, 1, 2 para spawnBox1, spawnBox2, spawnBox3
-        // Así que si clientID es 1 o 2, debemos restar 1
         int slotIndex = client.clientID - 1;
-        
-        Debug.Log($"<color=yellow>Generando pedido: clientID={client.clientID}, slotIndex={slotIndex}</color>");
-        
-        // Usar OrderSystem directamente como el tutorial antiguo
+
         if (OrderSystem.Instance != null)
         {
             OrderSystem.Instance.GenerateTutorialOrderForClient(
-                clientObj,
-                slotIndex,  // Usar 0, 1 o 2
+                client.gameObject,
+                slotIndex,
                 client.requirement1,
                 client.requirement2,
                 client.requirement3
             );
-            
-            Debug.Log($"<color=cyan>✓ Pedido generado para cliente {client.clientID} en slot {slotIndex}</color>");
-            Debug.Log($"<color=cyan>  La mochila (DeliveryBox) se ha instanciado en el mostrador automáticamente</color>");
-            
-            // Verificar que se añadió correctamente
-            int orderCount = OrderSystem.Instance.GetActiveOrdersCount();
-            Debug.Log($"<color=magenta>📊 Pedidos activos después de generar: {orderCount}</color>");
         }
         else
         {
-            Debug.LogError("<color=red>OrderSystem.Instance es null!</color>");
+            Debug.LogError("OrderSystem.Instance es null!");
         }
-        
-        // Marcar que ha recibido la orden
+
         client.hasReceivedOrder = true;
         stateManager.hasLearnedOrders = true;
     }
@@ -926,38 +885,18 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator GoToItemsToCollect(TutorialClient client)
     {
-        Debug.Log($"<color=yellow>GoToItemsToCollect iniciado para cliente {client.clientID}</color>");
-        
         playerRestrictions.EnableAll();
-        
-        // IMPORTANTE: Activar interacción y uso de inventario SOLO durante la recolección de items
         playerRestrictions.EnableInteraction();
         playerRestrictions.EnableInventory();
-        
-        // Iluminar objetos de nuevo
+
         client.ShowObjectHints();
-        
-        // Habilitar restricción de objetos - solo puede coger los del pedido
         SetObjectTypeRestrictionForClient(client);
-        
-        Debug.Log($"<color=yellow>Esperando a que recoja {(client.requirement3 != null ? 3 : 2)} items...</color>");
-        
-        // Esperar a que recoja los objetos necesarios
+
         yield return StartCoroutine(WaitForItemsCollected(client));
-        
-        Debug.Log($"<color=green>Items recogidos! Ocultando hints...</color>");
-        
-        // Ocultar hints
+
         client.HideObjectHints();
-        
-        // Quitar restricción
         RemoveObjectTypeRestriction();
-        
-        // IMPORTANTE: Desactivar interacción después de recoger los items
         playerRestrictions.DisableInteraction();
-        // Mantener inventario activo para que pueda entregar
-        
-        Debug.Log($"<color=green>GoToItemsToCollect completado</color>");
     }
     
     /// <summary>
@@ -967,17 +906,10 @@ public class NewTutorial : MonoBehaviour
     {
         if (playerRestrictions == null)
         {
-            Debug.LogError("<color=red>playerRestrictions es NULL!</color>");
+            Debug.LogError("playerRestrictions es NULL!");
             return;
         }
-        
-        // Obtener los tipos de objetos del pedido
-        ObjectType[] allowedTypes = GetObjectTypesFromRequirements(client);
-        
-        Debug.Log($"<color=yellow>Restringiendo objetos para cliente {client.clientID}: {string.Join(", ", allowedTypes)}</color>");
-        
-        // Configurar restricción
-        playerRestrictions.SetAllowedObjectTypes(allowedTypes, true);
+        playerRestrictions.SetAllowedObjectTypes(GetObjectTypesFromRequirements(client), true);
     }
     
     /// <summary>
@@ -1015,22 +947,11 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForItemsCollected(TutorialClient client)
     {
-        // Determinar cuántos items necesita
         int requiredItems = client.requirement3 != null ? 3 : 2;
-        
-        Debug.Log($"<color=cyan>Esperando {requiredItems} items en el inventario...</color>");
-        
-        // Esperar hasta que tenga los items en el inventario
+
         while (GetItemsInInventoryCount() < requiredItems)
-        {
-            // Log cada 2 segundos para ver el progreso
-            int currentCount = GetItemsInInventoryCount();
-            Debug.Log($"<color=cyan>Items en inventario: {currentCount}/{requiredItems}</color>");
-            
-            yield return new WaitForSeconds(2f);
-        }
-        
-        Debug.Log($"<color=green>¡{requiredItems} items recogidos!</color>");
+            yield return new WaitForSeconds(0.5f);
+
         yield return new WaitForSeconds(0.5f);
     }
     
@@ -1057,10 +978,8 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator ReturnToClientAndDeliver(TutorialClient client)
     {
-        Debug.Log($"<color=yellow>ReturnToClientAndDeliver iniciado para cliente {client.clientID}</color>");
-        
         playerRestrictions.DisableAll();
-        
+
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Perfecte! Ara porta els objectes a la motxilla del taulell per lliurar la comanda.",
             dialogueSystem.dogSprite,
@@ -1068,29 +987,16 @@ public class NewTutorial : MonoBehaviour
             true,
             tutorialDog.transform
         ));
-        
+
         dialogueSystem.HideDialogue();
-        
-        // NOTA: La mochila (DeliveryBox) ya fue creada por OrderSystem en el mostrador
-        Debug.Log($"<color=cyan>La mochila del cliente {client.clientID} está en el mostrador (creada por OrderSystem)</color>");
-        
         playerRestrictions.EnableAll();
-        
-        // IMPORTANTE: Activar interacción e inventario para poder entregar en la DeliveryBox
         playerRestrictions.EnableInteraction();
         playerRestrictions.EnableInventory();
-        
-        Debug.Log($"<color=cyan>Esperando a que complete el pedido en la DeliveryBox del mostrador...</color>");
-        
-        // Esperar a que complete el pedido
+
         yield return StartCoroutine(WaitForOrderCompletion());
-        
-        // IMPORTANTE: Desactivar interacción e inventario después de entregar
-        playerRestrictions.DisableInteraction();
-        playerRestrictions.DisableInventory();
-        
+
         playerRestrictions.DisableAll();
-        
+
         yield return StartCoroutine(dialogueSystem.ShowDialogue(
             "Molt bé! Comanda completada!",
             dialogueSystem.dogSprite,
@@ -1098,10 +1004,8 @@ public class NewTutorial : MonoBehaviour
             true,
             tutorialDog.transform
         ));
-        
+
         dialogueSystem.HideDialogue();
-        
-        Debug.Log($"<color=green>ReturnToClientAndDeliver completado</color>");
     }
     
     /// <summary>
@@ -1109,167 +1013,22 @@ public class NewTutorial : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForOrderCompletion()
     {
-        // Obtener el count inicial de pedidos
-        int initialCount = 0;
-        if (OrderSystem.Instance != null)
-        {
-            initialCount = OrderSystem.Instance.GetActiveOrdersCount();
-        }
-        
-        Debug.Log($"<color=yellow>⏳ WaitForOrderCompletion: Conteo inicial = {initialCount}</color>");
-        
-        // Timeout de seguridad: si pasan 60 segundos, salir
-        float timeoutDuration = 60f;
+        int initialCount = OrderSystem.Instance != null ? OrderSystem.Instance.GetActiveOrdersCount() : 0;
         float elapsedTime = 0f;
-        
-        // Esperar hasta que disminuya el número de pedidos (se completó uno)
+        float timeoutDuration = 60f;
+
         while (OrderSystem.Instance != null && OrderSystem.Instance.GetActiveOrdersCount() >= initialCount)
         {
             elapsedTime += Time.deltaTime;
-            
-            // Log cada 5 segundos para debugging
-            if (Mathf.FloorToInt(elapsedTime) % 5 == 0 && elapsedTime > 0.1f)
-            {
-                int currentCount = OrderSystem.Instance.GetActiveOrdersCount();
-                Debug.Log($"<color=cyan>⏳ Esperando completación... ({elapsedTime:F0}s) - Pedidos: {currentCount}/{initialCount}</color>");
-            }
-            
-            // Timeout de seguridad
             if (elapsedTime >= timeoutDuration)
             {
-                Debug.LogError($"<color=red>⚠️ TIMEOUT: WaitForOrderCompletion esperó {timeoutDuration}s sin cambios!</color>");
-                Debug.LogError($"<color=red>Pedidos iniciales: {initialCount}, Pedidos actuales: {OrderSystem.Instance.GetActiveOrdersCount()}</color>");
+                Debug.LogError($"TIMEOUT: El pedido no se completó en {timeoutDuration}s.");
                 break;
             }
-            
             yield return null;
         }
-        
-        int finalCount = OrderSystem.Instance != null ? OrderSystem.Instance.GetActiveOrdersCount() : 0;
-        Debug.Log($"<color=green>✓ WaitForOrderCompletion: Pedido completado! ({initialCount} → {finalCount}) en {elapsedTime:F1}s</color>");
-        
-        // Esperar un momento adicional para que termine las animaciones
+
         yield return new WaitForSeconds(0.5f);
-    }
-
-    /// <summary>
-    /// Explica los objetos, su calidad, dinero y tiempo de reaparición
-    /// </summary>
-    private IEnumerator ExplainObjects(TutorialClient client)
-    {
-        // Iluminar los objetos del cliente
-        client.ShowObjectHints();
-
-        yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Aquests objectes estan ressaltats perquè són els que necessites. Agafa'ls!",
-            dialogueSystem.dogSprite,
-            null,
-            true,
-            tutorialDog.transform
-        ));
-
-        dialogueSystem.HideDialogue();
-        playerRestrictions.EnableAll();
-
-        // Esperar a que se acerque a los objetos
-        // TODO: Implementar detección de proximidad a objetos
-
-        yield return new WaitForSeconds(1f); // Temporal
-
-        playerRestrictions.DisableAll();
-
-        yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Cada objecte té un temps de reaparició. Tria sàviament!",
-            dialogueSystem.dogSprite,
-            null,
-            true,
-            tutorialDog.transform
-        ));
-
-        stateManager.hasLearnedItemQuality = true;
-        dialogueSystem.HideDialogue();
-    }
-
-    /// <summary>
-    /// Espera a que el jugador recoja los objetos necesarios
-    /// </summary>
-    private IEnumerator WaitForObjectCollection(TutorialClient client)
-    {
-        playerRestrictions.EnableAll();
-
-        // TODO: Implementar verificación de objetos recogidos
-        // Por ahora, esperar unos segundos
-        yield return new WaitForSeconds(5f);
-
-        client.HideObjectHints();
-    }
-
-    /// <summary>
-    /// Entrega el pedido al cliente
-    /// </summary>
-    private IEnumerator DeliverOrder(TutorialClient client)
-    {
-        playerRestrictions.DisableAll();
-
-        yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Torna amb el client per finalitzar la comanda.",
-            dialogueSystem.dogSprite,
-            null,
-            true,
-            tutorialDog.transform
-        ));
-
-        dialogueSystem.HideDialogue();
-        playerRestrictions.EnableAll();
-
-        // Esperar a que vuelva con el cliente
-        isCheckingConditions = true;
-        while (!client.IsPlayerInZone())
-        {
-            yield return null;
-        }
-        isCheckingConditions = false;
-
-        playerRestrictions.DisableAll();
-
-        // Mostrar pedido en la UI de la derecha y mochila
-        client.ShowBackpack();
-
-        yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "El client ha deixat la seva bossa, posa els objectes dins.",
-            dialogueSystem.dogSprite,
-            null,
-            true,
-            client.backpack.transform
-        ));
-
-        dialogueSystem.HideDialogue();
-        playerRestrictions.EnableAll();
-
-        // Esperar a que complete el pedido
-        yield return StartCoroutine(WaitForOrderCompletion(client));
-    }
-
-    /// <summary>
-    /// Espera a que se complete un pedido
-    /// </summary>
-    private IEnumerator WaitForOrderCompletion(TutorialClient client)
-    {
-        // TODO: Implementar verificación de pedido completado
-        // Por ahora, esperar unos segundos
-        yield return new WaitForSeconds(5f);
-
-        playerRestrictions.DisableAll();
-
-        yield return StartCoroutine(dialogueSystem.ShowDialogue(
-            "Comanda finalitzada, molt bona feina.",
-            dialogueSystem.dogSprite,
-            null,
-            true,
-            tutorialDog.transform
-        ));
-
-        dialogueSystem.HideDialogue();
     }
 
     // ============= MÉTODOS DE ESPERA PARA ACCIONES DEL JUGADOR =============
